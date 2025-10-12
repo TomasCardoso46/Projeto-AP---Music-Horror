@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class Chord : MonoBehaviour
 {
+    [Header("Melody Tracker")]
+    [SerializeField] private ChordSequenceManager sequenceManager;
+
     [Header("List of Target Transforms")]
     [SerializeField] private List<Transform> targetPositions = new List<Transform>();
 
@@ -85,6 +88,12 @@ public class Chord : MonoBehaviour
     {
         if (audioSource == null || positionSounds.Count == 0)
             return;
+        
+        if (sequenceManager != null)
+        {
+            sequenceManager.RegisterChord(currentIndex + 1);
+        }
+
 
         if (currentIndex < positionSounds.Count && positionSounds[currentIndex] != null)
         {

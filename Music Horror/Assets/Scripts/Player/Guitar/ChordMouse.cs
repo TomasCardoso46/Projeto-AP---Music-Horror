@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MouseMovementPositionSelector : MonoBehaviour
+public class ChordMouse : MonoBehaviour
 {
     [Header("List of Target Transforms")]
     [SerializeField] private List<Transform> targetPositions = new List<Transform>();
