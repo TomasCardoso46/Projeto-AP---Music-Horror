@@ -198,7 +198,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!108 &171210937
 Light:
   m_ObjectHideFlags: 0
@@ -210,7 +210,7 @@ Light:
   serializedVersion: 11
   m_Type: 1
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
-  m_Intensity: 1
+  m_Intensity: 0
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -252,7 +252,7 @@ Light:
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
-  m_BounceIntensity: 1
+  m_BounceIntensity: 0
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
@@ -1311,6 +1311,7 @@ GameObject:
   - component: {fileID: 1020809705}
   - component: {fileID: 1020809707}
   - component: {fileID: 1020809706}
+  - component: {fileID: 1020809708}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1361,6 +1362,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 7122a4f4dd8a65045b619948b1ebc5b9, type: 3}
   - {fileID: 8300000, guid: ccbb5955231f221418cd4fc2afebc919, type: 3}
   audioSource: {fileID: 1020809706}
+  emitter: {fileID: 1020809708}
 --- !u!82 &1020809706
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1473,11 +1475,30 @@ MonoBehaviour:
   spellSequences:
   - 1112
   - 1113
+  - 2223
+  - 2224
   spells:
   - {fileID: 11400000, guid: 50f353fc6489ec74ba24c92ca6c4f9f2, type: 2}
   - {fileID: 11400000, guid: bcf45ca134618f44bb1283f82eb52461, type: 2}
+  - {fileID: 11400000, guid: 261ad7a82e20b264bbcbdee98a13456c, type: 2}
+  - {fileID: 11400000, guid: ee8f6f4f0ca11ff4496ff8ec4b56e7c5, type: 2}
   currentSequence: 
   resetDelay: 3
+--- !u!114 &1020809708
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1020809703}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fad9abd0d6860c43a1c1cff641edaa5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SoundEmitter
+  baseRadius: 92.04
+  radiusMultiplier: 1
+  overrideTag: 
 --- !u!1 &1061840191
 GameObject:
   m_ObjectHideFlags: 0
@@ -2226,7 +2247,7 @@ MonoBehaviour:
   hearingTags:
   - Player
   - Noise
-  requirePlayerTagToChase: 1
+  requirePlayerTagToChase: 0
   playerTag: Player
   startPatrollingOnStart: 1
   stuckRecoveryDistance: 0.5

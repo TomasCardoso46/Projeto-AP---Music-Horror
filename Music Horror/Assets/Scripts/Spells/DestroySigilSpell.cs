@@ -4,8 +4,8 @@ using UnityEngine;
 public class DestroySigilSpell : Spell
 {
     [Header("Sigil Settings")]
-    public string sigilColor; // "Red" or "Green"
-    public float maxDistance = 10f;
+    [SerializeField] private string sigilColor; // "Red" or "Green"
+    [SerializeField] private float maxDistance = 10f;
 
     public override void Cast(Transform caster)
     {

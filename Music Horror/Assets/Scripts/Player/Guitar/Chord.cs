@@ -17,6 +17,7 @@ public class Chord : MonoBehaviour
 
     [Header("Audio Source")]
     [SerializeField] private AudioSource audioSource;
+    [SerializeField] private SoundEmitter emitter;
 
     private int currentIndex = 0;
 
@@ -99,6 +100,7 @@ public class Chord : MonoBehaviour
         {
             audioSource.clip = positionSounds[currentIndex];
             audioSource.Play();
+            emitter.PlaySound(5);
         }
         else
         {
