@@ -158,7 +158,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -2.458, y: 0.92, z: 1.05}
-  m_LocalScale: {x: 0.68622, y: 0.68622, z: 0.68622}
+  m_LocalScale: {x: 0.37688577, y: 0.37688577, z: 0.37688577}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3305882699654493994}
@@ -253,8 +253,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9cbcada5b9b6014385fd8f59a23a2b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StickyLight
-  speed: {x: 0, y: 250, z: 250}
-  time: 0
+  speed: {x: 0, y: 2, z: 5}
+  followTarget: 0
+  shrinkingSpeed: 0.08
 --- !u!54 &3090500771280043480
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -263,7 +264,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1270084781342114803}
   serializedVersion: 5
-  m_Mass: 1
+  m_Mass: 0.5
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -271,10 +272,10 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1

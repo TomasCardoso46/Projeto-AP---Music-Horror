@@ -198,7 +198,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!108 &171210937
 Light:
   m_ObjectHideFlags: 0
@@ -210,7 +210,7 @@ Light:
   serializedVersion: 11
   m_Type: 1
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
-  m_Intensity: 0
+  m_Intensity: 0.42
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -317,7 +317,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 207372179}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -675,7 +675,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 320176527}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Positions
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -711,7 +711,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 398517959}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: 5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -776,7 +776,7 @@ GameObject:
   - component: {fileID: 622539078}
   - component: {fileID: 622539077}
   - component: {fileID: 622539080}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Main Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -1312,7 +1312,7 @@ GameObject:
   - component: {fileID: 1020809707}
   - component: {fileID: 1020809706}
   - component: {fileID: 1020809708}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -1513,7 +1513,7 @@ GameObject:
   - component: {fileID: 1061840193}
   - component: {fileID: 1061840192}
   - component: {fileID: 1061840197}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Capsule
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -1767,7 +1767,7 @@ GameObject:
   - component: {fileID: 1087797101}
   - component: {fileID: 1087797100}
   - component: {fileID: 1087797099}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2585,7 +2585,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1819802866}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2616,7 +2616,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1849605296}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3132,7 +3132,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2119729529}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3213,7 +3213,7 @@ GameObject:
   - component: {fileID: 2499860799839291338}
   - component: {fileID: 171467300639701473}
   - component: {fileID: 5628052563301243987}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: pasted__A
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3229,7 +3229,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1885926332655450041}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: FretStrings
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3245,7 +3245,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1341393952593205704}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: TuningPins
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3271,7 +3271,7 @@ GameObject:
   - component: {fileID: 9015695227197279780}
   - component: {fileID: 7974497586094509840}
   - component: {fileID: 6607067342449460312}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: TuningPinBottom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3304,7 +3304,7 @@ GameObject:
   - component: {fileID: 3786964884556716369}
   - component: {fileID: 5641642798119865284}
   - component: {fileID: 8241803164318678011}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: E
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3335,7 +3335,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5146575405138990742}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: pasted__Headstock_Strings
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3413,7 +3413,7 @@ GameObject:
   - component: {fileID: 4167280742697263589}
   - component: {fileID: 5835772782602519613}
   - component: {fileID: 2570646524688309497}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3437,7 +3437,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2030264860116780725}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: pasted__Guitar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3511,7 +3511,7 @@ GameObject:
   - component: {fileID: 3356447177741733941}
   - component: {fileID: 6302879445754596532}
   - component: {fileID: 884895133474985232}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: MetalStrips
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3544,7 +3544,7 @@ GameObject:
   - component: {fileID: 8222169311285549863}
   - component: {fileID: 8951013927128385270}
   - component: {fileID: 5408308869778354341}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: pasted__E
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3656,7 +3656,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 543450652113177652}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: DevilGuitar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3672,7 +3672,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7267191811600936152}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: TuningPin6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3746,7 +3746,7 @@ GameObject:
   - component: {fileID: 8099219849950652157}
   - component: {fileID: 1603382483678249695}
   - component: {fileID: 1082603695612829806}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: ControlKnob
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3831,7 +3831,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6786030124171230676}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: ControlKnob2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3943,7 +3943,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7899073010987191528}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Strings
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4040,7 +4040,7 @@ GameObject:
   - component: {fileID: 8169287976978575216}
   - component: {fileID: 6817242258573235015}
   - component: {fileID: 23993604388401891}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: ControlKnobControler
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4089,7 +4089,7 @@ GameObject:
   - component: {fileID: 4643517650333745964}
   - component: {fileID: 649582569672812096}
   - component: {fileID: 1545273166867394596}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: ControlKnobControler
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4194,7 +4194,7 @@ GameObject:
   - component: {fileID: 6357141875084787298}
   - component: {fileID: 8465309636487151336}
   - component: {fileID: 3587864497106948014}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: TuningPinString
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4323,7 +4323,7 @@ GameObject:
   - component: {fileID: 7181521972469379852}
   - component: {fileID: 5472703037386371427}
   - component: {fileID: 2191556267448133246}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: TuningPinTop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4437,7 +4437,7 @@ GameObject:
   - component: {fileID: 5921243909966435134}
   - component: {fileID: 536736068038068588}
   - component: {fileID: 6200759685467473252}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: CoilPockup2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4666,7 +4666,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8988717056127147850}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: TuningPin4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4740,7 +4740,7 @@ GameObject:
   - component: {fileID: 2651709747035643782}
   - component: {fileID: 3978319522229477039}
   - component: {fileID: 6092312865686844544}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: TussDown
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4758,7 +4758,7 @@ GameObject:
   - component: {fileID: 8836480350001466390}
   - component: {fileID: 7396528752428294281}
   - component: {fileID: 5865252871448890396}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: B
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4776,7 +4776,7 @@ GameObject:
   - component: {fileID: 2565082654203690058}
   - component: {fileID: 1967603673443210104}
   - component: {fileID: 4837842742276995506}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: pasted__B
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4794,7 +4794,7 @@ GameObject:
   - component: {fileID: 1866275219336961105}
   - component: {fileID: 7876547458736770780}
   - component: {fileID: 1536216362004397982}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: TuningPinBottom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4812,7 +4812,7 @@ GameObject:
   - component: {fileID: 7011864699066398488}
   - component: {fileID: 7562655247486199962}
   - component: {fileID: 4961441496002961501}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: TuningPinTop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4921,7 +4921,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6563324326466907996}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: TuningPin1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4937,7 +4937,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3925699616222115933}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: ControlKnobs
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4955,7 +4955,7 @@ GameObject:
   - component: {fileID: 3757601516559518250}
   - component: {fileID: 3090299307304646570}
   - component: {fileID: 1916903539580747343}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: TuningPinString
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4971,7 +4971,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3041001882510040283}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: ControlKnob1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5124,7 +5124,7 @@ GameObject:
   - component: {fileID: 5558195821859246724}
   - component: {fileID: 5985869638376750408}
   - component: {fileID: 5588851179793242467}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: TuningPinTop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5223,7 +5223,7 @@ GameObject:
   - component: {fileID: 5457734020439532472}
   - component: {fileID: 3795575657925247124}
   - component: {fileID: 4145862650130801230}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: High_E
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5241,7 +5241,7 @@ GameObject:
   - component: {fileID: 2153449862544589041}
   - component: {fileID: 726617722039577022}
   - component: {fileID: 856558373760470797}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: pasted__E_High
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5322,7 +5322,7 @@ GameObject:
   - component: {fileID: 1974056237986021203}
   - component: {fileID: 5379975941200543185}
   - component: {fileID: 3385041054803899805}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: TuningPinBottom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5340,7 +5340,7 @@ GameObject:
   - component: {fileID: 5139972828369554248}
   - component: {fileID: 2706268484870792488}
   - component: {fileID: 4980679284755899243}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Bridge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5358,7 +5358,7 @@ GameObject:
   - component: {fileID: 1272255921505238407}
   - component: {fileID: 3701789004296019831}
   - component: {fileID: 8117865435209862900}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: E
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5439,7 +5439,7 @@ GameObject:
   - component: {fileID: 4446486729118221715}
   - component: {fileID: 7870088971992379783}
   - component: {fileID: 6120388154873448770}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: A
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5470,7 +5470,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1359866804597433838}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: ControlKnob3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5511,7 +5511,7 @@ GameObject:
   - component: {fileID: 4953706565368424585}
   - component: {fileID: 1400492409337637482}
   - component: {fileID: 5655050001887848925}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: ControlKnob
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5605,7 +5605,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6314873550188310827}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: TuningPin3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5775,7 +5775,7 @@ GameObject:
   - component: {fileID: 3354525300097417530}
   - component: {fileID: 4941671572624142530}
   - component: {fileID: 2639461177202475202}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: TuningPinTop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5793,7 +5793,7 @@ GameObject:
   - component: {fileID: 4586589611921199125}
   - component: {fileID: 2871317392185029156}
   - component: {fileID: 8592815197172642070}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: D
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5811,7 +5811,7 @@ GameObject:
   - component: {fileID: 7218873985423372602}
   - component: {fileID: 7955951788452866123}
   - component: {fileID: 709898547742417875}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: CoilPockup1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6043,7 +6043,7 @@ GameObject:
   - component: {fileID: 8076857991932474737}
   - component: {fileID: 5996778542219736587}
   - component: {fileID: 7945533397676459875}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: TuningPinBottom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6381,7 +6381,7 @@ GameObject:
   - component: {fileID: 5796914663337640663}
   - component: {fileID: 4994695082525034541}
   - component: {fileID: 8908862722755909137}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: TuningPinTop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6430,7 +6430,7 @@ GameObject:
   - component: {fileID: 8773545432960714413}
   - component: {fileID: 2601232738893996918}
   - component: {fileID: 8233838008633887390}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: TuningPinBottom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6547,7 +6547,7 @@ GameObject:
   - component: {fileID: 5093833890578787406}
   - component: {fileID: 3865583788905357190}
   - component: {fileID: 2661930205786154312}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: D
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6812,7 +6812,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4946805658619069047}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: TuningPin_Strings
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6845,7 +6845,7 @@ GameObject:
   - component: {fileID: 8580689549556190103}
   - component: {fileID: 1180129772898920202}
   - component: {fileID: 4876802980803526926}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: G
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6881,7 +6881,7 @@ GameObject:
   - component: {fileID: 7501217658429416146}
   - component: {fileID: 5300473708855852608}
   - component: {fileID: 7036528369044844234}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: TuningPinString
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6947,7 +6947,7 @@ GameObject:
   - component: {fileID: 812839269659989383}
   - component: {fileID: 2981902226246451534}
   - component: {fileID: 8190721398618800772}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: TuningPinTop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7068,7 +7068,7 @@ GameObject:
   - component: {fileID: 1600622163266033934}
   - component: {fileID: 2552699989583900585}
   - component: {fileID: 2478809768376422624}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: TuningPinString
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7134,7 +7134,7 @@ GameObject:
   - component: {fileID: 5933109703953468469}
   - component: {fileID: 1122907471200144550}
   - component: {fileID: 8072104909658675089}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: B
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7223,7 +7223,7 @@ GameObject:
   - component: {fileID: 6093549500602760079}
   - component: {fileID: 8369762565759425321}
   - component: {fileID: 4490045503068493649}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: TuningPinBottom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7287,7 +7287,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5947299870397815451}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Headstock_Strings
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7305,7 +7305,7 @@ GameObject:
   - component: {fileID: 3003336719395720946}
   - component: {fileID: 8740076835879596596}
   - component: {fileID: 4637425600492947445}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: ControlKnob
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7371,7 +7371,7 @@ GameObject:
   - component: {fileID: 7523879210525187474}
   - component: {fileID: 4568286161452049052}
   - component: {fileID: 6886305278763049776}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: pasted__D
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7395,7 +7395,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8598989388089790227}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: TuningPin2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7451,7 +7451,7 @@ GameObject:
   - component: {fileID: 3343016288159602897}
   - component: {fileID: 1758185965496009370}
   - component: {fileID: 4881456210182777543}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Headstock
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7469,7 +7469,7 @@ GameObject:
   - component: {fileID: 6708162321073579563}
   - component: {fileID: 3784945615613659564}
   - component: {fileID: 6677779847607655971}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: pasted__G
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7487,7 +7487,7 @@ GameObject:
   - component: {fileID: 488656129026652435}
   - component: {fileID: 9165180944758901840}
   - component: {fileID: 1673813028010315097}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: FretBoard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7664,7 +7664,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3974402180181811272}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: pasted__Strings
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7745,7 +7745,7 @@ GameObject:
   - component: {fileID: 4980651428873450930}
   - component: {fileID: 3789863071258289163}
   - component: {fileID: 3602260352974907108}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: A
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7776,7 +7776,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5271157277555854109}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: TuningPin5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8025,7 +8025,7 @@ GameObject:
   - component: {fileID: 4536994948087995502}
   - component: {fileID: 8406627850031033112}
   - component: {fileID: 8423671343967456463}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: TussUp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8124,7 +8124,7 @@ GameObject:
   - component: {fileID: 6746478561131640310}
   - component: {fileID: 631015167046498888}
   - component: {fileID: 5208707665721236912}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: TuningPinString
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8142,7 +8142,7 @@ GameObject:
   - component: {fileID: 578039065243940550}
   - component: {fileID: 5658483789867372347}
   - component: {fileID: 7064374635976537829}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: ControlKnobControler
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8269,7 +8269,7 @@ GameObject:
   - component: {fileID: 4636871849505683248}
   - component: {fileID: 6935662807472445025}
   - component: {fileID: 6174223924710246947}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: TuningPinString
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8320,7 +8320,7 @@ GameObject:
   - component: {fileID: 251136551797868465}
   - component: {fileID: 3554621432930592526}
   - component: {fileID: 2195248828608941367}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: E_High
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8338,7 +8338,7 @@ GameObject:
   - component: {fileID: 8939798192228684104}
   - component: {fileID: 4875767836537556161}
   - component: {fileID: 2480866470754032018}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: G
   m_TagString: Untagged
   m_Icon: {fileID: 0}
