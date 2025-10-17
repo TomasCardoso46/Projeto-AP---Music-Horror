@@ -41,6 +41,7 @@ Material:
     - _Dissolve: -0.06
     - _Noise: 1
     - _NoiseScale: 28.42
+    - _Noise_Tiling: 1
     - _QueueControl: 0
     - _QueueOffset: 0
     - _TwirlAmount: 1
@@ -49,6 +50,7 @@ Material:
     - _NoiseSpeed: {r: 0, g: 0.5, b: 0, a: 0}
     - _TwirlCenter: {r: 1, g: 10, b: 0, a: 0}
     - _TwirlSpeed: {r: 0.5, g: 0.2, b: 0, a: 0}
+    - _Twirl_Speed_3: {r: 0.001, g: 0.001, b: 0.001, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &3722036051072722029
