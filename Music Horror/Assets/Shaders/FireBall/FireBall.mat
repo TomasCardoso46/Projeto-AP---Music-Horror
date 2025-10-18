@@ -41,11 +41,12 @@ Material:
     - _Dissolve: 1.17
     - _Noise: 1
     - _NoiseScale: 28.42
+    - _Noise_Tiling: 1
     - _QueueControl: 0
     - _QueueOffset: 0
     - _TwirlAmount: 1
     m_Colors:
-    - _Color: {r: 0.21026695, g: 1, b: 0.4392157, a: 1}
+    - _Color: {r: 1, g: 0.37635887, b: 0.2117647, a: 1}
     - _NoiseSpeed: {r: 0, g: 0.5, b: 0, a: 0}
     - _TwirlCenter: {r: 1, g: 10, b: 0, a: 0}
     - _TwirlSpeed: {r: 0.5, g: 0.2, b: 0, a: 0}
