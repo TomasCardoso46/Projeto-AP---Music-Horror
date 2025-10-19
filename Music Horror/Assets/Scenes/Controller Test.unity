@@ -1596,6 +1596,9 @@ GameObject:
   - component: {fileID: 1061840193}
   - component: {fileID: 1061840192}
   - component: {fileID: 1061840197}
+  - component: {fileID: 1061840200}
+  - component: {fileID: 1061840199}
+  - component: {fileID: 1061840198}
   m_Layer: 3
   m_Name: Capsule
   m_TagString: Player
@@ -1759,6 +1762,141 @@ MonoBehaviour:
   currentLean: 0
   shakeTime: 0
   normalHeight: 0
+--- !u!82 &1061840198
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1061840191}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &1061840199
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1061840191}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 692ff1c34817a2646942c9597da1252b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyAudioEmitter
+  lowSound: 0
+  normalSound: 0
+  highSound: 0
+--- !u!114 &1061840200
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1061840191}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0e96d91bed9b2b4e8bbf8242b8c8112, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FootstepEmitter
+  audioSource: {fileID: 1061840198}
+  enemyAudioEmitter: {fileID: 1061840199}
+  footstepClips:
+  - {fileID: 8300000, guid: be096f1c78edb1843b5c2a88519fe86e, type: 3}
+  walkStepInterval: 0.5
+  sprintStepInterval: 0.35
+  crouchStepInterval: 0.8
+  walkVolume: 0.736
+  sprintVolume: 0.857
+  crouchVolume: 0.5
+  soundDuration: 0.2
 --- !u!1 &1083564380
 GameObject:
   m_ObjectHideFlags: 0
@@ -2445,7 +2583,11 @@ GameObject:
   - component: {fileID: 1644037714}
   - component: {fileID: 1644037713}
   - component: {fileID: 1644037712}
-  - component: {fileID: 1644037711}
+  - component: {fileID: 1644037722}
+  - component: {fileID: 1644037721}
+  - component: {fileID: 1644037720}
+  - component: {fileID: 1644037719}
+  - component: {fileID: 1644037717}
   - component: {fileID: 1644037716}
   m_Layer: 0
   m_Name: Enemy
@@ -2454,38 +2596,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1644037711
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1644037710}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d00b290ea55362743a6cc07432531dba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyAI
-  patrolPoints:
-  - {fileID: 594699950}
-  - {fileID: 1929224772}
-  - {fileID: 237771385}
-  - {fileID: 27044061}
-  - {fileID: 138099878}
-  patrolSpeed: 3.5
-  patrolWaitTime: 5
-  chaseSpeed: 6.5
-  chaseStopDistance: 1.2
-  losePlayerDistance: 20
-  investigateWaitTime: 4
-  hearingTags:
-  - Player
-  - Noise
-  requirePlayerTagToChase: 0
-  playerTag: Player
-  startPatrollingOnStart: 1
-  stuckRecoveryDistance: 0.5
-  stuckRecoveryTimeout: 2
 --- !u!136 &1644037712
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -2599,9 +2709,87 @@ NavMeshAgent:
   m_AutoBraking: 1
   m_AutoRepath: 1
   m_Height: 2
-  m_BaseOffset: 0
+  m_BaseOffset: 0.84
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &1644037717
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1644037710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d338b44bbc04cca47861395547ba2327, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyPatrol
+  patrolPoints: []
+  loop: 1
+--- !u!114 &1644037719
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1644037710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfff73737aa532c4c93477baa7ea3fcb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyAttack
+  settings: {fileID: 11400000, guid: 48ce1a4df96d4cd48b017c703090052e, type: 2}
+  canAttack: 1
+--- !u!114 &1644037720
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1644037710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4026ddeb7f69814eb8a84da3c16db81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyMovement
+  agent: {fileID: 1644037716}
+  settings: {fileID: 11400000, guid: 48ce1a4df96d4cd48b017c703090052e, type: 2}
+  controller: {fileID: 1644037722}
+--- !u!114 &1644037721
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1644037710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54a564089876a3543849e6f87c7fa534, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyPerception
+  targetTag: Player
+  obstructionMask:
+    serializedVersion: 2
+    m_Bits: 0
+--- !u!114 &1644037722
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1644037710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 760b002cb43af2449a5421d1d7c3f45c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyController
+  settings: {fileID: 11400000, guid: 48ce1a4df96d4cd48b017c703090052e, type: 2}
+  animator: {fileID: 0}
+  perception: {fileID: 1644037721}
+  movement: {fileID: 1644037720}
+  attack: {fileID: 1644037719}
+  health: {fileID: 0}
+  currentState: 0
 --- !u!1 &1649008388
 GameObject:
   m_ObjectHideFlags: 0

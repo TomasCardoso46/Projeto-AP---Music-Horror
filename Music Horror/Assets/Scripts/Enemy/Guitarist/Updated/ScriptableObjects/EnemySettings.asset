@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5165a55fbc81669449f3a7198e71c5a8, type: 3}
+  m_Name: EnemySettings
+  m_EditorClassIdentifier: Assembly-CSharp::EnemySettings
+  sightFOV: 27.9
+  sightRange: 0
+  lowHearingRange: 3
+  normalHearingRange: 8
+  highHearingRange: 12
+  memoryTime: 6
+  patrolSpeed: 1.5
+  chaseSpeed: 2
+  stoppingDistance: 1.2
+  attackRange: 1.6
+  attackCooldown: 1.5
+  attackDamage: 20
+  investigateChance: 0.9
+  patrolPointTolerance: 0.5
+  randomRoam: 1
+  roamRadius: 10
