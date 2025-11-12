@@ -22,7 +22,7 @@ public class EnemyController : MonoBehaviour, IEnemy
 
     [SerializeField] private State currentState = State.Idle;
 
-    private Transform target;
+    public Transform target;
     private Vector3 lastKnownPosition;
     private float timeSinceSeen;
 

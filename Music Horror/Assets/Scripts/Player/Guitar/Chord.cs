@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using static EnemyAudioEmitter;
 
 public class Chord : MonoBehaviour
 {
@@ -18,6 +19,7 @@ public class Chord : MonoBehaviour
     [Header("Audio Source")]
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private SoundEmitter emitter;
+    [SerializeField] private EnemyAudioEmitter enemyAudioEmitter;
 
     private int currentIndex = 0;
 
@@ -87,6 +89,7 @@ public class Chord : MonoBehaviour
 
     void PlayCurrentSound()
     {
+        enemyAudioEmitter.EmitSound(SoundLevel.High, 3);
         if (audioSource == null || positionSounds.Count == 0)
             return;
         
