@@ -12,17 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5165a55fbc81669449f3a7198e71c5a8, type: 3}
   m_Name: EnemySettings
   m_EditorClassIdentifier: Assembly-CSharp::EnemySettings
-  sightFOV: 27.9
-  sightRange: 0
+  sightFOV: 180
+  sightRange: 3
   lowHearingRange: 8
-  normalHearingRange: 12
-  highHearingRange: 16
-  memoryTime: 10
+  normalHearingRange: 16
+  highHearingRange: 24
+  memoryTime: 5
   patrolSpeed: 1.5
   chaseSpeed: 2.5
   stoppingDistance: 1.2
-  attackRange: 1.6
-  attackCooldown: 1.5
+  attackRange: 2.5
+  attackCooldown: 5
   attackDamage: 20
   investigateChance: 0.3
   patrolPointTolerance: 0.5

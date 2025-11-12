@@ -24,16 +24,16 @@ public class EnemyAttack : MonoBehaviour
         {
             // attempt attack
             var healthComp = target.GetComponent<EnemyHealth>() ?? target.GetComponentInChildren<EnemyHealth>();
-            // if target is player, they should have a script with a TakeDamage method. We call by component name "PlayerHealth" in many projects.
-            // We'll try common names; if not present, we can use messages.
             if (healthComp != null)
             {
+                Debug.Log("Attack");
                 healthComp.TakeDamage(settings.AttackDamage, transform.position);
             }
             else
             {
                 // generic send message fallback
                 target.SendMessage("TakeDamage", settings.AttackDamage, SendMessageOptions.DontRequireReceiver);
+                Debug.Log("Attack");
             }
 
             StartCoroutine(AttackCooldown());

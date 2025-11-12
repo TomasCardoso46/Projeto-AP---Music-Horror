@@ -22,7 +22,7 @@ public class EnemyController : MonoBehaviour, IEnemy
 
     [SerializeField] private State currentState = State.Idle;
 
-    public Transform target;
+    private Transform target;
     private Vector3 lastKnownPosition;
     private float timeSinceSeen;
 
@@ -137,7 +137,7 @@ public class EnemyController : MonoBehaviour, IEnemy
     {
         if (currentState == newState) return;
         currentState = newState;
-        // Debug.Log($"{name} → {currentState}");
+        
     }
 
     #region IEnemy Implementation
