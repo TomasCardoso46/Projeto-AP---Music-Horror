@@ -10,7 +10,7 @@ public class DestroySigilSpell : Spell
     public override void Cast(Transform caster)
     {
         Ray ray = new Ray(caster.position, caster.forward);
-        if (Physics.Raycast(ray, out RaycastHit hit, maxDistance))
+        if (Physics.Raycast(ray, out RaycastHit hit, maxDistance) && hit.collider.isTrigger)
         {
             // Check if the object hit has a DoorInteraction script in parent
             DoorInteraction door = hit.collider.GetComponentInParent<DoorInteraction>();
