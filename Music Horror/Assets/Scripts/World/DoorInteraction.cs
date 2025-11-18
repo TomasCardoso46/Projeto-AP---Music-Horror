@@ -66,6 +66,7 @@ public class DoorInteraction : MonoBehaviour
         bool allSigilsInactive = AreAllSigilsInactive();
         if (allSigilsInactive)
             hasUnlocked = true;
+            Debug.Log($"hasUnlocked = {hasUnlocked}");
 
         UpdatePromptText();
 
@@ -117,6 +118,25 @@ public class DoorInteraction : MonoBehaviour
         return side > 0 ? openRotationB : openRotationA;
     }
 
+    private void OpenDoorForEnemy(Transform enemy)
+    {
+        if (!isOpen)
+        {
+            // Decide direction based on enemy position relative to door
+            targetRotation = DetermineOpenDirectionForEnemy(enemy);
+            isOpen = true;
+        }
+    }
+
+    // Use similar logic to the player version, but pass enemy transform
+    private Quaternion DetermineOpenDirectionForEnemy(Transform enemy)
+    {
+        Vector3 direction = (enemy.position - transform.position).normalized;
+        float side = Vector3.Dot(transform.forward, direction);
+
+        return side > 0 ? openRotationB : openRotationA;
+    }
+
 
 
 
@@ -137,10 +157,19 @@ public class DoorInteraction : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        bool allSigilsInactive = AreAllSigilsInactive();
+        if (allSigilsInactive)
+            hasUnlocked = true;
+            Debug.Log($"hasUnlocked = {hasUnlocked}");
         if (other.CompareTag(playerTag))
         {
             isPlayerInRange = true;
             player = other.transform;
+        }
+        if (other.CompareTag("Enemy") && hasUnlocked)
+        {
+            // Open the door automatically for enemies
+            OpenDoorForEnemy(other.transform);
         }
     }
 
