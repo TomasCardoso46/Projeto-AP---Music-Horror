@@ -54,7 +54,7 @@ public class DoorInteraction : MonoBehaviour
         {
             closedRotation = door.localRotation;
 
-            // 🔥 Auto-detect NavMeshObstacle on the door object
+            //Auto-detect NavMeshObstacle on the door object
             navMeshObstacle = door.GetComponent<NavMeshObstacle>();
 
             Vector3 baseEuler = door.localEulerAngles;
@@ -118,16 +118,6 @@ public class DoorInteraction : MonoBehaviour
         {
             navMeshObstacle.enabled = false;
             Debug.Log("NavMeshObstacle disabled on door object.");
-        }
-
-        // Activate the NavMeshSurface ONCE
-        if (!surfaceActivated && navMeshSurface != null)
-        {
-            navMeshSurface.enabled = true;
-            navMeshSurface.BuildNavMesh();
-
-            Debug.Log("NavMeshSurface Activated & Rebuilt!");
-            surfaceActivated = true;
         }
     }
 
