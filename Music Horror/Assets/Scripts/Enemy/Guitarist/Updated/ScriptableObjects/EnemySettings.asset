@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: EnemySettings
   m_EditorClassIdentifier: Assembly-CSharp::EnemySettings
   sightFOV: 180
-  sightRange: 3
-  lowHearingRange: 8
-  normalHearingRange: 16
-  highHearingRange: 24
-  memoryTime: 5
+  sightRange: 2
+  lowHearingRange: 4
+  normalHearingRange: 8
+  highHearingRange: 12
+  memoryTime: 3
   patrolSpeed: 1.5
   chaseSpeed: 2.5
   stoppingDistance: 1.2
