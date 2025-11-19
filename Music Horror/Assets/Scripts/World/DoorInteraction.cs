@@ -1,10 +1,12 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.AI;
+using Unity.AI.Navigation;
 
 public class DoorInteraction : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] private Transform door;           
+    [SerializeField] private Transform door;
     [SerializeField] private TextMeshProUGUI promptText;
     [SerializeField] private Transform sigilsParent;
     [SerializeField] private string playerTag = "Player";
@@ -13,20 +15,25 @@ public class DoorInteraction : MonoBehaviour
     [SerializeField] private float openAngle = 90f;
     [SerializeField] private float rotationSpeed = 3f;
 
+    [Header("NavMesh Activation")]
+    [SerializeField] private NavMeshSurface navMeshSurface; 
+    private NavMeshObstacle navMeshObstacle;   // auto-detected at runtime
+    private bool surfaceActivated = false;
+
     private bool isPlayerInRange = false;
     private bool hasUnlocked = false;
     private bool isOpen = false;
 
     private Quaternion closedRotation;
-    private Quaternion openRotationA;   // Opens to +openAngle
-    private Quaternion openRotationB;   // Opens to -openAngle
+    private Quaternion openRotationA;
+    private Quaternion openRotationB;
     private Quaternion targetRotation;
 
     private Transform player;
 
     private void Start()
     {
-        // Automatically find the TextMeshProUGUI named "DoorStatus", even if inactive
+        // Find DoorStatus TMP if not assigned
         if (promptText == null)
         {
             TextMeshProUGUI[] allTMPs = Resources.FindObjectsOfTypeAll<TextMeshProUGUI>();
@@ -47,6 +54,9 @@ public class DoorInteraction : MonoBehaviour
         {
             closedRotation = door.localRotation;
 
+            // 🔥 Auto-detect NavMeshObstacle on the door object
+            navMeshObstacle = door.GetComponent<NavMeshObstacle>();
+
             Vector3 baseEuler = door.localEulerAngles;
 
             openRotationA = Quaternion.Euler(baseEuler + new Vector3(0, openAngle, 0));
@@ -54,9 +64,19 @@ public class DoorInteraction : MonoBehaviour
 
             targetRotation = closedRotation;
         }
+
+        if (navMeshSurface != null)
+        {
+            navMeshSurface.enabled = false;
+        }
+
+        bool allSigilsInactive = AreAllSigilsInactive();
+        if (allSigilsInactive)
+        {
+            if (!hasUnlocked)
+                UnlockDoor();
+        }
     }
-
-
 
     private void Update()
     {
@@ -65,8 +85,10 @@ public class DoorInteraction : MonoBehaviour
 
         bool allSigilsInactive = AreAllSigilsInactive();
         if (allSigilsInactive)
-            hasUnlocked = true;
-            Debug.Log($"hasUnlocked = {hasUnlocked}");
+        {
+            if (!hasUnlocked)
+                UnlockDoor();
+        }
 
         UpdatePromptText();
 
@@ -86,17 +108,38 @@ public class DoorInteraction : MonoBehaviour
         }
     }
 
+    private void UnlockDoor()
+    {
+        hasUnlocked = true;
+        Debug.Log("Door Unlocked!");
+
+        //Disable the NavMeshObstacle automatically
+        if (navMeshObstacle != null)
+        {
+            navMeshObstacle.enabled = false;
+            Debug.Log("NavMeshObstacle disabled on door object.");
+        }
+
+        // Activate the NavMeshSurface ONCE
+        if (!surfaceActivated && navMeshSurface != null)
+        {
+            navMeshSurface.enabled = true;
+            navMeshSurface.BuildNavMesh();
+
+            Debug.Log("NavMeshSurface Activated & Rebuilt!");
+            surfaceActivated = true;
+        }
+    }
+
     private void ToggleDoor()
     {
         if (!isOpen)
         {
-            // Decide which direction to open based on player position
             targetRotation = DetermineOpenDirection();
             isOpen = true;
         }
         else
         {
-            // Close door
             targetRotation = closedRotation;
             isOpen = false;
         }
@@ -105,16 +148,11 @@ public class DoorInteraction : MonoBehaviour
     private Quaternion DetermineOpenDirection()
     {
         if (player == null)
-            return openRotationA; // fallback
+            return openRotationA;
 
-        // Direction from the trigger object (this) to the player
         Vector3 playerDirection = (player.position - transform.position).normalized;
-
-        // Compare player position to THIS object's local right axis
         float side = Vector3.Dot(transform.forward, playerDirection);
 
-        // side > 0 → player is on right side → open to the left (negative rotation)
-        // side < 0 → player is on left side → open to the right (positive rotation)
         return side > 0 ? openRotationB : openRotationA;
     }
 
@@ -122,13 +160,11 @@ public class DoorInteraction : MonoBehaviour
     {
         if (!isOpen)
         {
-            // Decide direction based on enemy position relative to door
             targetRotation = DetermineOpenDirectionForEnemy(enemy);
             isOpen = true;
         }
     }
 
-    // Use similar logic to the player version, but pass enemy transform
     private Quaternion DetermineOpenDirectionForEnemy(Transform enemy)
     {
         Vector3 direction = (enemy.position - transform.position).normalized;
@@ -136,9 +172,6 @@ public class DoorInteraction : MonoBehaviour
 
         return side > 0 ? openRotationB : openRotationA;
     }
-
-
-
 
     private void UpdatePromptText()
     {
@@ -157,18 +190,19 @@ public class DoorInteraction : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log($"{other} entered door ");
         bool allSigilsInactive = AreAllSigilsInactive();
-        if (allSigilsInactive)
-            hasUnlocked = true;
-            Debug.Log($"hasUnlocked = {hasUnlocked}");
+        if (allSigilsInactive && !hasUnlocked)
+            UnlockDoor();
+
         if (other.CompareTag(playerTag))
         {
             isPlayerInRange = true;
             player = other.transform;
         }
+
         if (other.CompareTag("Enemy") && hasUnlocked)
         {
-            // Open the door automatically for enemies
             OpenDoorForEnemy(other.transform);
         }
     }
