@@ -9,6 +9,9 @@ public class EnemyAttack : MonoBehaviour
     private bool onCooldown = false;
     private IEnemy owner;
 
+    [Header("Jumpscare Settings")]
+    [SerializeField] private Jumpscare jumpscare; // Drag your Jumpscare script here
+
     public void Initialize(EnemySettings s, IEnemy enemyOwner)
     {
         settings = s;
@@ -22,18 +25,26 @@ public class EnemyAttack : MonoBehaviour
         float dist = Vector3.Distance(transform.position, target.position);
         if (dist <= settings.AttackRange)
         {
-            // attempt attack
+            // Attempt attack
             var healthComp = target.GetComponent<EnemyHealth>() ?? target.GetComponentInChildren<EnemyHealth>();
             if (healthComp != null)
             {
                 Debug.Log("Attack");
                 healthComp.TakeDamage(settings.AttackDamage, transform.position);
+
+                // Trigger jumpscare if assigned
+                if (jumpscare != null)
+                    jumpscare.TriggerJumpscare();
             }
             else
             {
-                // generic send message fallback
+                // Generic fallback
                 target.SendMessage("TakeDamage", settings.AttackDamage, SendMessageOptions.DontRequireReceiver);
                 Debug.Log("Attack");
+
+                // Trigger jumpscare if assigned
+                if (jumpscare != null)
+                    jumpscare.TriggerJumpscare();
             }
 
             StartCoroutine(AttackCooldown());
