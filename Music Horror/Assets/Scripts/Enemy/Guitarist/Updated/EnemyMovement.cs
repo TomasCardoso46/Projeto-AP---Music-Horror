@@ -16,13 +16,15 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private AudioClip breathingClip;
     [SerializeField] private AudioClip footstepClip;
 
-    [Header("Footstep Settings")]
-    [SerializeField] private float roamFootstepInterval = 0.6f;
-    [SerializeField] private float chaseFootstepInterval = 0.3f;
+    [Header("Footstep Sound Speeds")]
+    [SerializeField] private float roamFootstepRate = 0.55f;   // seconds per step
+    [SerializeField] private float chaseFootstepRate = 0.35f;  // faster cadence
+    [SerializeField] private float roamFootstepPitch = 1.0f;
+    [SerializeField] private float chaseFootstepPitch = 1.3f;
 
     private Vector3 spawnPosition;
     private Coroutine roamCoroutine;
-    private Coroutine footstepCoroutine;
+    private float stepTimer = 0f;
 
     public void Initialize(EnemySettings s, IEnemy owner)
     {
@@ -32,32 +34,30 @@ public class EnemyMovement : MonoBehaviour
 
         spawnPosition = transform.position;
 
-        // Breathing setup
+        // ========= breathing audio setup =========
         if (breathingSource != null && breathingClip != null)
         {
             breathingSource.clip = breathingClip;
             breathingSource.loop = true;
-            breathingSource.spatialBlend = 1f; // 3D sound
+
+            // 3D sound
+            breathingSource.spatialBlend = 1f;
             breathingSource.rolloffMode = AudioRolloffMode.Logarithmic;
-            breathingSource.minDistance = 2f;
-            breathingSource.maxDistance = 20f;
             breathingSource.Play();
         }
 
-        // Footsteps setup
+        // ========= footstep audio setup =========
         if (footstepSource != null)
         {
             footstepSource.spatialBlend = 1f;
             footstepSource.rolloffMode = AudioRolloffMode.Logarithmic;
-            footstepSource.minDistance = 1f;
-            footstepSource.maxDistance = 25f;
         }
     }
 
     public void Idle()
     {
         agent.isStopped = true;
-        StopFootsteps();
+        stepTimer = 0f;
     }
 
     public void Patrol()
@@ -71,37 +71,41 @@ public class EnemyMovement : MonoBehaviour
         if (settings.RandomRoam && roamCoroutine == null)
             roamCoroutine = StartCoroutine(RandomRoam());
 
-        StartFootsteps(roamFootstepInterval);
+        // Switch to roaming footstep pitch
+        footstepSource.pitch = roamFootstepPitch;
     }
 
     public void MoveTo(Vector3 worldPos)
     {
         if (!agent.isOnNavMesh) return;
+
         StopRoam();
         agent.isStopped = false;
         agent.speed = settings.ChaseSpeed;
         agent.SetDestination(worldPos);
 
-        StartFootsteps(chaseFootstepInterval);
+        // Switch to chasing footstep pitch
+        footstepSource.pitch = chaseFootstepPitch;
     }
 
     public void Chase(Transform t)
     {
         if (!agent.isOnNavMesh) return;
+
         StopRoam();
         agent.isStopped = false;
         agent.speed = settings.ChaseSpeed;
         agent.SetDestination(t.position);
 
-        StartFootsteps(chaseFootstepInterval);
+        footstepSource.pitch = chaseFootstepPitch;
     }
 
     public void DisableMovement()
     {
         StopRoam();
-        StopFootsteps();
         agent.isStopped = true;
         agent.enabled = false;
+        stepTimer = 0f;
     }
 
     private IEnumerator RandomRoam()
@@ -109,16 +113,20 @@ public class EnemyMovement : MonoBehaviour
         while (true)
         {
             Vector3 target = spawnPosition + Random.insideUnitSphere * settings.RoamRadius;
+
             if (NavMesh.SamplePosition(target, out NavMeshHit hit, 2f, NavMesh.AllAreas))
             {
                 agent.SetDestination(hit.position);
                 float timer = 0f;
-                while (Vector3.Distance(transform.position, hit.position) > settings.PatrolPointTolerance && timer < 12f)
+
+                while (Vector3.Distance(transform.position, hit.position) > settings.PatrolPointTolerance &&
+                       timer < 12f)
                 {
                     timer += Time.deltaTime;
                     yield return null;
                 }
             }
+
             yield return new WaitForSeconds(Random.Range(1.5f, 4f));
         }
     }
@@ -132,39 +140,37 @@ public class EnemyMovement : MonoBehaviour
         }
     }
 
-    // FOOTSTEP LOGIC
-    private void StartFootsteps(float interval)
+    private void Update()
     {
-        StopFootsteps(); // make sure only one coroutine runs
-        if (footstepSource != null && footstepClip != null)
-            footstepCoroutine = StartCoroutine(Footsteps(interval));
+        HandleFootsteps();
     }
 
-    private void StopFootsteps()
+    // ===========================================================
+    // FOOTSTEP TIMING SYSTEM
+    // ===========================================================
+    private void HandleFootsteps()
     {
-        if (footstepCoroutine != null)
+        // If not moving → reset timer and stop
+        if (agent.velocity.sqrMagnitude < 0.1f || agent.isStopped)
         {
-            StopCoroutine(footstepCoroutine);
-            footstepCoroutine = null;
+            stepTimer = 0f;
+            return;
         }
-    }
 
-    private IEnumerator Footsteps(float interval)
-    {
-        while (true)
+        // Add time
+        stepTimer += Time.deltaTime;
+
+        // Pick the correct cadence
+        float stepRate =
+            agent.speed == settings.ChaseSpeed ? chaseFootstepRate : roamFootstepRate;
+
+        // Time for next step?
+        if (stepTimer >= stepRate)
         {
-            if (agent.velocity.magnitude > 0.1f)
-            {
+            if (footstepClip != null)
                 footstepSource.PlayOneShot(footstepClip);
-            }
-            else
-            {
-                // Stop coroutine immediately if agent stops
-                StopFootsteps();
-                yield break;
-            }
 
-            yield return new WaitForSeconds(interval / (agent.speed / settings.PatrolSpeed));
+            stepTimer = 0f;
         }
     }
 }

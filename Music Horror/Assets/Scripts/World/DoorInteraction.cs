@@ -15,10 +15,13 @@ public class DoorInteraction : MonoBehaviour
     [SerializeField] private float openAngle = 90f;
     [SerializeField] private float rotationSpeed = 3f;
 
+    [Header("Audio")]
+    [SerializeField] private AudioSource openSoundSource;
+    [SerializeField] private AudioClip openSoundClip;
+
     [Header("NavMesh Activation")]
-    [SerializeField] private NavMeshSurface navMeshSurface; 
-    private NavMeshObstacle navMeshObstacle;   // auto-detected at runtime
-    private bool surfaceActivated = false;
+    [SerializeField] private NavMeshSurface navMeshSurface;
+    private NavMeshObstacle navMeshObstacle;
 
     private bool isPlayerInRange = false;
     private bool hasUnlocked = false;
@@ -31,9 +34,12 @@ public class DoorInteraction : MonoBehaviour
 
     private Transform player;
 
+    private EnemyAudioEmitter enemyAudioEmitter;
+
     private void Start()
     {
-        // Find DoorStatus TMP if not assigned
+        enemyAudioEmitter = FindObjectOfType<EnemyAudioEmitter>();
+
         if (promptText == null)
         {
             TextMeshProUGUI[] allTMPs = Resources.FindObjectsOfTypeAll<TextMeshProUGUI>();
@@ -53,8 +59,6 @@ public class DoorInteraction : MonoBehaviour
         if (door != null)
         {
             closedRotation = door.localRotation;
-
-            //Auto-detect NavMeshObstacle on the door object
             navMeshObstacle = door.GetComponent<NavMeshObstacle>();
 
             Vector3 baseEuler = door.localEulerAngles;
@@ -66,9 +70,7 @@ public class DoorInteraction : MonoBehaviour
         }
 
         if (navMeshSurface != null)
-        {
             navMeshSurface.enabled = false;
-        }
 
         bool allSigilsInactive = AreAllSigilsInactive();
         if (allSigilsInactive)
@@ -111,14 +113,9 @@ public class DoorInteraction : MonoBehaviour
     private void UnlockDoor()
     {
         hasUnlocked = true;
-        Debug.Log("Door Unlocked!");
 
-        //Disable the NavMeshObstacle automatically
         if (navMeshObstacle != null)
-        {
             navMeshObstacle.enabled = false;
-            Debug.Log("NavMeshObstacle disabled on door object.");
-        }
     }
 
     private void ToggleDoor()
@@ -127,6 +124,9 @@ public class DoorInteraction : MonoBehaviour
         {
             targetRotation = DetermineOpenDirection();
             isOpen = true;
+
+            PlayOpenSound();
+            EmitNormalSoundForPlayer();
         }
         else
         {
@@ -152,6 +152,8 @@ public class DoorInteraction : MonoBehaviour
         {
             targetRotation = DetermineOpenDirectionForEnemy(enemy);
             isOpen = true;
+
+            PlayOpenSound();
         }
     }
 
@@ -161,6 +163,18 @@ public class DoorInteraction : MonoBehaviour
         float side = Vector3.Dot(transform.forward, direction);
 
         return side > 0 ? openRotationB : openRotationA;
+    }
+
+    private void PlayOpenSound()
+    {
+        if (openSoundSource != null && openSoundClip != null)
+            openSoundSource.PlayOneShot(openSoundClip);
+    }
+
+    private void EmitNormalSoundForPlayer()
+    {
+        if (enemyAudioEmitter != null && player != null)
+            enemyAudioEmitter.EmitSound(EnemyAudioEmitter.SoundLevel.Normal);
     }
 
     private void UpdatePromptText()
@@ -180,7 +194,6 @@ public class DoorInteraction : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log($"{other} entered door ");
         bool allSigilsInactive = AreAllSigilsInactive();
         if (allSigilsInactive && !hasUnlocked)
             UnlockDoor();
@@ -192,9 +205,7 @@ public class DoorInteraction : MonoBehaviour
         }
 
         if (other.CompareTag("Enemy") && hasUnlocked)
-        {
             OpenDoorForEnemy(other.transform);
-        }
     }
 
     private void OnTriggerExit(Collider other)
