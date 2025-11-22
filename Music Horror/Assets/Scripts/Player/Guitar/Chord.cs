@@ -21,6 +21,12 @@ public class Chord : MonoBehaviour
     [SerializeField] private SoundEmitter emitter;
     [SerializeField] private EnemyAudioEmitter enemyAudioEmitter;
 
+    [Header("Cooldown Visual Objects (Match Indices)")]
+    [SerializeField] private List<GameObject> cooldownObjects = new List<GameObject>();
+
+    [Header("Cooldown Timer Settings")]
+    [SerializeField] private float cooldownDuration = 2f;
+
     private int currentIndex = 0;
 
     void Start()
@@ -46,6 +52,13 @@ public class Chord : MonoBehaviour
         // Instantly move to the first position
         currentIndex = 0;
         objectToMove.position = targetPositions[currentIndex].position;
+
+        // Disable all cooldown visual objects at start
+        foreach (var obj in cooldownObjects)
+        {
+            if (obj != null)
+                obj.SetActive(false);
+        }
     }
 
     void Update()
@@ -55,16 +68,16 @@ public class Chord : MonoBehaviour
 
         float scroll = Input.GetAxis("Mouse ScrollWheel");
 
-        if (scroll > 0f) // Scroll up
+        if (scroll > 0f) 
         {
             MoveToIndex(currentIndex - 1);
         }
-        else if (scroll < 0f) // Scroll down
+        else if (scroll < 0f) 
         {
             MoveToIndex(currentIndex + 1);
         }
 
-        if (Input.GetMouseButtonDown(0)) // Left mouse click
+        if (Input.GetMouseButtonDown(0)) 
         {
             PlayCurrentSound();
         }
@@ -74,7 +87,6 @@ public class Chord : MonoBehaviour
     {
         int count = targetPositions.Count;
 
-        // Wrap-around behavior
         if (newIndex < 0)
             newIndex = count - 1;
         else if (newIndex >= count)
@@ -90,15 +102,16 @@ public class Chord : MonoBehaviour
     void PlayCurrentSound()
     {
         enemyAudioEmitter.EmitSound(SoundLevel.High, 3);
+
         if (audioSource == null || positionSounds.Count == 0)
             return;
-        
+
         if (sequenceManager != null)
         {
             sequenceManager.RegisterChord(currentIndex + 1);
         }
 
-
+        // Play Audio
         if (currentIndex < positionSounds.Count && positionSounds[currentIndex] != null)
         {
             audioSource.clip = positionSounds[currentIndex];
@@ -109,5 +122,65 @@ public class Chord : MonoBehaviour
         {
             Debug.LogWarning($"No audio clip assigned for position index {currentIndex}!");
         }
+
+        // Trigger cooldown object fade-out
+        ActivateCooldownObject(currentIndex);
+    }
+
+    void ActivateCooldownObject(int index)
+    {
+        if (index >= cooldownObjects.Count || cooldownObjects[index] == null)
+            return;
+
+        GameObject cooldownObj = cooldownObjects[index];
+
+        // Turn object on and fully visible
+        cooldownObj.SetActive(true);
+
+        // Reset alpha to full
+        SetObjectAlpha(cooldownObj, 1f);
+
+        // Start fade coroutine
+        StartCoroutine(FadeOutCooldownObject(cooldownObj));
+    }
+
+    System.Collections.IEnumerator FadeOutCooldownObject(GameObject obj)
+    {
+        float timer = 0f;
+
+        Renderer rend = obj.GetComponent<Renderer>();
+        if (rend == null)
+        {
+            Debug.LogWarning("Cooldown object has no Renderer! Cannot fade.");
+            yield break;
+        }
+
+        Material mat = rend.material;
+
+        while (timer < cooldownDuration)
+        {
+            timer += Time.deltaTime;
+
+            float t = 1f - (timer / cooldownDuration);
+            Color c = mat.color;
+            c.a = t;
+            mat.color = c;
+
+            yield return null;
+        }
+
+        // Fully invisible → cooldown ended
+        obj.SetActive(false);
+    }
+
+    void SetObjectAlpha(GameObject obj, float alpha)
+    {
+        Renderer rend = obj.GetComponent<Renderer>();
+        if (rend == null) return;
+
+        Material mat = rend.material;
+        Color c = mat.color;
+        c.a = alpha;
+        mat.color = c;
     }
 }
