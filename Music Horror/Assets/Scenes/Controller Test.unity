@@ -13838,7 +13838,6 @@ GameObject:
   m_Component:
   - component: {fileID: 871936530}
   - component: {fileID: 871936529}
-  - component: {fileID: 871936528}
   - component: {fileID: 871936527}
   m_Layer: 3
   m_Name: Jumpscare
@@ -13891,14 +13890,6 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
---- !u!81 &871936528
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 871936526}
-  m_Enabled: 1
 --- !u!20 &871936529
 Camera:
   m_ObjectHideFlags: 0
@@ -21359,7 +21350,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1333691120}
   - component: {fileID: 1333691123}
-  - component: {fileID: 1333691122}
   - component: {fileID: 1333691121}
   m_Layer: 0
   m_Name: Viewmodel
@@ -21427,14 +21417,6 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
---- !u!81 &1333691122
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1333691119}
-  m_Enabled: 1
 --- !u!20 &1333691123
 Camera:
   m_ObjectHideFlags: 0
@@ -48262,6 +48244,18 @@ PrefabInstance:
       propertyPath: objectToMove
       value: 
       objectReference: {fileID: 3847789589731438761}
+    - target: {fileID: 2967022306951442414, guid: 655ab849774fa474f97fe4cfcfa4f5f6, type: 3}
+      propertyPath: guitarRenderer
+      value: 
+      objectReference: {fileID: 9086786461411248715}
+    - target: {fileID: 2967022306951442414, guid: 655ab849774fa474f97fe4cfcfa4f5f6, type: 3}
+      propertyPath: usableMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: b11d1ceb6c6baf74b88b8ee56ef5d9de, type: 2}
+    - target: {fileID: 2967022306951442414, guid: 655ab849774fa474f97fe4cfcfa4f5f6, type: 3}
+      propertyPath: disabledMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 50d24379894998044bc2fb6114ad672d, type: 2}
     - target: {fileID: 2967022306951442414, guid: 655ab849774fa474f97fe4cfcfa4f5f6, type: 3}
       propertyPath: cooldownObjects.Array.size
       value: 5
