@@ -24,7 +24,7 @@ MonoBehaviour:
   attackRange: 2.5
   attackCooldown: 5
   attackDamage: 20
-  investigateChance: 0.3
+  investigateChance: 1
   patrolPointTolerance: 0.5
   randomRoam: 1
-  roamRadius: 10
+  roamRadius: 100
