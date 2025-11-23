@@ -6,8 +6,11 @@ public class ChordSequenceManager : MonoBehaviour
     [Header("List of Possible Spell Patterns")]
     [SerializeField] private List<string> spellSequences = new List<string>();
 
-    [Header("List of Spell ScriptableObjects")]
+    [Header("List of Spell ScriptableObjects (Matches index of Spell Pattern)")]
     [SerializeField] private List<Spell> spells = new List<Spell>();
+
+    [Header("List of GameObjects to Activate on Match (Optional, Same Index as Patterns)")]
+    [SerializeField] private List<GameObject> objectsToActivate = new List<GameObject>();
 
     [Header("Debug - Current Sequence")]
     [SerializeField] private string currentSequence = "";
@@ -35,8 +38,10 @@ public class ChordSequenceManager : MonoBehaviour
     {
         playedChords.Add(chordIndex.ToString());
         currentSequence = string.Join("", playedChords);
+
         timer = resetDelay;
         timerRunning = true;
+
         CheckForSpellMatch();
     }
 
@@ -46,10 +51,20 @@ public class ChordSequenceManager : MonoBehaviour
         {
             if (currentSequence == spellSequences[i])
             {
-                // Cast the corresponding spell using ScriptableObject
+                // CAST SPELL
                 if (i < spells.Count && spells[i] != null)
                 {
-                    spells[i].Cast(Camera.main.transform); // Assuming player casting from main camera
+                    spells[i].Cast(Camera.main.transform);
+                }
+
+                // ACTIVATE ASSOCIATED GAMEOBJECT (if any)
+                if (i < objectsToActivate.Count && objectsToActivate[i] != null)
+                {
+                    if (!objectsToActivate[i].activeSelf)
+                    {
+                        objectsToActivate[i].SetActive(true);
+                        Debug.Log($"Activated object: {objectsToActivate[i].name}");
+                    }
                 }
 
                 ResetSequence();

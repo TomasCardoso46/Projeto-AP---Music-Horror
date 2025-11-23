@@ -4,10 +4,17 @@ public class StickyLight : MonoBehaviour
 {
     [Header("Projectile Settings")]
     [SerializeField] private Vector3 speed = new Vector3(0, 0, 20f);
-    [SerializeField] private bool followTarget = false;   // If true, sticks to and follows moving objects
-    [SerializeField] private float shrinkingSpeed = 0.5f; // Units per second the projectile shrinks after sticking
+    [SerializeField] private float shrinkingSpeed = 0.5f;
+
+    [Header("Sticking Settings")]
+    [SerializeField] private float surfaceOffset = 0f; 
+
+    [Header("Follow Settings")]
+    [Tooltip("Tags the projectile will follow after sticking (e.g. 'Enemy')")]
+    [SerializeField] private string[] followTags = new string[] { "Enemy" };
 
     private Rigidbody rb;
+    private Collider col;
     private Vector3 impactScale;
     private Vector3 originalScale;
     private bool isStuck = false;
@@ -19,11 +26,10 @@ public class StickyLight : MonoBehaviour
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
+        col = GetComponent<Collider>();
 
-        // Store the initial scale before impact
         originalScale = transform.localScale;
 
-        // Find a child Point Light automatically
         pointLight = GetComponentInChildren<Light>();
         if (pointLight != null)
         {
@@ -31,35 +37,64 @@ public class StickyLight : MonoBehaviour
             initialLightRange = pointLight.range;
         }
 
-        // Apply an instantaneous push (frame-rate independent)
         rb.AddRelativeForce(speed, ForceMode.Impulse);
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (isStuck) return; // Prevent multiple triggers
+        if (isStuck) return;
         isStuck = true;
 
-        // Record the current scale at the moment of impact
         impactScale = transform.localScale;
 
-        // Stop all physics
         rb.isKinematic = true;
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
 
-        // Move to the contact point and orient toward the surface
         ContactPoint contact = collision.contacts[0];
-        transform.position = contact.point;
+
+        // Determine sticking offset
+        float offset = surfaceOffset;
+        if (offset == 0f)
+        {
+            if (col != null)
+            {
+                Vector3 localForward = transform.InverseTransformDirection(-contact.normal);
+                localForward = new Vector3(
+                    Mathf.Abs(localForward.x),
+                    Mathf.Abs(localForward.y),
+                    Mathf.Abs(localForward.z)
+                );
+
+                Vector3 extents = col.bounds.extents;
+                offset = Mathf.Max(localForward.x * extents.x,
+                                   localForward.y * extents.y,
+                                   localForward.z * extents.z);
+            }
+            else offset = 0.1f;
+        }
+
+        transform.position = contact.point + contact.normal * offset;
         transform.rotation = Quaternion.LookRotation(contact.normal);
 
-        // Optional: stick to moving objects using a scale-neutral anchor
-        if (followTarget)
+        // ===== AUTO FOLLOW ENEMIES =====
+        bool shouldFollow = false;
+        foreach (string tag in followTags)
+        {
+            if (collision.collider.CompareTag(tag))
+            {
+                shouldFollow = true;
+                break;
+            }
+        }
+
+        if (shouldFollow)
         {
             GameObject anchor = new GameObject("StickyAnchor");
-            anchor.transform.position = contact.point;
+            anchor.transform.position = transform.position;
             anchor.transform.rotation = transform.rotation;
             anchor.transform.SetParent(collision.transform, true);
+
             transform.SetParent(anchor.transform, true);
         }
         else
@@ -67,7 +102,6 @@ public class StickyLight : MonoBehaviour
             transform.SetParent(null);
         }
 
-        // Restore the pre-impact scale
         transform.localScale = impactScale;
     }
 
@@ -75,7 +109,7 @@ public class StickyLight : MonoBehaviour
     {
         if (!isStuck) return;
 
-        // Maintain same world scale even if parent scales
+        // Maintain world scale even if parent scales
         if (transform.parent != null)
         {
             Vector3 parentScale = transform.parent.lossyScale;
@@ -86,14 +120,13 @@ public class StickyLight : MonoBehaviour
             );
         }
 
-        // Gradually shrink
+        // Shrink
         if (shrinkingSpeed > 0f)
         {
             float shrinkAmount = shrinkingSpeed * Time.deltaTime;
             impactScale -= Vector3.one * shrinkAmount;
 
-            // Destroy when very small
-            if (impactScale.x <= 0f || impactScale.y <= 0f || impactScale.z <= 0f)
+            if (impactScale.x <= 0f)
             {
                 Destroy(gameObject);
                 return;
@@ -101,20 +134,17 @@ public class StickyLight : MonoBehaviour
 
             transform.localScale = impactScale;
 
-            // --- LIGHT FADE SECTION ---
+            // Light fade
             if (pointLight != null)
             {
-                // Normalize light fade relative to the projectile’s original scale
-                float normalizedScale = Mathf.Clamp01(impactScale.x / originalScale.x);
+                float normalized = Mathf.Clamp01(impactScale.x / originalScale.x);
 
-                // Smoothly fade out the light’s intensity and range
-                pointLight.intensity = Mathf.Lerp(0f, initialLightIntensity, normalizedScale);
-                pointLight.range = Mathf.Lerp(0f, initialLightRange, normalizedScale);
+                pointLight.intensity = Mathf.Lerp(0f, initialLightIntensity, normalized);
+                pointLight.range = Mathf.Lerp(0f, initialLightRange, normalized);
             }
         }
         else if (pointLight != null)
         {
-            // If shrinking stops early, continue fading light smoothly to zero
             pointLight.intensity = Mathf.MoveTowards(pointLight.intensity, 0f, Time.deltaTime * initialLightIntensity);
             pointLight.range = Mathf.MoveTowards(pointLight.range, 0f, Time.deltaTime * initialLightRange);
         }
