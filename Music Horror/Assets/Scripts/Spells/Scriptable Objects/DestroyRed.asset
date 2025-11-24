@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DestroySigilSpell
   spellName: Destroy Red Sigil
   sigilColor: Red
-  maxDistance: 10
+  maxDistance: 25
