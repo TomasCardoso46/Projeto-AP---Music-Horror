@@ -27959,7 +27959,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2154392076684130444, guid: 098f9c8d9d6ca2e41893d1f162b438c8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1740563620}
   m_SourcePrefab: {fileID: 100100000, guid: 098f9c8d9d6ca2e41893d1f162b438c8, type: 3}
 --- !u!1 &1252408922
 GameObject:
@@ -29227,6 +29230,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1318019555}
   - component: {fileID: 1318019554}
+  - component: {fileID: 1318019556}
   m_Layer: 0
   m_Name: JumpscareManager
   m_TagString: Untagged
@@ -29271,6 +29275,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1318019556
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1318019553}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efef37b82f7c3324dad6467e65de89bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DeleteEnemy
+  objectToDelete: {fileID: 1644037710}
 --- !u!4 &1318875733 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4759226835713514800, guid: 4afe858b45c740449bde8115ee55d5c8, type: 3}
@@ -38648,6 +38665,36 @@ Transform:
   - {fileID: 1031872800}
   m_Father: {fileID: 2006849448}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1740563617 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2154392076684130444, guid: 098f9c8d9d6ca2e41893d1f162b438c8, type: 3}
+  m_PrefabInstance: {fileID: 1249903612}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1740563618 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4769299662802885655, guid: 098f9c8d9d6ca2e41893d1f162b438c8, type: 3}
+  m_PrefabInstance: {fileID: 1249903612}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1740563617}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Core.Runtime::UnityEngine.Rendering.Volume
+--- !u!114 &1740563620
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1740563617}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5148e4871ad1fb74782d69bad853fc4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ChangePostExposure
+  volume: {fileID: 1740563618}
+  changeAmount: 0.5
 --- !u!1001 &1742861171
 PrefabInstance:
   m_ObjectHideFlags: 0
