@@ -7,7 +7,7 @@ public static class EnemyUtilities
     {
         Vector3 randDirection = Random.insideUnitSphere * dist;
         randDirection += origin;
-        if (UnityEngine.AI.NavMesh.SamplePosition(randDirection, out UnityEngine.AI.NavMeshHit navHit, 2.0f, UnityEngine.AI.NavMesh.AllAreas))
+        if (UnityEngine.AI.NavMesh.SamplePosition(randDirection, out UnityEngine.AI.NavMeshHit navHit, 20.0f, UnityEngine.AI.NavMesh.AllAreas))
         {
             result = navHit.position;
             return true;

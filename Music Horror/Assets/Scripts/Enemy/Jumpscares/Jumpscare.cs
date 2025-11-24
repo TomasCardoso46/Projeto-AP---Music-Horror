@@ -1,31 +1,33 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class Jumpscare : MonoBehaviour
 {
     [Header("Audio")]
-    public AudioSource audioSource;  // The audio source to play the jumpscare sound
-    public AudioClip jumpscareClip;  // The sound to play
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip jumpscareClip; 
 
     [Header("Camera Settings")]
-    public GameObject jumpscareCamera;  // The 2nd camera to enable
+    [SerializeField] private GameObject jumpscareCamera;  
 
     [Header("Shake Settings")]
-    public GameObject objectToShake;   // Any object to shake
-    public float shakeDuration = 0.5f;  // How long the shake lasts
-    public float shakeMagnitude = 15f;  // Max rotation in degrees
-    public enum ShakeAxis { X, Y, Z }
-    public ShakeAxis shakeAxis = ShakeAxis.Y; // Choose which axis to shake
+    [SerializeField] private GameObject objectToShake;
+    [SerializeField] private float shakeDuration = 0.5f;
+    [SerializeField] private float shakeMagnitude = 15f;
+    [SerializeField] private enum ShakeAxis { X, Y, Z }
+    [SerializeField] private ShakeAxis shakeAxis = ShakeAxis.Y;
 
     [Header("Enemy Settings")]
-    public GameObject enemyToDisable;  // The chasing enemy to hide
+    [SerializeField] private GameObject enemyToDisable;
 
     [Header("Quit Settings")]
-    public float quitDelay = 2f;  // Time in seconds before quitting the game
+    [SerializeField] private float quitDelay = 2f;
+    [SerializeField] private string sceneToLoad;
 
     private Quaternion originalRotation;
 
-    // Call this function to trigger the jumpscare
+    // Call this metod to trigger the jumpscare
     public void TriggerJumpscare()
     {
         if (jumpscareCamera != null)
@@ -79,11 +81,6 @@ public class Jumpscare : MonoBehaviour
     private IEnumerator QuitAfterDelay()
     {
         yield return new WaitForSeconds(quitDelay);
-
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false; // Stop play mode in editor
-#else
-        Application.Quit(); // Quit the build
-#endif
+        SceneManager.LoadScene(sceneToLoad);
     }
 }

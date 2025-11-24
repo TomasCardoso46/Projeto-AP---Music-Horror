@@ -14,17 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemySettings
   sightFOV: 180
   sightRange: 2
-  lowHearingRange: 4
-  normalHearingRange: 8
-  highHearingRange: 12
+  lowHearingRange: 5
+  normalHearingRange: 10
+  highHearingRange: 20
   memoryTime: 3
   patrolSpeed: 1.5
-  chaseSpeed: 2.5
+  chaseSpeed: 3
   stoppingDistance: 1.2
   attackRange: 2.5
   attackCooldown: 5
   attackDamage: 20
   investigateChance: 1
-  patrolPointTolerance: 0.5
+  patrolPointTolerance: 1
   randomRoam: 1
-  roamRadius: 100
+  roamRadius: 50

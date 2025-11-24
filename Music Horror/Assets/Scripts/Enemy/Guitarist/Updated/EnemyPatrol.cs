@@ -21,7 +21,6 @@ public class EnemyPatrol : MonoBehaviour
     {
         agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         var movement = GetComponent<EnemyMovement>();
-        // movement will initialize settings; but for patience, we fetch them from movement if available
         settings = movement != null ? (movement as EnemyMovement)?.GetType().GetField("settings", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)?.GetValue(movement) as EnemySettings : null;
     }
 

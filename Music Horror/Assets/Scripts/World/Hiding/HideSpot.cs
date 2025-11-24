@@ -1,15 +1,16 @@
 using System.Collections;
 using UnityEngine;
+using TMPro;
 
 public class HideSpot : MonoBehaviour
 {
     [Header("Positions")]
-    [SerializeField] private Transform playerHidePosition;   // Where the player hides
-    [SerializeField] private Transform playerExitPosition;   // Where the player exits
-    [SerializeField] private Transform cameraHidePosition;   // Where the camera should be while hiding
+    [SerializeField] private Transform playerHidePosition;
+    [SerializeField] private Transform playerExitPosition;
+    [SerializeField] private Transform cameraHidePosition;
 
     [Header("Settings")]
-    [SerializeField] private KeyCode hideKey = KeyCode.E;
+    [SerializeField] private KeyCode hideKey = KeyCode.F;
     [SerializeField] private float moveSpeed = 5f;
 
     private bool playerNearby = false;
@@ -22,6 +23,24 @@ public class HideSpot : MonoBehaviour
     private Camera mainCamera;
     private Coroutine moveRoutine;
 
+    [SerializeField] private TextMeshProUGUI hidePrompt; // found automatically
+
+    private void Start()
+    {
+        if (hidePrompt == null)
+        {
+            TextMeshProUGUI[] allTMPs = Resources.FindObjectsOfTypeAll<TextMeshProUGUI>();
+            foreach (var tmp in allTMPs)
+            {
+                if (tmp.name == "ClosetStatus")
+                {
+                    hidePrompt = tmp;
+                    break;
+                }
+            }
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
@@ -32,6 +51,8 @@ public class HideSpot : MonoBehaviour
             playerColliders = player.GetComponentsInChildren<Collider>();
             playerRigidbody = player.GetComponent<Rigidbody>();
             mainCamera = Camera.main;
+
+            UpdatePrompt();
         }
     }
 
@@ -40,6 +61,10 @@ public class HideSpot : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             playerNearby = false;
+
+            if (hidePrompt != null)
+                hidePrompt.gameObject.SetActive(false);
+
             if (isHiding)
                 ForceExitHide();
         }
@@ -50,7 +75,23 @@ public class HideSpot : MonoBehaviour
         if (playerNearby && Input.GetKeyDown(hideKey))
         {
             ToggleHide();
+            UpdatePrompt();
         }
+    }
+
+    private void UpdatePrompt()
+    {
+        if (hidePrompt == null) return;
+
+        if (!playerNearby)
+        {
+            hidePrompt.gameObject.SetActive(false);
+            return;
+        }
+
+        hidePrompt.gameObject.SetActive(true);
+
+        hidePrompt.text = !isHiding ? "Press F to Hide" : "Press F to Leave";
     }
 
     private void ToggleHide()
@@ -59,7 +100,6 @@ public class HideSpot : MonoBehaviour
 
         if (!isHiding)
         {
-            // Begin hiding
             isHiding = true;
 
             if (playerMovement != null)
@@ -72,18 +112,14 @@ public class HideSpot : MonoBehaviour
                 playerRigidbody.isKinematic = true;
             }
 
-            if (playerColliders != null)
-            {
-                foreach (var c in playerColliders)
-                    c.enabled = false;
-            }
+            foreach (var c in playerColliders)
+                c.enabled = false;
 
             if (moveRoutine != null) StopCoroutine(moveRoutine);
             moveRoutine = StartCoroutine(MoveToHide());
         }
         else
         {
-            // Exit hiding
             if (moveRoutine != null) StopCoroutine(moveRoutine);
             StartCoroutine(MoveToExit());
         }
@@ -115,8 +151,11 @@ public class HideSpot : MonoBehaviour
 
             yield return null;
         }
-
         moveRoutine = null;
+        UpdatePrompt();
+        playerNearby = true;
+        hidePrompt.gameObject.SetActive(true);
+        
     }
 
     private IEnumerator MoveToExit()
@@ -129,27 +168,21 @@ public class HideSpot : MonoBehaviour
         Vector3 targetCamPos = playerExitPosition != null ? playerExitPosition.position : transform.position + transform.forward * 1.5f;
         Quaternion targetCamRot = playerExitPosition != null ? playerExitPosition.rotation : Quaternion.LookRotation(transform.forward);
 
-        // Move player instantly to exit (so they don't clip inside)
         if (playerExitPosition != null)
         {
             player.position = playerExitPosition.position;
             player.rotation = playerExitPosition.rotation;
         }
 
-        // Reactivate player control
         if (playerMovement != null)
             playerMovement.enabled = true;
 
         if (playerRigidbody != null)
             playerRigidbody.isKinematic = false;
 
-        if (playerColliders != null)
-        {
-            foreach (var c in playerColliders)
-                c.enabled = true;
-        }
+        foreach (var c in playerColliders)
+            c.enabled = true;
 
-        // Smoothly move camera back to player exit area
         float t = 0f;
         while (t < 1f)
         {
@@ -160,6 +193,9 @@ public class HideSpot : MonoBehaviour
         }
 
         moveRoutine = null;
+        UpdatePrompt();
+        playerNearby = false;
+        hidePrompt.gameObject.SetActive(false);
     }
 
     private void ForceExitHide()
@@ -174,7 +210,6 @@ public class HideSpot : MonoBehaviour
             moveRoutine = null;
         }
 
-        // Safety reposition
         player.position = playerExitPosition != null ? playerExitPosition.position : transform.position + transform.forward * 1.5f;
         player.rotation = playerExitPosition != null ? playerExitPosition.rotation : Quaternion.LookRotation(transform.forward);
 
@@ -184,10 +219,9 @@ public class HideSpot : MonoBehaviour
         if (playerRigidbody != null)
             playerRigidbody.isKinematic = false;
 
-        if (playerColliders != null)
-        {
-            foreach (var c in playerColliders)
-                c.enabled = true;
-        }
+        foreach (var c in playerColliders)
+            c.enabled = true;
+
+        UpdatePrompt();
     }
 }

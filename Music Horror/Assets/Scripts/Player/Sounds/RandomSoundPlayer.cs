@@ -56,6 +56,9 @@ public class RandomSoundPlayer : MonoBehaviour
         // Pick a random clip
         AudioClip clip = clips[Random.Range(0, clips.Count)];
 
+        // Make sure looping is off
+        audioSource.loop = false;
+
         // Play it
         audioSource.clip = clip;
         audioSource.Play();
