@@ -30,7 +30,7 @@ public class EnemyController : MonoBehaviour, IEnemy
     // AUDIO SETTINGS
     // -----------------------------
     [Header("Investigate Audio")]
-    [SerializeField] private AudioSource chaseAudioSource;   // <-- your own audio source (e.g. player audio)
+    [SerializeField] private AudioSource chaseAudioSource;   
     [SerializeField] private AudioClip chaseClip;
 
     [SerializeField] private float chaseFadeOutTime = 1.2f;
@@ -184,7 +184,7 @@ public class EnemyController : MonoBehaviour, IEnemy
         }
 
         chaseAudioSource.clip = chaseClip;
-        chaseAudioSource.volume = investigateStartVolume; // <-- uses your editor value
+        chaseAudioSource.volume = investigateStartVolume; 
         chaseAudioSource.loop = true;
         chaseAudioSource.Play();
 

@@ -10,7 +10,7 @@ public class EnemyAttack : MonoBehaviour
     private IEnemy owner;
 
     [Header("Jumpscare Settings")]
-    [SerializeField] private Jumpscare jumpscare; // Drag your Jumpscare script here
+    [SerializeField] private Jumpscare jumpscare; 
 
     public void Initialize(EnemySettings s, IEnemy enemyOwner)
     {

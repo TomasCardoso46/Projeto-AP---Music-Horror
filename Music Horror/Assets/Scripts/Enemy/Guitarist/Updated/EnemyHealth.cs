@@ -4,7 +4,7 @@ public class EnemyHealth : MonoBehaviour
 {
     [SerializeField] private int maxHealth = 100;
     [SerializeField] private bool destroyOnDeath = false;
-    [SerializeField] private GameObject ragdollRoot; // optional transform to enable on death
+    [SerializeField] private GameObject ragdollRoot; 
     private int currentHealth;
     private IEnemy owner;
 

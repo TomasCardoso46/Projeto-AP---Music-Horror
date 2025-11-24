@@ -14,7 +14,7 @@ public class ChangePostExposure : MonoBehaviour
         
         if (volume != null && volume.profile.TryGet(out colorAdjustments))
         {
-            // Success
+           
         }
         else
         {
