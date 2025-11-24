@@ -58289,6 +58289,26 @@ PrefabInstance:
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 2967022306951442414, guid: 655ab849774fa474f97fe4cfcfa4f5f6, type: 3}
+      propertyPath: 'positionSounds.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8300000, guid: ffffe91d1d1190542b69df260e339ebd, type: 3}
+    - target: {fileID: 2967022306951442414, guid: 655ab849774fa474f97fe4cfcfa4f5f6, type: 3}
+      propertyPath: 'positionSounds.Array.data[1]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 4e028482eddacd74aabe0a858f34e5bc, type: 3}
+    - target: {fileID: 2967022306951442414, guid: 655ab849774fa474f97fe4cfcfa4f5f6, type: 3}
+      propertyPath: 'positionSounds.Array.data[2]'
+      value: 
+      objectReference: {fileID: 8300000, guid: b4539b2068a414f43a0555c414315bd0, type: 3}
+    - target: {fileID: 2967022306951442414, guid: 655ab849774fa474f97fe4cfcfa4f5f6, type: 3}
+      propertyPath: 'positionSounds.Array.data[3]'
+      value: 
+      objectReference: {fileID: 8300000, guid: f975572ce38458d40a3a22d964e57c51, type: 3}
+    - target: {fileID: 2967022306951442414, guid: 655ab849774fa474f97fe4cfcfa4f5f6, type: 3}
+      propertyPath: 'positionSounds.Array.data[4]'
+      value: 
+      objectReference: {fileID: 8300000, guid: f925a7167e47b094491ffa1d216c1a0f, type: 3}
+    - target: {fileID: 2967022306951442414, guid: 655ab849774fa474f97fe4cfcfa4f5f6, type: 3}
       propertyPath: 'cooldownObjects.Array.data[0]'
       value: 
       objectReference: {fileID: 1177555769}
