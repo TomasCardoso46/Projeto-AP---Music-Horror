@@ -18,10 +18,10 @@ MonoBehaviour:
   normalHearingRange: 10
   highHearingRange: 20
   memoryTime: 3
-  patrolSpeed: 1.5
-  chaseSpeed: 3
+  patrolSpeed: 2.7
+  chaseSpeed: 5.7
   stoppingDistance: 1.2
-  attackRange: 2.5
+  attackRange: 1
   attackCooldown: 5
   attackDamage: 20
   investigateChance: 1
