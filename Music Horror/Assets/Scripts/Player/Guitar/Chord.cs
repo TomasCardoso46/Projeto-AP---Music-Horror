@@ -59,15 +59,27 @@ public class Chord : MonoBehaviour
         if (!CanUseGuitar())
             return;
 
+        // Mouse scroll input
         float scroll = Input.GetAxis("Mouse ScrollWheel");
-
         if (scroll > 0f)
             MoveToIndex(currentIndex - 1);
         else if (scroll < 0f)
             MoveToIndex(currentIndex + 1);
 
+        // Mouse click
         if (Input.GetMouseButtonDown(0))
             PlayCurrentSound();
+
+        // Keyboard input for chord selection
+        for (int i = 0; i < targetPositions.Count && i < 9; i++)
+        {
+            // KeyCode.Alpha1 corresponds to "1" key, Alpha2 to "2", etc.
+            if (Input.GetKeyDown(KeyCode.Alpha1 + i))
+            {
+                MoveToIndex(i);
+                PlayCurrentSound();
+            }
+        }
     }
 
     bool CanUseGuitar()
