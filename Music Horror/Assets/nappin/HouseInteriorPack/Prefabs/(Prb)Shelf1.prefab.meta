@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:fee65b219da4d21cb44a3fa990a4f0bad20e549b979108278ada26dd07aac4f0
-size 362
+fileFormatVersion: 2
+guid: 706836d784292a74097d31519e9337fa
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 258782
+  packageName: House Interior - Free
+  packageVersion: 2.0.0
+  assetPath: Assets/nappin/HouseInteriorPack/Prefabs/(Prb)Shelf1.prefab
+  uploadId: 799960

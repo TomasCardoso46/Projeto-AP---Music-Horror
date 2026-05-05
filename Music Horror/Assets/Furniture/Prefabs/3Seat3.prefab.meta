@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:889d097fa483e66a90f4490eca6cf6f170253ce560dfa9eac25593a4b8e921a7
-size 338
+fileFormatVersion: 2
+guid: d9e6213ffc5943b4db8396985aa3f894
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 192628
+  packageName: Furniture FREE Pack
+  packageVersion: 1.0
+  assetPath: Assets/Furniture/Prefabs/3Seat3.prefab
+  uploadId: 426116

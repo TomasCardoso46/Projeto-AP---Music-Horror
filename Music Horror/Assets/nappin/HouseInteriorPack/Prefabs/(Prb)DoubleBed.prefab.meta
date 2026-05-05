@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:8c17426bc8cd1d3fbf92d969029067ea538cbab342ed7b611332df79bdaea75e
-size 365
+fileFormatVersion: 2
+guid: 2223fa9f01f9e4745bcd93ad2fd7f5cd
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 258782
+  packageName: House Interior - Free
+  packageVersion: 2.0.0
+  assetPath: Assets/nappin/HouseInteriorPack/Prefabs/(Prb)DoubleBed.prefab
+  uploadId: 799960

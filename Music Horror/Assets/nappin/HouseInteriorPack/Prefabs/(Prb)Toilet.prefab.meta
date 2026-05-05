@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:1428f8a1b823e9de6b53f20d6e69f0a53d7427fb5ae966778a49709b3b06498b
-size 362
+fileFormatVersion: 2
+guid: 5e1b8b1cf115f2940b01346027776031
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 258782
+  packageName: House Interior - Free
+  packageVersion: 2.0.0
+  assetPath: Assets/nappin/HouseInteriorPack/Prefabs/(Prb)Toilet.prefab
+  uploadId: 799960

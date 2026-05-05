@@ -1,3 +1,16 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:f2655b546f2737d76057356cb1a45f69eb60fe9bdfb3bdd356a926c2c72fd659
-size 473
+fileFormatVersion: 2
+guid: 80055b809bdbb6b459297f4a1c11a8e0
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 306143
+  packageName: Easy Shockwaves VFX - URP
+  packageVersion: 1.0.2
+  assetPath: Assets/Vefects/Easy Shockwaves VFX URP/Demo/Resources/Character/Shaders/SH_Vefects_URP_VFX_Character_Showoff.shader
+  uploadId: 780644

@@ -1,3 +1,15 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:9f237fbb6e335f13994c97bb2f117105a862cd89a9878b1f72aad42a6fc070c1
-size 431
+fileFormatVersion: 2
+guid: e12050a34c4114f44860701d7b44b478
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 306143
+  packageName: Easy Shockwaves VFX - URP
+  packageVersion: 1.0.2
+  assetPath: Assets/Vefects/Easy Shockwaves VFX URP/_ Extra/Materials/M_Vefects_Extra_Billboard_04.mat
+  uploadId: 780644

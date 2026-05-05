@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:14137493e3c2c0b4c5ed52d2c7d35eaba70e276f591cdd6f5151781e6b3af584
-size 338
+fileFormatVersion: 2
+guid: 0602526b549f4e74c9107db59bde2a39
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 192628
+  packageName: Furniture FREE Pack
+  packageVersion: 1.0
+  assetPath: Assets/Furniture/Prefabs/Fotel2.prefab
+  uploadId: 426116

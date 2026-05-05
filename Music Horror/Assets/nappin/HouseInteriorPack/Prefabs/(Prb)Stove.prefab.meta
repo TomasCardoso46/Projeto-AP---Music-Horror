@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:2250af4aade4b918512cae514dcce851b401cd4b774cc44ba1d1eb52e823f08d
-size 361
+fileFormatVersion: 2
+guid: 3e3c34c03ce58074fbfcfcdf18b4dda8
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 258782
+  packageName: House Interior - Free
+  packageVersion: 2.0.0
+  assetPath: Assets/nappin/HouseInteriorPack/Prefabs/(Prb)Stove.prefab
+  uploadId: 799960

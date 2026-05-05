@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:0bacb7658b71706c8279cd1b950c24af0273b59da46684d39b950bf455dee550
-size 374
+fileFormatVersion: 2
+guid: 138d0852e3d6a79458e885febb13bb03
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 258782
+  packageName: House Interior - Free
+  packageVersion: 2.0.0
+  assetPath: Assets/nappin/HouseInteriorPack/Prefabs/(Prb)CornerSofa_pillowT.prefab
+  uploadId: 799960

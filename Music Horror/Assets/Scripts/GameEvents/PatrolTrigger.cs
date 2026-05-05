@@ -1,3 +1,25 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:e171b3da62323dbe0f45e3d6a6156a5a9bc166e94f05b1da2377f8548b0a1422
-size 587
+using UnityEngine;
+
+public class PatrolTrigger : MonoBehaviour
+{
+    [Header("Patrol Settings")]
+    [SerializeField] private int patrolIndex;
+
+    [Header("Target Script")]
+    [SerializeField] private EnemyPatrol target;
+
+    //private bool hasTriggered = false;
+
+    private void OnTriggerEnter(Collider other)
+    {
+        //if (hasTriggered) return;
+
+        // Check if the entering object is the player
+        if (other.GetComponent<FirstPersonRigidbodyController>() == null)
+            return;
+
+        //hasTriggered = true;
+
+        target.SwitchPatrol(patrolIndex);
+    }
+}

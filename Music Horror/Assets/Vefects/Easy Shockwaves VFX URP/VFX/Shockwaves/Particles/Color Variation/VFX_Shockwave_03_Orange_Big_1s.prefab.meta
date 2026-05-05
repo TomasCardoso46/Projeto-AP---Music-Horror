@@ -1,3 +1,15 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:63162500c56995082d826e5674a021d93d48274aa0d6bcc06f8497a0cbc02700
-size 429
+fileFormatVersion: 2
+guid: 3353de0a41fbdd045a95ece01cb8cf9c
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 306143
+  packageName: Easy Shockwaves VFX - URP
+  packageVersion: 1.0.2
+  assetPath: Assets/Vefects/Easy Shockwaves VFX URP/VFX/Shockwaves/Particles/Color
+    Variation/VFX_Shockwave_03_Orange_Big_1s.prefab
+  uploadId: 780644

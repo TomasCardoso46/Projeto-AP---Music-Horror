@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:b1c1408d57733c6f3c538e32e9e84e8750f73fba57347b11778a7aaca074607e
-size 368
+fileFormatVersion: 2
+guid: f34f09e70e02cc94683d8dbaaf079f2e
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 258782
+  packageName: House Interior - Free
+  packageVersion: 2.0.0
+  assetPath: Assets/nappin/HouseInteriorPack/Prefabs/(Prb)BedsideTable.prefab
+  uploadId: 799960

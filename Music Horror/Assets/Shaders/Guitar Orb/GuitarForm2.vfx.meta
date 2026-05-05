@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:d8b9d84892adf7eba9ab0305eb5ea6b3d47584515ba3f6c67d6d909deff1590b
-size 296
+fileFormatVersion: 2
+guid: 3b0f4f5694d5ac74a8111c3f3ba96c90
+VisualEffectImporter:
+  externalObjects: {}
+  serializedVersion: 1
+  template:
+    name: 
+    category: 
+    description: 
+    icon: {instanceID: 0}
+    thumbnail: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

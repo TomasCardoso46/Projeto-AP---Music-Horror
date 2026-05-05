@@ -1,3 +1,10 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:86144341d0ef15c921c0a32ccb414708e0f50639ce03362d84b44ed759236991
-size 285
+fileFormatVersion: 2
+guid: 402904fec7b70854cb19199e41e7c35c
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 625f186215c104763be7675aa2d941aa, type: 3}

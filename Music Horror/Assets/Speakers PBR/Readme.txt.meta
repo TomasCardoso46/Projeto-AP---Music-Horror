@@ -1,3 +1,15 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:913181e23a68f77f73ad957980f451cc9f2b93d54ab6e69da536ff6b96fae9c1
-size 348
+fileFormatVersion: 2
+guid: 25cb16264df3fed43a85fa8a8126627d
+timeCreated: 1510241164
+licenseType: Store
+TextScriptImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 111606
+  packageName: Speakers PBR
+  packageVersion: 1.0
+  assetPath: Assets/Speakers PBR/Readme.txt
+  uploadId: 446600

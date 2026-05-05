@@ -1,3 +1,15 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:ccda5fa75a0ba76fb7c82fb878404fa5012e0039de1d1b0207905acdf9d0b29b
-size 440
+fileFormatVersion: 2
+guid: e821995ff6a65e74796715ac8f07e683
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 306143
+  packageName: Easy Shockwaves VFX - URP
+  packageVersion: 1.0.2
+  assetPath: Assets/Vefects/Easy Shockwaves VFX URP/VFX/Shockwaves/Particles/Color
+    Variation/VFX_Shockwave_Vertical_08_Lavender_Big_1s.prefab
+  uploadId: 780644

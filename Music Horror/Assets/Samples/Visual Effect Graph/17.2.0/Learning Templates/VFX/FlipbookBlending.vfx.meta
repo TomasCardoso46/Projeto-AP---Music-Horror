@@ -1,3 +1,15 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:16d6bc366f9ecc1fdeb6d133ecd7581f11a8d71c202c423e347db0be7ee592fc
-size 555
+fileFormatVersion: 2
+guid: a977458597c62ae48aca0c6ba7674959
+VisualEffectImporter:
+  externalObjects: {}
+  serializedVersion: 1
+  template:
+    name: Flipbook Blending
+    category: Learning Templates
+    description: This VFX illustrates the differences between a traditional frame
+      blending and a frame blending using motion vectors.
+    icon: {fileID: 2800000, guid: 49836be3225b70342b4057f6bf94b554, type: 3}
+    thumbnail: {fileID: 2800000, guid: 952793e298fc73447af1c50dbaaeae35, type: 3}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

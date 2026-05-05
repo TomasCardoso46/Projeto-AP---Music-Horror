@@ -1,3 +1,63 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:4f26af233450662a08b10c221529c8c6bff47d3709c4cca2c971274be22bf15b
-size 2733
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &8733490289479873628
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 18ee6d4d98f285f4ba0529998aee13ee, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -12.313141
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 18ee6d4d98f285f4ba0529998aee13ee, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 61.500004
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 18ee6d4d98f285f4ba0529998aee13ee, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -50.694366
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 18ee6d4d98f285f4ba0529998aee13ee, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 18ee6d4d98f285f4ba0529998aee13ee, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 18ee6d4d98f285f4ba0529998aee13ee, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 18ee6d4d98f285f4ba0529998aee13ee, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 18ee6d4d98f285f4ba0529998aee13ee, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 18ee6d4d98f285f4ba0529998aee13ee, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 18ee6d4d98f285f4ba0529998aee13ee, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 18ee6d4d98f285f4ba0529998aee13ee, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: ee6e5fbe5e9f7734eac590d315a47b6c, type: 2}
+    - target: {fileID: 919132149155446097, guid: 18ee6d4d98f285f4ba0529998aee13ee, type: 3}
+      propertyPath: m_Name
+      value: HalfFloor_Ceiling
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 18ee6d4d98f285f4ba0529998aee13ee, type: 3}

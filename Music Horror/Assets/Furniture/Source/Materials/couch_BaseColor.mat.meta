@@ -1,3 +1,15 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:40e3f108f2083fb60a0c9cce198f5e3d0a6a2a90cadc4d65b74792ff7dc39a55
-size 381
+fileFormatVersion: 2
+guid: db493b3fe60ef33498992529fc74113a
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 192628
+  packageName: Furniture FREE Pack
+  packageVersion: 1.0
+  assetPath: Assets/Furniture/Source/Materials/couch_BaseColor.mat
+  uploadId: 426116

@@ -1,3 +1,25 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:0eabdbcdfef86bc1b6f6496cb926011b324bbb15fb5c4d3a5cf7235662540f38
-size 690
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+public class SceneTrigger : MonoBehaviour
+{
+    [Header("Name of the scene to load when the player enters")]
+    [SerializeField] private string sceneToLoad;
+
+    private void OnTriggerEnter(Collider other)
+    {
+        // Check if the entering object has the "Player" tag
+        if (other.CompareTag("Player"))
+        {
+            // Load the specified scene
+            if (!string.IsNullOrEmpty(sceneToLoad))
+            {
+                SceneManager.LoadScene(sceneToLoad);
+            }
+            else
+            {
+                Debug.LogWarning("SceneTrigger: No scene name assigned!");
+            }
+        }
+    }
+}

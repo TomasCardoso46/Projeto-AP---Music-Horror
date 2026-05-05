@@ -1,3 +1,15 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:2c7009bea49626afdca2bd336562b7287277e8ac4c10bf9e008369f060d35474
-size 417
+fileFormatVersion: 2
+guid: 1a50a9ace93fd614db63694d201e262b
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 191256
+  packageName: URP Dissolve 2020
+  packageVersion: 2020.3.0
+  assetPath: Assets/ShaderGraph_Dissolve/URP/Materials/Shader Graphs_Dissolve_Dissolve_Metallic.mat
+  uploadId: 533539

@@ -1,3 +1,16 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:42924613a6ed33018072c862dc2349aadf69623d458c64d4caac559a1ee94a2d
-size 585
+fileFormatVersion: 2
+guid: f023ef5f170adc34180abdbd65838179
+VisualEffectImporter:
+  externalObjects: {}
+  serializedVersion: 1
+  template:
+    name: System Bound
+    category: Learning Templates
+    description: The Bounds are used to cull the VFX when it's not in the camera
+      frustum. This VFX explains the importance of Bounds and how to properly set
+      them.
+    icon: {fileID: 2800000, guid: 49836be3225b70342b4057f6bf94b554, type: 3}
+    thumbnail: {fileID: 2800000, guid: ebac51e649dc3cd418ec7486775452ad, type: 3}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

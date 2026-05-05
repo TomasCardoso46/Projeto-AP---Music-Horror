@@ -1,3 +1,44 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:881869573c292fd47c46da116fc7a7a6fe45f8a0f4b17d425b23562f8f83f5ae
-size 1162
+# if UNITY_EDITOR
+using System.Collections;
+using System.Collections.Generic;
+using UnityEditor.Rendering;
+using UnityEngine;
+
+namespace UnityEngine.Rendering
+{
+    public class RequiredSettingsSOT<T> : RequiredSettingsSO where T : RequiredSettingBase
+    {
+        [SerializeField]
+        public List<T> m_requiredSettings;
+
+        public override List<RequiredSettingBase> requiredSettings => new List<RequiredSettingBase>(m_requiredSettings);
+
+
+        public bool allGood
+        {
+            get
+            {
+                if (requiredSettings == null || requiredSettings.Count == 0)
+                    return true;
+
+                foreach(var setting in requiredSettings)
+                {
+                    if (!setting.state)
+                        return false;
+                }
+                return true;
+            }
+        }
+    }
+
+    public abstract class RequiredSettingsSO : ScriptableObject, RequiredSettingsSOI
+    {
+        public abstract List<RequiredSettingBase> requiredSettings { get; }
+    }
+
+    public interface RequiredSettingsSOI
+    {
+        public List<RequiredSettingBase> requiredSettings { get; }
+    }
+}
+#endif

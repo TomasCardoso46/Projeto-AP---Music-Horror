@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:52df998f2c6f2d5e3a897b34d74cce7c22ff11218fd4d428c5366aa4f594533f
-size 369
+fileFormatVersion: 2
+guid: 6a3dbb2a6b4da624abc81f5dc716f1c7
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 258782
+  packageName: House Interior - Free
+  packageVersion: 2.0.0
+  assetPath: Assets/nappin/HouseInteriorPack/Prefabs/(Prb)SoapDispenser.prefab
+  uploadId: 799960

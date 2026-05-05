@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:8ad8f84cf3d4bad16bfa42fa93c82adfecaef5002bcbf8ad2357c68a018d2556
-size 342
+fileFormatVersion: 2
+guid: 204da6aadc13e164eac745605815a273
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 192628
+  packageName: Furniture FREE Pack
+  packageVersion: 1.0
+  assetPath: Assets/Furniture/Prefabs/MetalTable.prefab
+  uploadId: 426116

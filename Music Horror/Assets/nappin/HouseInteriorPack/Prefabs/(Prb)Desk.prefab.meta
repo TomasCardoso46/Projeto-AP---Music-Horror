@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:26b75d3598c085420a0a084e5f42a571b658f0cd418b69311ac43fb4d3642a9b
-size 360
+fileFormatVersion: 2
+guid: 00e5c0945f7a8b0439135711f7f02840
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 258782
+  packageName: House Interior - Free
+  packageVersion: 2.0.0
+  assetPath: Assets/nappin/HouseInteriorPack/Prefabs/(Prb)Desk.prefab
+  uploadId: 799960

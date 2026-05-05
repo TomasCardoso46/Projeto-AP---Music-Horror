@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:2027e946d3f94d1a40c09567d1df4493b046603e95f8c1c199e23a2acc749fa8
-size 349
+fileFormatVersion: 2
+guid: d1c3109bdb54ad54c8a2b2838528e640
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 301169
+  packageName: Picture Frames
+  packageVersion: 1.0
+  assetPath: Assets/Picture_Frames_FREE/Scenes/Demonstration.unity
+  uploadId: 704608

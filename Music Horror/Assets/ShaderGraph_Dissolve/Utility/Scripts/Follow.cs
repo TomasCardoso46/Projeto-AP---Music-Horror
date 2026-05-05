@@ -1,3 +1,27 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:e5788b0b5c7b4c4efd06944e9b9bcc0373882902ac82b3b069abbdc3e2cfc1d5
-size 616
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+namespace DissolveExample
+{
+
+
+    public class Follow : MonoBehaviour
+    {
+        [Range(0, 5f)]
+        public float speed;
+        public float height;
+        Vector3 pos;
+        // Start is called before the first frame update
+        void Start()
+        {
+            pos = transform.position;
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+            var value = Mathf.PingPong(Time.time * speed, height);
+            transform.position = (pos + value * Vector3.up);
+        }
+    }
+}

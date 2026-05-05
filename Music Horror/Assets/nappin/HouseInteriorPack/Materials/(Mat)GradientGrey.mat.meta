@@ -1,3 +1,15 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:9dd6c7374743c0002d2bba3430d6ebe205391808a69a07c8595791e593b3585b
-size 401
+fileFormatVersion: 2
+guid: 3441f6441092d3c459a48c3c48ea63c6
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 258782
+  packageName: House Interior - Free
+  packageVersion: 2.0.0
+  assetPath: Assets/nappin/HouseInteriorPack/Materials/(Mat)GradientGrey.mat
+  uploadId: 799960

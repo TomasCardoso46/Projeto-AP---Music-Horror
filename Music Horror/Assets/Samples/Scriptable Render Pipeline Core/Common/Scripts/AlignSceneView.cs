@@ -1,3 +1,35 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:827ef1ec379c1beb6d0d7f4e8410fe01f1d071a7d1fa6c724fedcd1d3dca71aa
-size 751
+using System;
+using System.Collections.Generic;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+using UnityEngine;
+
+[ExecuteInEditMode]
+public class AlignSceneView : MonoBehaviour
+{
+
+    // Start is called before the first frame update
+    void Awake()
+    {
+         AlignCamera(transform);
+    }
+
+
+    private static void AlignCamera(Transform target)
+    {
+#if UNITY_EDITOR
+            SceneView view = SceneView.lastActiveSceneView;
+            if (view == null) return;
+            Camera sceneCam = view.camera;
+            if(sceneCam == null) return;
+            sceneCam.transform.position = target.position;
+            sceneCam.transform.rotation = target.rotation;
+            view.AlignViewToObject(sceneCam.transform);
+#endif
+    }
+    
+}
+
+
+

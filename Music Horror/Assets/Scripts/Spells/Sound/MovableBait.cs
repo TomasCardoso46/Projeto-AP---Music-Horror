@@ -1,3 +1,40 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:7c3bbf113ebc4d2efb1f6d27048994f4989aafb6eb29b87664650af469604334
-size 895
+using UnityEngine;
+
+public class MovableBait : MonoBehaviour
+{
+    [Header("Movement Settings")]
+    [SerializeField] private float moveSpeed = 10f;
+
+    private bool hasTriggered = false;
+
+
+    private void Update()
+    {
+        if (!hasTriggered)
+        {
+            transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
+        }
+    }
+
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (hasTriggered) return;
+
+        GameObject collidedObject = collision.gameObject;
+
+        // Try to find SoundBait on the collided object
+        SoundBait soundBait = collidedObject.GetComponent<SoundBait>();
+
+        if (soundBait != null)
+        {
+            hasTriggered = true;
+
+            // Enable the SoundBait script
+            soundBait.enabled = true;
+        }
+
+        // Destroy projectile regardless of result
+        Destroy(gameObject);
+    }
+}

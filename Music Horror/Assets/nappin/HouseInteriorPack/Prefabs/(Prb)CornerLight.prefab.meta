@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:0de9246d698a21d0ae54c6994bd54c83c08dc1006ff9bca200f058a3e34e80b1
-size 367
+fileFormatVersion: 2
+guid: 7232880492f88cd4d9624a501fc37aba
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 258782
+  packageName: House Interior - Free
+  packageVersion: 2.0.0
+  assetPath: Assets/nappin/HouseInteriorPack/Prefabs/(Prb)CornerLight.prefab
+  uploadId: 799960

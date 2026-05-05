@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:72994050b1ee8d2e8c749d099b0cb2cd2ba137bbcac933b1a0a8ca00946c20d9
-size 367
+fileFormatVersion: 2
+guid: 5eb4faf7729d059408358aadfe75945f
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 258782
+  packageName: House Interior - Free
+  packageVersion: 2.0.0
+  assetPath: Assets/nappin/HouseInteriorPack/Prefabs/(Prb)MirrorLight.prefab
+  uploadId: 799960

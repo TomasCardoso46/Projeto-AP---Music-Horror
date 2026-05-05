@@ -1,3 +1,15 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:d9e7611aa27f0a006ca2aaf74d601891eb47462db00edb56462d3fcbf9b10431
-size 385
+fileFormatVersion: 2
+guid: efc342f7b2a0699478373355bfc9d9fe
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 192628
+  packageName: Furniture FREE Pack
+  packageVersion: 1.0
+  assetPath: Assets/Furniture/Source/Materials/3SeatDirt_BaseColor.mat
+  uploadId: 426116

@@ -1,3 +1,17 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:8a1671c199eafbf8b2bc8c663c2c0869409a8d46234f5934f4ba269722f51dbc
-size 414
+fileFormatVersion: 2
+guid: f80bed1528613b543904e6d58d40090f
+timeCreated: 1518707252
+licenseType: Store
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 111606
+  packageName: Speakers PBR
+  packageVersion: 1.0
+  assetPath: Assets/Speakers PBR/Prefabs/Speaker.prefab
+  uploadId: 446600

@@ -1,3 +1,44 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:7e153015d7f08c02f5cb66421ed3ef490f8f1c550bf977b736cbfbf0bffd3538
-size 1067
+using UnityEngine;
+
+public class PlayerInteract : MonoBehaviour
+{
+    [Header("Raycast Settings")]
+    [SerializeField] private float interactRange = 3f;
+    [SerializeField] private LayerMask interactLayer;
+
+    [Header("UI")]
+    [SerializeField] private CrosshairController crosshair;
+
+    private Camera cam;
+    private IInteractable currentInteractable;
+
+    private void Start()
+    {
+        cam = GetComponent<Camera>();
+    }
+
+    private void Update()
+    {
+        DetectInteractable();
+
+        if (Input.GetKeyDown(KeyCode.F) && currentInteractable != null)
+        {
+            currentInteractable.Interact();
+        }
+
+        crosshair.SetInteractState(currentInteractable != null);
+    }
+
+    private void DetectInteractable()
+    {
+        Ray ray = new Ray(cam.transform.position, cam.transform.forward);
+        RaycastHit hit;
+
+        currentInteractable = null;
+
+        if (Physics.Raycast(ray, out hit, interactRange, interactLayer))
+        {
+            currentInteractable = hit.collider.GetComponent<IInteractable>();
+        }
+    }
+}

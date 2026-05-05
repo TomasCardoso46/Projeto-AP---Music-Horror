@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:49736e4f9bfa9aa45cf05ba8f4e92125aa10526726ab0620382dd8b806fa1386
-size 360
+fileFormatVersion: 2
+guid: 184025b0b1d332c4db8122de5dd6c499
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 258782
+  packageName: House Interior - Free
+  packageVersion: 2.0.0
+  assetPath: Assets/nappin/HouseInteriorPack/Prefabs/(Prb)Lamp.prefab
+  uploadId: 799960

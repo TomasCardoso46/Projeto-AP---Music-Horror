@@ -1,3 +1,15 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:92475f1fe513431823dca89a339f1133d02e3e2a6b202aabb745a5dd2609d805
-size 437
+fileFormatVersion: 2
+guid: b36a66533b7d7bb459557d4f7875f5b1
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 306143
+  packageName: Easy Shockwaves VFX - URP
+  packageVersion: 1.0.2
+  assetPath: Assets/Vefects/Easy Shockwaves VFX URP/VFX/Shockwaves/Particles/Color
+    Variation/VFX_Shockwave_Vertical_05_Green_Big_1s.prefab
+  uploadId: 780644

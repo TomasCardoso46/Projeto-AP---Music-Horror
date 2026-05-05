@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:fbe0fe3bcb4082722cd49d21e628f4214c5ae6a58cff9870aeca4fa38ce78311
-size 360
+fileFormatVersion: 2
+guid: 9fc0d4010bbf28b4594072e72b8655ab
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 258782
+  packageName: House Interior - Free
+  packageVersion: 2.0.0
+  assetPath: Assets/nappin/HouseInteriorPack/HouseInteriorPack.unity
+  uploadId: 799960

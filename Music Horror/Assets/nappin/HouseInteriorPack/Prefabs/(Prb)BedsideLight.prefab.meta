@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:2b9eb746a43ff3e00166c4b7ee2bae03424859ff8ccb2a7e0147113982e42458
-size 368
+fileFormatVersion: 2
+guid: 4f06099175b8866458a6cf669a7c20fb
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 258782
+  packageName: House Interior - Free
+  packageVersion: 2.0.0
+  assetPath: Assets/nappin/HouseInteriorPack/Prefabs/(Prb)BedsideLight.prefab
+  uploadId: 799960

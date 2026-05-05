@@ -1,3 +1,15 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:03e9a843dce8bd0a694624bedec3ab0f55b6ef58e245e54379abb58648a87311
-size 386
+fileFormatVersion: 2
+guid: 1e3e15069c54528489d18e5f7b87cf25
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 301169
+  packageName: Picture Frames
+  packageVersion: 1.0
+  assetPath: Assets/Picture_Frames_FREE/Scenes/Postprocess Profile_URP.asset
+  uploadId: 704608

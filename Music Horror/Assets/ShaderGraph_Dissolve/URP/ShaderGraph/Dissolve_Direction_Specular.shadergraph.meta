@@ -1,3 +1,17 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:fae2c42c51794f66652f8a2a281b89c45221d14fbe0ec9c59faabdf240cba9fb
-size 517
+fileFormatVersion: 2
+guid: 68e65d2e58a73c14d8b51311dc70d1ad
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 625f186215c104763be7675aa2d941aa, type: 3}
+AssetOrigin:
+  serializedVersion: 1
+  productId: 191256
+  packageName: URP Dissolve 2020
+  packageVersion: 2020.3.0
+  assetPath: Assets/ShaderGraph_Dissolve/URP/ShaderGraph/Dissolve_Direction_Specular.shadergraph
+  uploadId: 533539

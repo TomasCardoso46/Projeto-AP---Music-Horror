@@ -1,3 +1,70 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:892a719da8c4ef9b9130654d1c0b72b025f97421feb5c4f30475780e9bfb01e7
-size 1807
+using UnityEngine;
+using System.Collections.Generic;
+
+public class SwapObjectsAndScriptsWithSound : MonoBehaviour
+{
+    [Header("GameObjects")]
+    [SerializeField] private List<GameObject> objectsToToggle = new List<GameObject>();
+
+    [Header("Scripts (MonoBehaviours)")]
+    [SerializeField] private List<MonoBehaviour> scriptsToToggle = new List<MonoBehaviour>();
+
+    [Header("Audio")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip enableSound;
+    [SerializeField] private AudioClip disableSound;
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.J))
+        {
+            SwapStates();
+        }
+    }
+
+    private void SwapStates()
+    {
+        bool firstTransition = false;
+        bool firstNewState = false;
+
+        for (int i = 0; i < objectsToToggle.Count; i++)
+        {
+            GameObject obj = objectsToToggle[i];
+            if (obj == null) continue;
+
+            bool newState = !obj.activeSelf;
+
+            if (i == 0)
+            {
+                firstTransition = true;
+                firstNewState = newState;
+            }
+
+            obj.SetActive(newState);
+        }
+
+        for (int i = 0; i < scriptsToToggle.Count; i++)
+        {
+            MonoBehaviour script = scriptsToToggle[i];
+            if (script == null) continue;
+
+            bool newState = !script.enabled;
+
+            if (!firstTransition)
+            {
+                firstTransition = true;
+                firstNewState = newState;
+            }
+
+            script.enabled = newState;
+        }
+
+        if (audioSource != null && firstTransition)
+        {
+            AudioClip clip = firstNewState ? enableSound : disableSound;
+
+            if (clip != null)
+                audioSource.PlayOneShot(clip);
+        }
+    }
+}

@@ -1,3 +1,38 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:4a3d945f3efe471876874b9e3e4b309a05c7f3c483ca12fc46517b14c945c13c
-size 1099
+#if UNITY_EDITOR
+using UnityEditor;
+using UnityEngine;
+
+[InitializeOnLoad]
+public class DisableEditorShortcuts
+{
+    static DisableEditorShortcuts()
+    {
+        // Hook into the editor update loop
+        EditorApplication.update += DisableShortcuts;
+    }
+
+    static void DisableShortcuts()
+    {
+        // Only act in Play Mode
+        if (!EditorApplication.isPlaying) return;
+
+        // Consume key events to prevent default shortcuts
+        if (Event.current != null && Event.current.type == EventType.KeyDown)
+        {
+            // Example: block F1-F12 keys
+            if (Event.current.keyCode >= KeyCode.F1 && Event.current.keyCode <= KeyCode.F12)
+            {
+                Event.current.Use(); // Prevents Unity from using this key
+                Debug.Log("Blocked Unity shortcut: " + Event.current.keyCode);
+            }
+
+            // Example: block Ctrl+S
+            if (Event.current.control && Event.current.keyCode == KeyCode.S)
+            {
+                Event.current.Use();
+                Debug.Log("Blocked Ctrl+S");
+            }
+        }
+    }
+}
+#endif

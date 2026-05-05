@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:f6566d625080725204462d4c0fc9dc40d05ce70d25535e4acdec169a96f9f6d2
-size 363
+fileFormatVersion: 2
+guid: bebe37461aa0901409254caebff7ac4e
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 258782
+  packageName: House Interior - Free
+  packageVersion: 2.0.0
+  assetPath: Assets/nappin/HouseInteriorPack/Prefabs/(Prb)Mirror2.prefab
+  uploadId: 799960

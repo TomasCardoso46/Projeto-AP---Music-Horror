@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:5d7a220fe209137bc8a81d85b9ceb0b8b014c5e72f36c01f079f7c7eef2b41fa
-size 411
+fileFormatVersion: 2
+guid: cf22afb314419024a912600068b12f79
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 306143
+  packageName: Easy Shockwaves VFX - URP
+  packageVersion: 1.0.2
+  assetPath: Assets/Vefects/Easy Shockwaves VFX URP/VFX/Shockwaves/Particles/VFX_Shockwave_01_White_Big_500ms.prefab
+  uploadId: 780644

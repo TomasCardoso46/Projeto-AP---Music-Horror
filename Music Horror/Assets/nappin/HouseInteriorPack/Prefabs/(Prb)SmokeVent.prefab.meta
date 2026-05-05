@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:d3168db624bcf718690e8c8cfe67a5b5516620b5e039f357205f1927041bd66f
-size 365
+fileFormatVersion: 2
+guid: cb011d3e851dd79499d8fbe7490394f0
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 258782
+  packageName: House Interior - Free
+  packageVersion: 2.0.0
+  assetPath: Assets/nappin/HouseInteriorPack/Prefabs/(Prb)SmokeVent.prefab
+  uploadId: 799960

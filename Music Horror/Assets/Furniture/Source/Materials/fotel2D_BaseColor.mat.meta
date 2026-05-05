@@ -1,3 +1,15 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:2c26765624c6813a42a34192b600812f063277b034d92031fdb2f0928b23929d
-size 383
+fileFormatVersion: 2
+guid: efa9631d2150a2d47bd7d38728829ef5
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 192628
+  packageName: Furniture FREE Pack
+  packageVersion: 1.0
+  assetPath: Assets/Furniture/Source/Materials/fotel2D_BaseColor.mat
+  uploadId: 426116

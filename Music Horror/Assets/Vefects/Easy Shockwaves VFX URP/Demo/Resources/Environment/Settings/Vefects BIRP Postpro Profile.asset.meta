@@ -1,3 +1,16 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:f7413a2bbde6ce224ec0b30947af2ca7637be9ed4a786a372ea1b86a8a9f71f6
-size 456
+fileFormatVersion: 2
+guid: e4e58a0fb3fd44b4986c4897cc57220a
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 306143
+  packageName: Easy Shockwaves VFX - URP
+  packageVersion: 1.0.2
+  assetPath: Assets/Vefects/Easy Shockwaves VFX URP/Demo/Resources/Environment/Settings/Vefects
+    BIRP Postpro Profile.asset
+  uploadId: 780644

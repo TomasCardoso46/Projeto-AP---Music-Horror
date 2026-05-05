@@ -1,3 +1,15 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:6d7a7150d33a3ff942df5a7b828b5c2488d0779a6915c372c2bbd3738b2ee2c8
-size 395
+fileFormatVersion: 2
+guid: f5b880b2bccf7364cbc645f81894becd
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 258782
+  packageName: House Interior - Free
+  packageVersion: 2.0.0
+  assetPath: Assets/nappin/HouseInteriorPack/Materials/(Mat)Skybox.mat
+  uploadId: 799960

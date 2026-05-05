@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:d2a9afb89453a6d19ac678335b34c832f7afa8dc2bd33702ec537372fda04cc5
-size 367
+fileFormatVersion: 2
+guid: 5c53a6c9c85b969488e8513f82ebf8a3
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 258782
+  packageName: House Interior - Free
+  packageVersion: 2.0.0
+  assetPath: Assets/nappin/HouseInteriorPack/Prefabs/(Prb)KitchenSink.prefab
+  uploadId: 799960

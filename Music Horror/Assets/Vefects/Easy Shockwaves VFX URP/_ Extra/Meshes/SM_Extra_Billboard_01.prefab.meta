@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:3e338ba2005ff9f05314286e9dd03ed6285fd21f9f76eb1a44097727f26b9bb5
-size 390
+fileFormatVersion: 2
+guid: 95e86a5937736734e9ad7387d187c9e9
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 306143
+  packageName: Easy Shockwaves VFX - URP
+  packageVersion: 1.0.2
+  assetPath: Assets/Vefects/Easy Shockwaves VFX URP/_ Extra/Meshes/SM_Extra_Billboard_01.prefab
+  uploadId: 780644

@@ -1,3 +1,15 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:b4bba5a6f1fd9b9d02f86dc9f2edfa5edc03cf1fab34c4d793ff7f795a68cabc
-size 558
+fileFormatVersion: 2
+guid: 0716daebd7b426f478f6dc430926c3b8
+VisualEffectImporter:
+  externalObjects: {}
+  serializedVersion: 1
+  template:
+    name: Rotation & Angular Velocity
+    category: Learning Templates
+    description: This VFX explains the usage of the Angular velocity attribute that
+      can be used to control particles rotation.
+    icon: {fileID: 2800000, guid: 49836be3225b70342b4057f6bf94b554, type: 3}
+    thumbnail: {fileID: 2800000, guid: 711415350ba8e734199e4d3ef52f18c6, type: 3}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

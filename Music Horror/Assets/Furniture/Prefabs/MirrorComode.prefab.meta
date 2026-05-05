@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:2084d663ddee162f0495fc08bedb51a7a6c567f7261d61c3e63f9e12da8cd267
-size 344
+fileFormatVersion: 2
+guid: f1ffc5e47031c224a92e5b203193d60b
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 192628
+  packageName: Furniture FREE Pack
+  packageVersion: 1.0
+  assetPath: Assets/Furniture/Prefabs/MirrorComode.prefab
+  uploadId: 426116

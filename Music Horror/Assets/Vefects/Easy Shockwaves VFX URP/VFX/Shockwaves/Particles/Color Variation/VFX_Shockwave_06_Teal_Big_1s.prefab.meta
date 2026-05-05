@@ -1,3 +1,15 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:fb245ac9bd647ae1270bcb3b15b92ab2b5154049268c1c23bb2c86e681aff1a6
-size 427
+fileFormatVersion: 2
+guid: ae8da828e8ec44c4bb37bd7d40075f19
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 306143
+  packageName: Easy Shockwaves VFX - URP
+  packageVersion: 1.0.2
+  assetPath: Assets/Vefects/Easy Shockwaves VFX URP/VFX/Shockwaves/Particles/Color
+    Variation/VFX_Shockwave_06_Teal_Big_1s.prefab
+  uploadId: 780644

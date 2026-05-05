@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:5d82c063f5d16f61793235ddb2fd5125ff3a757fca1173c0f0744c5c343ace46
-size 366
+fileFormatVersion: 2
+guid: c5495f7852c483f41945b90c27fcb2f2
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 258782
+  packageName: House Interior - Free
+  packageVersion: 2.0.0
+  assetPath: Assets/nappin/HouseInteriorPack/Prefabs/(Prb)Minifridge.prefab
+  uploadId: 799960

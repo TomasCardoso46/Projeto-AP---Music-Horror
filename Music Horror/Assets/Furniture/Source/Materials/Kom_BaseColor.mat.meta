@@ -1,3 +1,15 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:3d4cf241f3b8bfde8f91b52c5024455bc2df34913a33bf8c407a784a73ef38ab
-size 379
+fileFormatVersion: 2
+guid: 50735be092ba0c449ae21a9c1a6195b8
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 192628
+  packageName: Furniture FREE Pack
+  packageVersion: 1.0
+  assetPath: Assets/Furniture/Source/Materials/Kom_BaseColor.mat
+  uploadId: 426116

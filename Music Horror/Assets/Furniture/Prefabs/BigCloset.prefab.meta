@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:01b01a82dcf14bd8db5730c60a03099ad56e61bd0d13ee33d7583a830f8fb505
-size 341
+fileFormatVersion: 2
+guid: 9d4494b8b100519479f9699c5a7390a9
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 192628
+  packageName: Furniture FREE Pack
+  packageVersion: 1.0
+  assetPath: Assets/Furniture/Prefabs/BigCloset.prefab
+  uploadId: 426116

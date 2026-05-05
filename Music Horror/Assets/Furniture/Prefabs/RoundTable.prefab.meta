@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:f21f587517cd09d326ae87132b30ce6ada13ea2ad4181455f333e39cebb0026b
-size 342
+fileFormatVersion: 2
+guid: 6f43b2566a8dcad4aa8e75125eeda38e
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 192628
+  packageName: Furniture FREE Pack
+  packageVersion: 1.0
+  assetPath: Assets/Furniture/Prefabs/RoundTable.prefab
+  uploadId: 426116

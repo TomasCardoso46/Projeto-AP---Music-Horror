@@ -1,3 +1,92 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:a162bed2cead868835ac71688b99b520db67caa70015a7d5b48ea725876dbd55
-size 3726
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &3985804291388204891
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 63265222f426549478bc40d1a3fa7689, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -10.872974
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 63265222f426549478bc40d1a3fa7689, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -3.2087178
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 63265222f426549478bc40d1a3fa7689, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1.3845408
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 63265222f426549478bc40d1a3fa7689, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 63265222f426549478bc40d1a3fa7689, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 63265222f426549478bc40d1a3fa7689, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 63265222f426549478bc40d1a3fa7689, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 63265222f426549478bc40d1a3fa7689, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 63265222f426549478bc40d1a3fa7689, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 63265222f426549478bc40d1a3fa7689, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 63265222f426549478bc40d1a3fa7689, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 3914cf20b7468174eb69aa1ed5689c41, type: 2}
+    - target: {fileID: 919132149155446097, guid: 63265222f426549478bc40d1a3fa7689, type: 3}
+      propertyPath: m_Name
+      value: WoodenPlanks
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 63265222f426549478bc40d1a3fa7689, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6259133580783718309}
+  m_SourcePrefab: {fileID: 100100000, guid: 63265222f426549478bc40d1a3fa7689, type: 3}
+--- !u!1 &4292214339007863306 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 63265222f426549478bc40d1a3fa7689, type: 3}
+  m_PrefabInstance: {fileID: 3985804291388204891}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &6259133580783718309
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4292214339007863306}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.318081, y: 0.1304149, z: 1.6394159}
+  m_Center: {x: 1.1590405, y: 0.06520736, z: 0.8197078}

@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:a27a740dc2f9619aa776b6f42db22720395046911c32a2484775245772416200
-size 366
+fileFormatVersion: 2
+guid: b235c805f008f6f4da469f7364846b10
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 258782
+  packageName: House Interior - Free
+  packageVersion: 2.0.0
+  assetPath: Assets/nappin/HouseInteriorPack/Prefabs/(Prb)CoffeTable.prefab
+  uploadId: 799960

@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:3803e9005fa53bd9171eff9e653b4c410853c92601b997a1a2ae66d22629de9f
-size 365
+fileFormatVersion: 2
+guid: de9100bbf110b884f9f1b1d8b6b33537
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 258782
+  packageName: House Interior - Free
+  packageVersion: 2.0.0
+  assetPath: Assets/nappin/HouseInteriorPack/Prefabs/(Prb)RoomLight.prefab
+  uploadId: 799960

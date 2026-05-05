@@ -1,3 +1,22 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:b36325128c252793175875132b8d4524756d795cab9eef8824ad03862fe7d376
-size 616
+using UnityEngine;
+
+public class SimpleSpawner : MonoBehaviour
+{
+    public void SpawnAndAutoDestroy(GameObject prefab, Transform parent, float lifetime)
+    {
+        if (prefab == null || parent == null)
+        {
+            Debug.LogWarning("Spawn failed: prefab or parent is null.");
+            return;
+        }
+
+        // Spawn as child of the parent
+        GameObject instance = Instantiate(prefab, parent);
+
+        instance.transform.localPosition = Vector3.zero;
+        instance.transform.localRotation = Quaternion.identity;
+
+        // Destroy after time
+        Destroy(instance, lifetime);
+    }
+}

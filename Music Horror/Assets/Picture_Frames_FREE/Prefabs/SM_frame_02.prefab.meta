@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:edc2ff014c02a6d5620ff6fb40197b566cb014b43295eadefaf31652b0e5a0ec
-size 348
+fileFormatVersion: 2
+guid: f8670ea5c7df9214182468ff459be71d
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 301169
+  packageName: Picture Frames
+  packageVersion: 1.0
+  assetPath: Assets/Picture_Frames_FREE/Prefabs/SM_frame_02.prefab
+  uploadId: 704608

@@ -1,3 +1,16 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:6433258415cc42413b4e300335ab279ca0779b0ad0fc4187c73255dd6a334dd4
-size 444
+fileFormatVersion: 2
+guid: 01b355b1a7894c743b655598ade709a9
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 191256
+  packageName: URP Dissolve 2020
+  packageVersion: 2020.3.0
+  assetPath: Assets/ShaderGraph_Dissolve/URP/Materials/Shader Graphs_Dissolve_Dissolve_Direction_Metallic_DoubleSide
+    1.mat
+  uploadId: 533539

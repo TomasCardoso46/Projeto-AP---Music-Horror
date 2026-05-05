@@ -1,3 +1,15 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:595f0a69e15bed76084ffc1996991c858714f2d34fe1c2dc4607642fb93d31e0
-size 386
+fileFormatVersion: 2
+guid: 30478f606bb42724abb4b3a08f9279d5
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 192628
+  packageName: Furniture FREE Pack
+  packageVersion: 1.0
+  assetPath: Assets/Furniture/Source/Materials/MetalTable_BaseColor.mat
+  uploadId: 426116

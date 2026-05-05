@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:346a020a1e97465e2d2d740522196581d918061f4ebe7aa82de0786d95393470
-size 433
+fileFormatVersion: 2
+guid: 171e1b5b17142754985b409d9544486f
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 306143
+  packageName: Easy Shockwaves VFX - URP
+  packageVersion: 1.0.2
+  assetPath: Assets/Vefects/Easy Shockwaves VFX URP/VFX/Shockwaves Distortion/Particles/VFX_Shockwave_Vertical_01_Distortion_Big_2s.prefab
+  uploadId: 780644

@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:0cebd244777d329be83d575a025b28e074324ac4da01594d8688bd274afae56c
-size 362
+fileFormatVersion: 2
+guid: 84ec177bc6599ae438ee9c03a98cad5c
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 258782
+  packageName: House Interior - Free
+  packageVersion: 2.0.0
+  assetPath: Assets/nappin/HouseInteriorPack/Prefabs/(Prb)Chair2.prefab
+  uploadId: 799960

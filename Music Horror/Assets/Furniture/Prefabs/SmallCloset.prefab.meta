@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:7af9d9233f7457ddb4cac12cbde2ce3488824838db1f853014ce3b86ef4c4bf5
-size 343
+fileFormatVersion: 2
+guid: 0811362ae53573c47be253aac1dbdd5d
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 192628
+  packageName: Furniture FREE Pack
+  packageVersion: 1.0
+  assetPath: Assets/Furniture/Prefabs/SmallCloset.prefab
+  uploadId: 426116

@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:580dfb90f48972722b53e27f049be6e2a77fe03286d5f3bfebbc497c98fb522a
-size 365
+fileFormatVersion: 2
+guid: 1cc7753ad8e096d4c8b059687625cdfa
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 258782
+  packageName: House Interior - Free
+  packageVersion: 2.0.0
+  assetPath: Assets/nappin/HouseInteriorPack/Prefabs/(Prb)SingleBed.prefab
+  uploadId: 799960

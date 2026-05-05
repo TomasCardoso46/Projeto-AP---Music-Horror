@@ -1,3 +1,37 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:34795fd1b814eaaf4c1c29f43e679137c6c8655f3d0507312f4b9d7e76dd7850
-size 1002
+using UnityEngine;
+using UnityEngine.AI;
+using Unity.AI.Navigation;
+
+[DisallowMultipleComponent]
+public class NavMeshLinkTraversalSettings : MonoBehaviour
+{
+    [Header("Traversal Mode")]
+    [Tooltip("If enabled, agents will play an animation while traversing all links on this object")]
+    public bool useAnimationTraversal = false;
+
+    [Header("Animation Traversal Settings")]
+    public string traversalTrigger = "Traverse";
+    public float animationDuration = 1.0f;
+
+    [Header("Speed-Based Traversal Settings")]
+    public float jumpHeight = 0f;
+
+    private NavMeshLink[] links;
+
+    void Awake()
+    {
+        links = GetComponents<NavMeshLink>();
+
+        if (links.Length == 0)
+        {
+            Debug.LogWarning($"NavMeshLinkTraversalSettings on '{name}' has no NavMeshLinks.");
+            return;
+        }
+
+        // Ensure consistency across all links on this object
+        foreach (NavMeshLink link in links)
+        {
+            link.bidirectional = true;
+        }
+    }
+}

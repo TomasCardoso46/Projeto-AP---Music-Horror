@@ -1,3 +1,18 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:2bb16783ebd71bbc7988dca99bf50be9904facce966c2b812d9e6dbdef10841e
-size 457
+fileFormatVersion: 2
+guid: 10d30b5f184165e40a486415984fffc8
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 191256
+  packageName: URP Dissolve 2020
+  packageVersion: 2020.3.0
+  assetPath: Assets/ShaderGraph_Dissolve/Utility/Scripts/RotatorDissolveDir.cs
+  uploadId: 533539

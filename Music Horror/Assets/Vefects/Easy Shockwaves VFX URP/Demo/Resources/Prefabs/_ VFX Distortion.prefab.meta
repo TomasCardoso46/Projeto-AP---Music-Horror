@@ -1,3 +1,15 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:c5d3e30d1d97946d63c4e21808a44ab2e284663be8308be5ced4c8f5f77c1cf1
-size 397
+fileFormatVersion: 2
+guid: ff3473b635e437442b3bc2d58da6ab0d
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 306143
+  packageName: Easy Shockwaves VFX - URP
+  packageVersion: 1.0.2
+  assetPath: Assets/Vefects/Easy Shockwaves VFX URP/Demo/Resources/Prefabs/_ VFX
+    Distortion.prefab
+  uploadId: 780644

@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:010a49ba45182a59d26275d2fb0d659de7e0e444f1b5283c4d0d22c766e0448c
-size 339
+fileFormatVersion: 2
+guid: 7be1856a1844e5a47b82d7cb61f184e5
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 192628
+  packageName: Furniture FREE Pack
+  packageVersion: 1.0
+  assetPath: Assets/Furniture/Prefabs/closet2.prefab
+  uploadId: 426116

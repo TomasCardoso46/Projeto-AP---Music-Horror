@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:dcca649b3e18d318eb18e85197ea666820451ab09594179d8409620fd081deb6
-size 360
+fileFormatVersion: 2
+guid: f933a928f9d932f4e845eb0fc9508d64
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 258782
+  packageName: House Interior - Free
+  packageVersion: 2.0.0
+  assetPath: Assets/nappin/HouseInteriorPack/Prefabs/(Prb)Sofa.prefab
+  uploadId: 799960

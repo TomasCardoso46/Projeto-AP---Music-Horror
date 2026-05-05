@@ -1,3 +1,18 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:1b84bb69b99c8201d45462901818ff18d6c4dd1b90a73837f43bad339c592414
-size 453
+fileFormatVersion: 2
+guid: 74df1da90448a4c49ac2b7f0673eed53
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 191256
+  packageName: URP Dissolve 2020
+  packageVersion: 2020.3.0
+  assetPath: Assets/ShaderGraph_Dissolve/Utility/Scripts/DissolveOffest.cs
+  uploadId: 533539

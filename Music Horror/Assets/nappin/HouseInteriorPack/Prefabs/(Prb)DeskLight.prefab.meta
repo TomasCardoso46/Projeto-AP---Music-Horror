@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:363fe4c008568f388d797e3f9532a047aefe3aee17023d8a9aa5911ed3a73842
-size 365
+fileFormatVersion: 2
+guid: e0a309163f5d1ef4e81367371dba0804
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 258782
+  packageName: House Interior - Free
+  packageVersion: 2.0.0
+  assetPath: Assets/nappin/HouseInteriorPack/Prefabs/(Prb)DeskLight.prefab
+  uploadId: 799960

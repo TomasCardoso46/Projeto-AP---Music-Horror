@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:c81289987cf0e263e03bbf8e12a275ff701f2987d617f1ebd19dd2c0c4884a8a
-size 362
+fileFormatVersion: 2
+guid: 5e5be735ac697564c9d232fa4619bcf9
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 258782
+  packageName: House Interior - Free
+  packageVersion: 2.0.0
+  assetPath: Assets/nappin/HouseInteriorPack/Prefabs/(Prb)Fridge.prefab
+  uploadId: 799960

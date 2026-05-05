@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:9c52b933d5401cb5805ebf05e5b78aaf23953e6630e090d867ffd30805a66977
-size 363
+fileFormatVersion: 2
+guid: 676edecf7cf6d7645a15b3550dce3e70
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 258782
+  packageName: House Interior - Free
+  packageVersion: 2.0.0
+  assetPath: Assets/nappin/HouseInteriorPack/Prefabs/(Prb)Drawer1.prefab
+  uploadId: 799960

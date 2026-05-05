@@ -1,3 +1,67 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:dfb9ef45851f51b18d8ed91d0dfa13db19a27f496783a52b4337af2281893d7d
-size 2981
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &622687027144692135
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: c8807d40c37db6448bc0c239004ac683, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -245.515
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c8807d40c37db6448bc0c239004ac683, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 62.629
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c8807d40c37db6448bc0c239004ac683, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 54.277
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c8807d40c37db6448bc0c239004ac683, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.31725252
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c8807d40c37db6448bc0c239004ac683, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c8807d40c37db6448bc0c239004ac683, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.94834113
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c8807d40c37db6448bc0c239004ac683, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c8807d40c37db6448bc0c239004ac683, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c8807d40c37db6448bc0c239004ac683, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 143.006
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c8807d40c37db6448bc0c239004ac683, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4897732323685117858, guid: c8807d40c37db6448bc0c239004ac683, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: e5f0c6a891510554fbd6b954bab4c2ad, type: 2}
+    - target: {fileID: -1526509560930016547, guid: c8807d40c37db6448bc0c239004ac683, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: e5f0c6a891510554fbd6b954bab4c2ad, type: 2}
+    - target: {fileID: 919132149155446097, guid: c8807d40c37db6448bc0c239004ac683, type: 3}
+      propertyPath: m_Name
+      value: TVtube
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: c8807d40c37db6448bc0c239004ac683, type: 3}

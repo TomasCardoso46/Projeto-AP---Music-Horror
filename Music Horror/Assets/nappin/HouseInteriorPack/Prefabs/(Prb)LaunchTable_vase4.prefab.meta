@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:27a62bfb816c33de51be7bdd26e5fc59f5fb087b052bd35a56c87719257f0911
-size 373
+fileFormatVersion: 2
+guid: c4357fd2cd18af449b8680904f04757c
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 258782
+  packageName: House Interior - Free
+  packageVersion: 2.0.0
+  assetPath: Assets/nappin/HouseInteriorPack/Prefabs/(Prb)LaunchTable_vase4.prefab
+  uploadId: 799960

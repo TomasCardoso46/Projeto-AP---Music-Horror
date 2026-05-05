@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:7792040659e8901f675c6e92c46621709a5fcc1fd5f054d99cc7d0388b87d138
-size 368
+fileFormatVersion: 2
+guid: f174423ab43ee4b49871930f6144ec2d
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 258782
+  packageName: House Interior - Free
+  packageVersion: 2.0.0
+  assetPath: Assets/nappin/HouseInteriorPack/Prefabs/(Prb)CeilingLight.prefab
+  uploadId: 799960

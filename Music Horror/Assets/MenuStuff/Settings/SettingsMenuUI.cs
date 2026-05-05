@@ -1,3 +1,46 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:04f394ddb0d865eed0b6c8fc665c4b86ac314f63e90ee5b595d3ed14d8c471d5
-size 1162
+using UnityEngine;
+using UnityEngine.UI;
+
+public class SettingsMenuUI : MonoBehaviour
+{
+    [SerializeField] Slider volumeSlider;
+    [SerializeField] Slider gammaSlider;
+    [SerializeField] Toggle crouchToggle;
+    [SerializeField] Button resetButton;
+
+    [SerializeField] GameObject menuRoot;
+
+    void Start()
+    {
+        var s = SettingsManager.Instance;
+
+        volumeSlider.value = s.volume;
+        gammaSlider.value = s.gamma;
+        crouchToggle.isOn = s.crouchToggleMode;
+
+        volumeSlider.onValueChanged.AddListener(s.SetVolume);
+        gammaSlider.onValueChanged.AddListener(s.SetGamma);
+        crouchToggle.onValueChanged.AddListener(s.SetCrouchMode);
+
+        resetButton.onClick.AddListener(() =>
+        {
+            s.ResetSettings();
+
+            volumeSlider.value = s.volume;
+            gammaSlider.value = s.gamma;
+            crouchToggle.isOn = s.crouchToggleMode;
+        });
+    }
+
+    public void Open()
+    {
+        menuRoot.SetActive(true);
+        SettingsManager.Instance.EnterSettings();
+    }
+
+    public void Close()
+    {
+        menuRoot.SetActive(false);
+        SettingsManager.Instance.ExitSettings();
+    }
+}

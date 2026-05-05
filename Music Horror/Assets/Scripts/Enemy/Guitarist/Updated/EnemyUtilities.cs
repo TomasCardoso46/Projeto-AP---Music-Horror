@@ -1,3 +1,18 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:6ffd907beb1405f9b579fce3cc3344f125c458fc6887d10be428eb45864d943c
-size 583
+using UnityEngine;
+
+public static class EnemyUtilities
+{
+    // Sample a random point on NavMesh around center
+    public static bool RandomNavSphere(Vector3 origin, float dist, out Vector3 result)
+    {
+        Vector3 randDirection = Random.insideUnitSphere * dist;
+        randDirection += origin;
+        if (UnityEngine.AI.NavMesh.SamplePosition(randDirection, out UnityEngine.AI.NavMeshHit navHit, 20.0f, UnityEngine.AI.NavMesh.AllAreas))
+        {
+            result = navHit.position;
+            return true;
+        }
+        result = origin;
+        return false;
+    }
+}

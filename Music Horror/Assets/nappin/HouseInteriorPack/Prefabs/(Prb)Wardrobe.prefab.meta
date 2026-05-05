@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:ae343c6954ae2b44c918ee040d2ac2bae08d6cd4515e97f238f56b0f897343a3
-size 364
+fileFormatVersion: 2
+guid: bdeb57ff900e167419635eef4854627d
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 258782
+  packageName: House Interior - Free
+  packageVersion: 2.0.0
+  assetPath: Assets/nappin/HouseInteriorPack/Prefabs/(Prb)Wardrobe.prefab
+  uploadId: 799960

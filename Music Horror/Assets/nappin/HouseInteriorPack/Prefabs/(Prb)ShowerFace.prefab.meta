@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:f8efc3bd223173a50e65f5f3406f0bb148a4196cb28e5fc3383d7160db8ff07f
-size 366
+fileFormatVersion: 2
+guid: d75d62e350e6ccb4fa03f56c0a8fd8b1
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 258782
+  packageName: House Interior - Free
+  packageVersion: 2.0.0
+  assetPath: Assets/nappin/HouseInteriorPack/Prefabs/(Prb)ShowerFace.prefab
+  uploadId: 799960

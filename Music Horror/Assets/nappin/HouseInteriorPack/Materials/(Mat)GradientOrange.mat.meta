@@ -1,3 +1,15 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:91bb1d8c515476eb831c99fc640a64cfb05b364a55629920b28f513a03600d79
-size 403
+fileFormatVersion: 2
+guid: fb698345bbbc4d74ba2ca7b2bb59eb9d
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 258782
+  packageName: House Interior - Free
+  packageVersion: 2.0.0
+  assetPath: Assets/nappin/HouseInteriorPack/Materials/(Mat)GradientOrange.mat
+  uploadId: 799960

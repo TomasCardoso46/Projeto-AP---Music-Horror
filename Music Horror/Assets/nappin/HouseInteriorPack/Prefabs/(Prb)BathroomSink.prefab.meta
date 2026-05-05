@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:4fa883a50ed101d165194382ccf298a9588f5119804d08c3ad6ac5ffb5f62d0c
-size 368
+fileFormatVersion: 2
+guid: fa3db0668a5ddff4c899e2c3fd2c0c72
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 258782
+  packageName: House Interior - Free
+  packageVersion: 2.0.0
+  assetPath: Assets/nappin/HouseInteriorPack/Prefabs/(Prb)BathroomSink.prefab
+  uploadId: 799960

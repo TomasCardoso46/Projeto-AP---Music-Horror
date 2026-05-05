@@ -1,3 +1,15 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:b9916fc44679a6f3ef10bebdbd6e1ba507b71202e2458e9f6e667850064b9fae
-size 581
+fileFormatVersion: 2
+guid: 9afc526ed3803a94b911bba9121f670e
+VisualEffectImporter:
+  externalObjects: {}
+  serializedVersion: 1
+  template:
+    name: Trigger Event on Collide
+    category: Learning Templates
+    description: This VFX is displaying an advanced usage of the Trigger on Collide
+      block that allows you to spawn particles when the particle collides.
+    icon: {fileID: 2800000, guid: 49836be3225b70342b4057f6bf94b554, type: 3}
+    thumbnail: {fileID: 2800000, guid: af98832125f677e4abbc689a14b778b9, type: 3}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

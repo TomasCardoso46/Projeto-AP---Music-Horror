@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:ca03b2c5be6fc657078d62faab3cbebc9600af7475d25f6ccb5bbc39abfd3ec0
-size 364
+fileFormatVersion: 2
+guid: 97bc4339b3151c34799878d35be91e6f
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 258782
+  packageName: House Interior - Free
+  packageVersion: 2.0.0
+  assetPath: Assets/nappin/HouseInteriorPack/Prefabs/(Prb)Storage1.prefab
+  uploadId: 799960

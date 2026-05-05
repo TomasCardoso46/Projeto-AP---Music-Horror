@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:015e261021fb76f46f276a9f8a354603f17432734031acc5169d4ee1416d0d80
-size 369
+fileFormatVersion: 2
+guid: 255e79009c0081f4b90ea3205cc262c1
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 258782
+  packageName: House Interior - Free
+  packageVersion: 2.0.0
+  assetPath: Assets/nappin/HouseInteriorPack/Prefabs/(Prb)KitchenIsland.prefab
+  uploadId: 799960

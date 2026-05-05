@@ -1,3 +1,15 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:a1a7a2208f4f6ed44190b0689e495807756340beb62b8c706f57411f05ab841a
-size 429
+fileFormatVersion: 2
+guid: 646776a1b91e25246b9e9c876b145e37
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 306143
+  packageName: Easy Shockwaves VFX - URP
+  packageVersion: 1.0.2
+  assetPath: Assets/Vefects/Easy Shockwaves VFX URP/VFX/Shockwaves/Particles/Color
+    Variation/VFX_Shockwave_09_Pink_Small_1s.prefab
+  uploadId: 780644

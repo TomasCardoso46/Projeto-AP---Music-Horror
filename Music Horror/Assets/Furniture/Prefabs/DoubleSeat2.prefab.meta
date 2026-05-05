@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:4e3a33c343241d8820eba7dab3df3251c27086f6cbd7b46555ac0051f4a8adcd
-size 343
+fileFormatVersion: 2
+guid: d5026a2aaf9d8394a9e8b886d38dbfac
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 192628
+  packageName: Furniture FREE Pack
+  packageVersion: 1.0
+  assetPath: Assets/Furniture/Prefabs/DoubleSeat2.prefab
+  uploadId: 426116

@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:b408389e175f1c4dd06866a993b3b237da6e4a4547125a02721bea9ef67a0d4d
-size 353
+fileFormatVersion: 2
+guid: 0a539a7e852df644496f2a0e6151c727
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 191256
+  packageName: URP Dissolve 2020
+  packageVersion: 2020.3.0
+  assetPath: Assets/ShaderGraph_Dissolve/URP/URP Samples.unity
+  uploadId: 533539

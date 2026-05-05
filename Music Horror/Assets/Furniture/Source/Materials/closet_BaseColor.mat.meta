@@ -1,3 +1,15 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:33b340a54ed5a0763ea2e0d0d11f1815c810800ebf48331d305856cdadf5a4ae
-size 382
+fileFormatVersion: 2
+guid: f6a97756ab140494c88bc5f4aac12a1f
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 192628
+  packageName: Furniture FREE Pack
+  packageVersion: 1.0
+  assetPath: Assets/Furniture/Source/Materials/closet_BaseColor.mat
+  uploadId: 426116

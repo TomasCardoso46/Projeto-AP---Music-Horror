@@ -1,3 +1,15 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:c41efe4e0858f1714d3e340cba8fb718151003204ce7ff7b6f208ebc51427b83
-size 555
+fileFormatVersion: 2
+guid: d27e95a5e4a69f84ba7d1a7c6b791ae0
+VisualEffectImporter:
+  externalObjects: {}
+  serializedVersion: 1
+  template:
+    name: TexIndex Attribute
+    category: Learning Templates
+    description: This VFX shows how to set the output settings to use a flipbook
+      and their relationship with the texIndex attribute.
+    icon: {fileID: 2800000, guid: 49836be3225b70342b4057f6bf94b554, type: 3}
+    thumbnail: {fileID: 2800000, guid: ec5b3fc4b1b065c48aa4944f0496294a, type: 3}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

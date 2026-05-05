@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:0ae2a4254c230ef262a8fc2fd1bbda392e0d10b9b82d3f46f8e93c7fbf272728
-size 368
+fileFormatVersion: 2
+guid: 38a6a1df4a5ef5f4b8107ff806b527c0
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 258782
+  packageName: House Interior - Free
+  packageVersion: 2.0.0
+  assetPath: Assets/nappin/HouseInteriorPack/Prefabs/(Prb)Sofa_pillowT.prefab
+  uploadId: 799960

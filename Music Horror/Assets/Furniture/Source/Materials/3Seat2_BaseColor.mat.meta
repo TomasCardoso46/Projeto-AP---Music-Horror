@@ -1,3 +1,15 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:a555a34708635297c7b6677c9acf4de4466d53b7f969d5a6172c4377e5b53c63
-size 382
+fileFormatVersion: 2
+guid: 53aa0875d11cc604a93539387bccc820
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 192628
+  packageName: Furniture FREE Pack
+  packageVersion: 1.0
+  assetPath: Assets/Furniture/Source/Materials/3Seat2_BaseColor.mat
+  uploadId: 426116

@@ -1,3 +1,1 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:5ceb6e8e2528c2c8c06b44b0a6f8db4c656dcc08849eabf45dc337ba9f65a897
-size 246
+Hi, this set you can use for their projects in different genres. In these models, no animation, particle system. Their suggestions can u send me here vovaustimuk@gmail.com. View my other packages here https://assetstore.unity.com/publishers/26494

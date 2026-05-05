@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:0836c32a1580dc97e3c4561b99ee30cd908a6d90e599ec29946ebc239d8c9aed
-size 366
+fileFormatVersion: 2
+guid: 290d5c01ef7f584438bbaca69591c2b9
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 258782
+  packageName: House Interior - Free
+  packageVersion: 2.0.0
+  assetPath: Assets/nappin/HouseInteriorPack/Prefabs/(Prb)CornerSofa.prefab
+  uploadId: 799960

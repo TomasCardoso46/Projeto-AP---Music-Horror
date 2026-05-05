@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:1628c669c06e21c5e544bc469f8bad8123c9aacc554fc36abf34cbebed970389
-size 334
+fileFormatVersion: 2
+guid: 245d0723103d5d140a83d27249c3df7a
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 192628
+  packageName: Furniture FREE Pack
+  packageVersion: 1.0
+  assetPath: Assets/Furniture/All models.unity
+  uploadId: 426116

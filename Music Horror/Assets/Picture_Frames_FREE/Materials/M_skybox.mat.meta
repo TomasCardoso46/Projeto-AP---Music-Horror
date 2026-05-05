@@ -1,3 +1,15 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:5d7dae796a08a05feac49d4c601ab5aff65b03a4351f304ea881373ab6fc881e
-size 372
+fileFormatVersion: 2
+guid: 0ffaa0b7117ba8c47a9d05ae701d4b4d
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 301169
+  packageName: Picture Frames
+  packageVersion: 1.0
+  assetPath: Assets/Picture_Frames_FREE/Materials/M_skybox.mat
+  uploadId: 704608
