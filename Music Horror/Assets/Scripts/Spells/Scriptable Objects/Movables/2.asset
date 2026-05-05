@@ -1,3 +1,17 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:56a8cec110c240f8a6c8dfed61a9bc0954560f11fd9aafc011f15e94cda65a19
-size 478
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8be83adb52094f4ba7ad83b35c02bd4, type: 3}
+  m_Name: 2
+  m_EditorClassIdentifier: Assembly-CSharp::TogglePlatformSpell
+  spellName: Move_2
+  targetID: 2
+  maxDistance: 15

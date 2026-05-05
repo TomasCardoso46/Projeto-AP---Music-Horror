@@ -1,3 +1,30 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:372ff59ee7cb796d0dc0d07e6f8ac31d76a3e8b081fef90192b144b009a9e620
-size 744
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5165a55fbc81669449f3a7198e71c5a8, type: 3}
+  m_Name: EnemySettings
+  m_EditorClassIdentifier: Assembly-CSharp::EnemySettings
+  sightFOV: 180
+  sightRange: 2
+  lowHearingRange: 1
+  normalHearingRange: 8
+  highHearingRange: 16
+  memoryTime: 5
+  patrolSpeed: 2
+  chaseSpeed: 4.7
+  stoppingDistance: 0.5
+  attackRange: 3
+  attackCooldown: 2
+  attackDamage: 20
+  investigateChance: 1
+  patrolPointTolerance: 1
+  randomRoam: 1
+  roamRadius: 5
