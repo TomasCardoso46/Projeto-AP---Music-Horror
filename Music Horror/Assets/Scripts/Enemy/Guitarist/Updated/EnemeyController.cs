@@ -246,6 +246,15 @@ public class EnemyController : MonoBehaviour, IEnemy
         chaseAudioPlaying = false;
     }
 
+    public void SetLastKnownPosition(Vector3 pos)
+    {
+        lastKnownPosition = pos;
+    }
+     public void ResetStateAfterLoad()
+    {
+        currentState = State.Patrol;
+    }
+
    
 
     #region IEnemy Implementation
