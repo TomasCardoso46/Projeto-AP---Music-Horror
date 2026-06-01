@@ -7,22 +7,22 @@ public class SettingsManager : MonoBehaviour
 {
     public static SettingsManager Instance;
 
-    [Header("UI Object Groups")]
-    [SerializeField] private GameObject[] disableOnOpen;
-    [SerializeField] private GameObject[] enableOnOpen;
+    [Header("Defaults")]
+    [SerializeField] float defaultVolume = 1f;
+    [SerializeField] float defaultGamma = 1f;
+    [SerializeField] bool defaultCrouchToggle = false;
 
-    [Header("Settings")]
-    public float volume = 1f;
-    public float gamma = 1f;
-    public bool crouchToggleMode = true;
+    [HideInInspector] public float volume;
+    [HideInInspector] public float gamma;
+    [HideInInspector] public bool crouchToggleMode;
 
-    private const string VOLUME_KEY = "VOLUME";
-    private const string GAMMA_KEY = "GAMMA";
-    private const string CROUCH_KEY = "CROUCH_MODE";
+    const string VolumeKey = "Volume";
+    const string GammaKey = "Gamma";
+    const string CrouchKey = "CrouchToggle";
 
     void Awake()
     {
-        if (Instance != null)
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
             return;
@@ -31,122 +31,99 @@ public class SettingsManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        Load();
-    }
+        LoadSettings();
 
-    void OnEnable()
-    {
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    void OnDisable()
+    void OnDestroy()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
-    void Start()
-    {
-        AudioListener.volume = volume;
-        ApplyGammaToAllVolumes();
-    }
-
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         ApplyGammaToAllVolumes();
     }
 
-    public void SetVolume(float v)
-    {
-        volume = v;
-        AudioListener.volume = volume;
-        Save();
-    }
 
-    public void SetGamma(float g)
+    public void SetVolume(float value)
     {
-        gamma = g;
-        ApplyGammaToAllVolumes();
-        Save();
-    }
-
-    public void SetCrouchMode(bool toggle)
-    {
-        crouchToggleMode = toggle;
-        Save();
-    }
-
-    public void ResetSettings()
-    {
-        volume = 1f;
-        gamma = 1f;
-        crouchToggleMode = true;
+        volume = Mathf.Clamp01(value);
 
         AudioListener.volume = volume;
-        ApplyGammaToAllVolumes();
 
-        Save();
+        PlayerPrefs.SetFloat(VolumeKey, volume);
+        PlayerPrefs.Save();
     }
 
-    /// <summary>
-    /// Applies gamma to ALL volumes in the current scene
-    /// </summary>
-    private void ApplyGammaToAllVolumes()
+
+    public void SetGamma(float value)
+    {
+        gamma = value;
+
+        ApplyGammaToAllVolumes();
+
+        PlayerPrefs.SetFloat(GammaKey, gamma);
+        PlayerPrefs.Save();
+    }
+
+    public void ApplyGammaToAllVolumes()
     {
         Volume[] volumes = FindObjectsByType<Volume>(FindObjectsSortMode.None);
 
         float g = Mathf.Clamp(gamma, 0.1f, 3f);
-        float colorMultiplier = g; // direct mapping
 
-        foreach (var volume in volumes)
+        foreach (var v in volumes)
         {
-            if (volume == null || volume.profile == null)
+            if (v == null || v.profile == null)
                 continue;
 
-            if (volume.profile.TryGet(out ColorAdjustments colorAdjustments))
+            if (v.profile.TryGet(out ColorAdjustments colorAdjustments))
             {
                 colorAdjustments.colorFilter.overrideState = true;
 
-                // Apply gamma as brightness tint (white scaled)
-                colorAdjustments.colorFilter.value = new Color(
-                    colorMultiplier,
-                    colorMultiplier,
-                    colorMultiplier,
-                    1f
-                );
+                colorAdjustments.colorFilter.value = new Color(g, g, g, 1f);
             }
         }
     }
 
-    public void EnterSettings() => SetGroupState(false, true);
-    public void ExitSettings() => SetGroupState(true, false);
 
-    private void SetGroupState(bool enableA, bool enableB)
+    public void SetCrouchMode(bool value)
     {
-        if (disableOnOpen != null)
-        {
-            foreach (var obj in disableOnOpen)
-                if (obj) obj.SetActive(enableA);
-        }
+        crouchToggleMode = value;
 
-        if (enableOnOpen != null)
-        {
-            foreach (var obj in enableOnOpen)
-                if (obj) obj.SetActive(enableB);
-        }
-    }
-
-    void Save()
-    {
-        PlayerPrefs.SetFloat(VOLUME_KEY, volume);
-        PlayerPrefs.SetFloat(GAMMA_KEY, gamma);
-        PlayerPrefs.SetInt(CROUCH_KEY, crouchToggleMode ? 1 : 0);
+        PlayerPrefs.SetInt(CrouchKey, value ? 1 : 0);
         PlayerPrefs.Save();
     }
 
-    void Load()
+
+    void LoadSettings()
     {
-        volume = PlayerPrefs.GetFloat(VOLUME_KEY, 1f);
-        gamma = PlayerPrefs.GetFloat(GAMMA_KEY, 1f);
-        crouchToggleMode = PlayerPrefs.GetInt(CROUCH_KEY, 1) == 1;
+        volume = PlayerPrefs.GetFloat(VolumeKey, defaultVolume);
+        gamma = PlayerPrefs.GetFloat(GammaKey, defaultGamma);
+        crouchToggleMode = PlayerPrefs.GetInt(CrouchKey, defaultCrouchToggle ? 1 : 0) == 1;
+
+        AudioListener.volume = volume;
+        ApplyGammaToAllVolumes();
+    }
+
+    public void ResetSettings()
+    {
+        SetVolume(defaultVolume);
+        SetGamma(defaultGamma);
+        SetCrouchMode(defaultCrouchToggle);
+    }
+
+
+    public void EnterSettings()
+    {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+    }
+
+    public void ExitSettings()
+    {
+        
     }
 }

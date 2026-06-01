@@ -9,14 +9,13 @@ public class SettingsMenuUI : MonoBehaviour
     [SerializeField] Button resetButton;
 
     [SerializeField] GameObject menuRoot;
+    [SerializeField] GameObject previousMenuRoot;
 
     void Start()
     {
         var s = SettingsManager.Instance;
 
-        volumeSlider.value = s.volume;
-        gammaSlider.value = s.gamma;
-        crouchToggle.isOn = s.crouchToggleMode;
+        RefreshUI();
 
         volumeSlider.onValueChanged.AddListener(s.SetVolume);
         gammaSlider.onValueChanged.AddListener(s.SetGamma);
@@ -25,22 +24,38 @@ public class SettingsMenuUI : MonoBehaviour
         resetButton.onClick.AddListener(() =>
         {
             s.ResetSettings();
-
-            volumeSlider.value = s.volume;
-            gammaSlider.value = s.gamma;
-            crouchToggle.isOn = s.crouchToggleMode;
+            RefreshUI();
         });
+    }
+
+    void RefreshUI()
+    {
+        var s = SettingsManager.Instance;
+
+        volumeSlider.SetValueWithoutNotify(s.volume);
+        gammaSlider.SetValueWithoutNotify(s.gamma);
+        crouchToggle.SetIsOnWithoutNotify(s.crouchToggleMode);
     }
 
     public void Open()
     {
+        RefreshUI();
+
+        if (previousMenuRoot != null)
+            previousMenuRoot.SetActive(false);
+
         menuRoot.SetActive(true);
+
         SettingsManager.Instance.EnterSettings();
     }
 
     public void Close()
     {
         menuRoot.SetActive(false);
+
+        if (previousMenuRoot != null)
+            previousMenuRoot.SetActive(true);
+
         SettingsManager.Instance.ExitSettings();
     }
 }
