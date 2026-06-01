@@ -48,6 +48,8 @@ public class Chord : MonoBehaviour
 
     void Update()
     {
+        if (GameState.IsPaused)
+        return;
         //UpdateGuitarMaterial();
 
         HandleModeSwitch();
@@ -56,9 +58,6 @@ public class Chord : MonoBehaviour
             return;*/
 
         HandleChordSelection();
-
-        if (Input.GetMouseButtonDown(0))
-            PlayCurrentSound();
 
         HandleNumberShortcuts();
     }

@@ -76,6 +76,8 @@ public class FirstPersonRigidbodyController : MonoBehaviour
 
     void Update()
     {
+        if (GameState.IsPaused)
+        return;
         ReadInput();
         HandleMouseLook();
         HandleLean();
@@ -87,6 +89,8 @@ public class FirstPersonRigidbodyController : MonoBehaviour
 
     void LateUpdate()
     {
+        if (GameState.IsPaused)
+        return;
         UpdateCamera();
         HandleMovement();
     }
