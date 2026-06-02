@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class SaveManager : MonoBehaviour
 {
@@ -93,11 +92,12 @@ public class SaveManager : MonoBehaviour
         yield return null;
         yield return new WaitForEndOfFrame();
 
-        RestorePlayer(data.player);
+        // ✅ CRITICAL: wait for deterministic player restore BEFORE anything else
+        yield return ApplyPlayerTransform(data.player);
+
         RestoreEnemy(data.enemy);
         RestoreSpells(data.unlockedSpells);
 
-        yield return null;
         yield return new WaitForEndOfFrame();
 
         EnableGameplaySystems();
@@ -113,27 +113,35 @@ public class SaveManager : MonoBehaviour
         IsLoading = false;
     }
 
-    private void RestorePlayer(PlayerData data)
-    {
-        StartCoroutine(ApplyPlayerTransform(data));
-    }
-
     private IEnumerator ApplyPlayerTransform(PlayerData data)
     {
         yield return new WaitForEndOfFrame();
-        yield return null;
 
         Vector3 pos = ToVector3(data.position);
         Vector3 rot = ToVector3(data.rotation);
 
-        player.position = pos;
-        player.rotation = Quaternion.Euler(rot);
-
         Rigidbody rb = player.GetComponent<Rigidbody>();
+
         if (rb != null)
         {
+            // ✅ fully freeze physics so NOTHING can override position
+            rb.isKinematic = true;
             rb.linearVelocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
+
+            rb.position = pos;
+            rb.rotation = Quaternion.Euler(rot);
+
+            Physics.SyncTransforms();
+
+            yield return null;
+
+            rb.isKinematic = false;
+        }
+        else
+        {
+            player.position = pos;
+            player.rotation = Quaternion.Euler(rot);
         }
     }
 

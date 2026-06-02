@@ -1,4 +1,7 @@
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public class SceneSaveBinder : MonoBehaviour
 {
@@ -15,6 +18,13 @@ public class SceneSaveBinder : MonoBehaviour
             drawingsRoot,
             playerController
         );
+
+        StartCoroutine(LoadPending());
+    }
+
+    private IEnumerator LoadPending()
+    {
+        yield return null; // ensures scene is fully initialized
 
         string pendingSave = PlayerPrefs.GetString("PendingSaveToLoad", "");
 
