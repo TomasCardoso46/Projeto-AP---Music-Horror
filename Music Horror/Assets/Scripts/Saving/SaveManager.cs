@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
+using UnityEngine.UI;
 
 public class SaveManager : MonoBehaviour
 {
@@ -11,8 +11,12 @@ public class SaveManager : MonoBehaviour
     private Transform player;
     private EnemyController enemy;
     private Transform drawingsRoot;
-
     private MonoBehaviour playerController;
+
+    private string lastCheckpointName = "Unknown Area";
+    private string lastCheckpointImage = "default";
+
+    public bool IsLoading { get; private set; }
 
     public int manualSaveLimit = 5;
     private List<string> manualSaves = new List<string>();
@@ -31,11 +35,7 @@ public class SaveManager : MonoBehaviour
         SaveSystem.Init();
     }
 
-    public void BindScene(
-        Transform playerT,
-        EnemyController enemyController,
-        Transform drawings,
-        MonoBehaviour playerCtrl)
+    public void BindScene(Transform playerT, EnemyController enemyController, Transform drawings, MonoBehaviour playerCtrl)
     {
         player = playerT;
         enemy = enemyController;
@@ -43,44 +43,7 @@ public class SaveManager : MonoBehaviour
         playerController = playerCtrl;
     }
 
-    private SaveData BuildSave(string type, string locationName, string imageKey)
-    {
-        return new SaveData
-        {
-            saveType = type,
-            locationName = locationName,
-            locationImageKey = imageKey,
-            dateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
-
-            player = new PlayerData
-            {
-                position = ToArray(player.position),
-                rotation = ToArray(player.eulerAngles)
-            },
-
-            enemy = BuildEnemyData(),
-
-            unlockedSpells = GetUnlockedSpells()
-        };
-    }
-
-    private EnemyData BuildEnemyData()
-    {
-        return new EnemyData
-        {
-            position = ToArray(enemy.transform.position),
-            rotation = ToArray(enemy.transform.eulerAngles),
-
-            state = (int)enemy.currentState,
-
-            lastKnownPosition = ToArray(enemy.transform.position),
-
-            timeSinceSeen = 0f,
-            investigateTimer = 0f
-        };
-    }
-
-    public void CreateManualSave(string locationName, string imageKey)
+    public void CreateManualSave()
     {
         if (manualSaves.Count >= manualSaveLimit)
         {
@@ -89,17 +52,20 @@ public class SaveManager : MonoBehaviour
         }
 
         string id = "manual_" + Guid.NewGuid();
-        SaveSystem.SaveToFile(id, BuildSave("Manual", locationName, imageKey));
+        SaveSystem.SaveToFile(id, BuildSave("Manual", lastCheckpointName, lastCheckpointImage));
         manualSaves.Add(id);
     }
 
-    public void CreateAutoSave(string locationName, string imageKey)
+    public void CreateAutoSave()
     {
-        SaveSystem.SaveToFile("auto", BuildSave("Auto", locationName, imageKey));
+        SaveSystem.SaveToFile("auto", BuildSave("Auto", lastCheckpointName, lastCheckpointImage));
     }
 
     public void CreateForcedSave(string locationName, string imageKey)
     {
+        lastCheckpointName = locationName;
+        lastCheckpointImage = imageKey;
+
         string id = "forced_" + locationName + "_" + Guid.NewGuid();
         SaveSystem.SaveToFile(id, BuildSave("Forced", locationName, imageKey));
     }
@@ -114,39 +80,68 @@ public class SaveManager : MonoBehaviour
 
     private IEnumerator LoadRoutine(SaveData data)
     {
+        IsLoading = true;
+
+        var controller = playerController as FirstPersonRigidbodyController;
+        if (controller != null)
+            controller.isLoading = true;
+
         Time.timeScale = 0f;
 
         DisableGameplaySystems();
 
         yield return null;
+        yield return new WaitForEndOfFrame();
 
         RestorePlayer(data.player);
         RestoreEnemy(data.enemy);
         RestoreSpells(data.unlockedSpells);
 
         yield return null;
+        yield return new WaitForEndOfFrame();
 
         EnableGameplaySystems();
 
         Time.timeScale = 1f;
+
+        if (controller != null)
+        {
+            controller.ResetAfterLoad();
+            controller.isLoading = false;
+        }
+
+        IsLoading = false;
     }
 
     private void RestorePlayer(PlayerData data)
     {
-        player.position = ToVector3(data.position);
-        player.eulerAngles = ToVector3(data.rotation);
+        StartCoroutine(ApplyPlayerTransform(data));
+    }
+
+    private IEnumerator ApplyPlayerTransform(PlayerData data)
+    {
+        yield return new WaitForEndOfFrame();
+        yield return null;
+
+        Vector3 pos = ToVector3(data.position);
+        Vector3 rot = ToVector3(data.rotation);
+
+        player.position = pos;
+        player.rotation = Quaternion.Euler(rot);
+
+        Rigidbody rb = player.GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+        }
     }
 
     private void RestoreEnemy(EnemyData data)
     {
         enemy.transform.position = ToVector3(data.position);
         enemy.transform.eulerAngles = ToVector3(data.rotation);
-
         enemy.currentState = (EnemyController.State)data.state;
-
-        Vector3 last = ToVector3(data.lastKnownPosition);
-        enemy.SendMessage("SetLastKnownPosition", last, SendMessageOptions.DontRequireReceiver);
-
         enemy.ResetStateAfterLoad();
     }
 
@@ -178,9 +173,46 @@ public class SaveManager : MonoBehaviour
         Physics.autoSimulation = true;
     }
 
-    private float[] ToArray(Vector3 v) => new float[] { v.x, v.y, v.z };
+    private SaveData BuildSave(string type, string locationName, string imageKey)
+    {
+        return new SaveData
+        {
+            saveType = type,
+            locationName = locationName,
+            locationImageKey = imageKey,
+            dateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
 
-    private Vector3 ToVector3(float[] v) => new Vector3(v[0], v[1], v[2]);
+            player = new PlayerData
+            {
+                position = ToArray(player.position),
+                rotation = ToArray(player.eulerAngles)
+            },
+
+            enemy = new EnemyData
+            {
+                position = ToArray(enemy.transform.position),
+                rotation = ToArray(enemy.transform.eulerAngles),
+                state = (int)enemy.currentState
+            },
+
+            unlockedSpells = GetUnlockedSpells()
+        };
+    }
+
+    private float[] ToArray(Vector3 v)
+    {
+        return new float[]
+        {
+            float.IsNaN(v.x) ? 0 : v.x,
+            float.IsNaN(v.y) ? 0 : v.y,
+            float.IsNaN(v.z) ? 0 : v.z
+        };
+    }
+
+    private Vector3 ToVector3(float[] v)
+    {
+        return new Vector3(v[0], v[1], v[2]);
+    }
 
     private List<string> GetUnlockedSpells()
     {
@@ -192,9 +224,7 @@ public class SaveManager : MonoBehaviour
 
         return result;
     }
-    public bool IsEnemyInvestigating()
-    {
-        if (enemy == null) return false;
-        return enemy.currentState == EnemyController.State.Investigate;
-    }
+
+    public string GetLastCheckpointName() => lastCheckpointName;
+    public string GetLastCheckpointImage() => lastCheckpointImage;
 }

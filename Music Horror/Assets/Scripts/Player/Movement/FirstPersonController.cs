@@ -35,6 +35,8 @@ public class FirstPersonRigidbodyController : MonoBehaviour
     [Header("References")]
     [SerializeField] Rigidbody rb;
 
+    public bool isLoading;
+
     float yaw;
     float pitch;
 
@@ -46,13 +48,15 @@ public class FirstPersonRigidbodyController : MonoBehaviour
     float currentLean;
 
     float shakeTime;
+
     float normalHeight;
 
     Vector3 cameraVelocity;
-
     Vector3 movementInput;
+
     bool isCrouching;
     bool isSprinting;
+    bool crouchState;
 
     void Awake()
     {
@@ -69,15 +73,14 @@ public class FirstPersonRigidbodyController : MonoBehaviour
         cameraYaw = yaw;
 
         if (cameraTransform != null)
-        {
             cameraTransform.parent = null;
-        }
     }
 
     void Update()
     {
-        if (GameState.IsPaused)
-        return;
+        if (GameState.IsPaused || isLoading)
+            return;
+
         ReadInput();
         HandleMouseLook();
         HandleLean();
@@ -85,17 +88,14 @@ public class FirstPersonRigidbodyController : MonoBehaviour
         HandleStepShake();
     }
 
-    
-
     void LateUpdate()
     {
-        if (GameState.IsPaused)
-        return;
+        if (GameState.IsPaused || isLoading)
+            return;
+
         UpdateCamera();
         HandleMovement();
     }
-
-    bool crouchState;
 
     void ReadInput()
     {
@@ -178,9 +178,7 @@ public class FirstPersonRigidbodyController : MonoBehaviour
 
     void HandleStepShake()
     {
-        bool isMoving =
-            movementInput.x != 0 ||
-            movementInput.z != 0;
+        bool isMoving = movementInput.x != 0 || movementInput.z != 0;
 
         if (isMoving)
             shakeTime = 1f;
@@ -241,10 +239,27 @@ public class FirstPersonRigidbodyController : MonoBehaviour
             0.05f
         );
 
+        if (float.IsNaN(smoothPitch) || float.IsNaN(cameraYaw))
+            return;
+
         cameraTransform.rotation = Quaternion.Euler(
             smoothPitch,
             cameraYaw,
             currentLean
         );
+    }
+
+    public void ResetAfterLoad()
+    {
+        yaw = transform.eulerAngles.y;
+        pitch = 0f;
+
+        cameraYaw = yaw;
+
+        yawVelocity = 0f;
+        pitchVelocity = 0f;
+
+        cameraVelocity = Vector3.zero;
+        shakeTime = 0f;
     }
 }

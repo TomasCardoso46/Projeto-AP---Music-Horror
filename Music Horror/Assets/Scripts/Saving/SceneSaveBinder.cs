@@ -15,5 +15,13 @@ public class SceneSaveBinder : MonoBehaviour
             drawingsRoot,
             playerController
         );
+
+        string pendingSave = PlayerPrefs.GetString("PendingSaveToLoad", "");
+
+        if (!string.IsNullOrEmpty(pendingSave))
+        {
+            PlayerPrefs.DeleteKey("PendingSaveToLoad");
+            SaveManager.Instance.LoadGame(pendingSave);
+        }
     }
 }

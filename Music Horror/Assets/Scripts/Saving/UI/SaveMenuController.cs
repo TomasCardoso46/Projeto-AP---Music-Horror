@@ -22,7 +22,7 @@ public class SaveMenuController : MonoBehaviour
         if (latest == null)
             return;
 
-        UnityEngine.SceneManagement.SceneManager.LoadScene("GameScene");
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Prototype");
         SaveManager.Instance.LoadGame(latest.fileName);
     }
 

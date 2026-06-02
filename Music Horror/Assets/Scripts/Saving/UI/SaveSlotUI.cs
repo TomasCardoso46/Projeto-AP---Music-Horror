@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class SaveSlotUI : MonoBehaviour
 {
@@ -18,7 +19,8 @@ public class SaveSlotUI : MonoBehaviour
         titleText.text = data.locationName;
         dateText.text = data.dateTime;
 
-        icon.sprite = SaveIconDatabase.Instance.Get(data.locationImageKey);
+        if (SaveIconDatabase.Instance != null)
+            icon.sprite = SaveIconDatabase.Instance.Get(data.locationImageKey);
 
         button.onClick.RemoveAllListeners();
         button.onClick.AddListener(LoadSave);
@@ -26,7 +28,7 @@ public class SaveSlotUI : MonoBehaviour
 
     private void LoadSave()
     {
-        SaveManager.Instance.LoadGame(fileName);
-        UnityEngine.SceneManagement.SceneManager.LoadScene("GameScene");
+        PlayerPrefs.SetString("PendingSaveToLoad", fileName);
+        SceneManager.LoadScene("Prototype");
     }
 }

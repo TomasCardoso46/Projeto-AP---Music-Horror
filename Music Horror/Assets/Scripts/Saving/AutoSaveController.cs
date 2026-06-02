@@ -3,7 +3,8 @@ using UnityEngine;
 
 public class AutoSaveController : MonoBehaviour
 {
-    public float interval = 120f;
+    [SerializeField] private float interval = 120f;
+    [SerializeField] private EnemyController enemy;
 
     private void Start()
     {
@@ -14,15 +15,19 @@ public class AutoSaveController : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(interval);
+            yield return new WaitForSecondsRealtime(interval);
 
-            var sm = SaveManager.Instance;
-            if (sm == null) continue;
+            if (enemy != null)
+            {
+                if (enemy.currentState == EnemyController.State.Investigate ||
+                    enemy.currentState == EnemyController.State.Chase ||
+                    enemy.currentState == EnemyController.State.Attack)
+                {
+                    continue;
+                }
+            }
 
-            if (sm.IsEnemyInvestigating())
-                continue;
-
-            sm.CreateAutoSave("Auto", "default");
+            SaveManager.Instance.CreateAutoSave();
         }
     }
 }
