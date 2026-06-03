@@ -11,12 +11,12 @@ GameObject:
   - component: {fileID: 7549232572456846695}
   - component: {fileID: 6976699462590658944}
   - component: {fileID: 4488215804059386029}
-  - component: {fileID: 8492624175083796594}
   - component: {fileID: 6166501366736796391}
   - component: {fileID: 8615104748917852996}
   - component: {fileID: 3825546956798114210}
   - component: {fileID: 4410675695108627310}
   - component: {fileID: 1562865003643532193}
+  - component: {fileID: 4845723926118374863}
   m_Layer: 0
   m_Name: SoundBait
   m_TagString: Untagged
@@ -34,7 +34,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -2.458, y: 0.92, z: 1.05}
-  m_LocalScale: {x: 0.68622, y: 0.68622, z: 0.68622}
+  m_LocalScale: {x: 0.14118037, y: 0.108385555, z: 1.5674875}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -95,27 +95,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &8492624175083796594
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1270084781342114803}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &6166501366736796391
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -128,8 +107,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ced144eab5e99b94fa67e26bd4b4d7a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SoundBait
-  fadeDuration: 15
   objectRenderer: {fileID: 4488215804059386029}
+  activeMaterial: {fileID: 0}
+  activeDuration: 5
 --- !u!114 &8615104748917852996
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -254,13 +234,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51278c5bced9e924196614e64dfa1e44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MovableBait
-  moveSpeed: 2
-  targetLayer:
-    serializedVersion: 2
-    m_Bits: 256
-  replacementMaterial: {fileID: 2100000, guid: 8801144271ab76f418af4a7776629578, type: 2}
-  fadeSpeed: 5
-  scriptToEnable: {fileID: 6166501366736796391}
+  moveSpeed: 20
 --- !u!54 &1562865003643532193
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -288,3 +262,25 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!64 &4845723926118374863
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1270084781342114803}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
