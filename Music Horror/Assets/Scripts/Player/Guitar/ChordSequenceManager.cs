@@ -33,6 +33,10 @@ public class ChordSequenceManager : MonoBehaviour
     [Header("Timing")]
     [SerializeField] private float sequenceTimeout = 3f;
 
+    [Header("Unlock Audio")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip unlockSound;
+
     private float lastChordTime;
     private int currentMode = 0;
 
@@ -122,8 +126,18 @@ public class ChordSequenceManager : MonoBehaviour
         if (index < modeSet.objectsToActivate.Count &&
             modeSet.objectsToActivate[index] != null)
         {
-            modeSet.objectsToActivate[index]
-                .SetActive(true);
+            GameObject unlockObject = modeSet.objectsToActivate[index];
+
+            bool wasInactive = !unlockObject.activeSelf;
+
+            unlockObject.SetActive(true);
+
+            if (wasInactive &&
+                audioSource != null &&
+                unlockSound != null)
+            {
+                audioSource.PlayOneShot(unlockSound);
+            }
         }
     }
 
