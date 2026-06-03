@@ -12,7 +12,6 @@ public class EnemyController : MonoBehaviour, IEnemy
     [SerializeField] private EnemySettings settings;
     [SerializeField] private Animator animator;
 
-    // Core components
     [SerializeField] private EnemyPerception perception;
     [SerializeField] private EnemyMovement movement;
     [SerializeField] private EnemyAttack attack;
@@ -24,30 +23,26 @@ public class EnemyController : MonoBehaviour, IEnemy
     private Vector3 lastKnownPosition;
     private float timeSinceSeen;
 
-    // Investigate Audio
     [SerializeField] private AudioSource chaseAudioSource;
     [SerializeField] private AudioClip chaseClip;
     [SerializeField] private float chaseFadeOutTime = 1.2f;
-    [SerializeField] [Range(0f, 1f)] private float investigateStartVolume = 1f;
+    [SerializeField][Range(0f, 1f)] private float investigateStartVolume = 1f;
+
     private Coroutine fadeOutCoroutine;
     private bool chaseAudioPlaying = false;
 
-    // Investigate timing
     [SerializeField] private float minInvestigateTime = 3f;
     private float investigateTimer = 0f;
 
-    // Sonar
     [SerializeField] private EnemySonar sonar;
     [SerializeField] private float sonarCooldown = 5f;
     private float sonarTimer = 0f;
 
-    // Hiding spot destruction
     [Header("Hide Spot Destruction")]
     [SerializeField] private LayerMask hideSpotLayer;
     [SerializeField] private float destroyRadius = 10f;
     [SerializeField] private float destroyAttackDelay = 0.5f;
 
-    private HideSpot playerHidingSpot = null;
     private bool destroyingHideSpot = false;
     private Transform player;
 
@@ -79,6 +74,35 @@ public class EnemyController : MonoBehaviour, IEnemy
 
     private void Update()
     {
+        if (Cheats.EnemyDisabled)
+        {
+            target = null;
+            lastKnownPosition = Vector3.zero;
+            timeSinceSeen = 0f;
+            investigateTimer = 0f;
+
+            if (currentState != State.Patrol)
+                SetState(State.Patrol);
+
+            if (perception != null) perception.enabled = false;
+            if (attack != null) attack.enabled = false;
+
+            movement.Patrol();
+
+            if (animator != null)
+                animator.SetInteger("State", (int)State.Patrol);
+
+            sonarTimer = 0f;
+
+            return;
+        }
+        else
+        {
+            if (perception != null) perception.enabled = true;
+            if (attack != null) attack.enabled = true;
+        }
+
+
         if (health != null && !health.IsAlive)
         {
             SetState(State.Dead);
@@ -87,7 +111,6 @@ public class EnemyController : MonoBehaviour, IEnemy
 
         perception.Tick();
 
-        // Normal perception handling
         if (perception.HasTarget)
         {
             target = perception.Target;
@@ -124,10 +147,8 @@ public class EnemyController : MonoBehaviour, IEnemy
             }
         }
 
-        // Execute behavior
         ExecuteState();
 
-        // Sonar handling
         if (currentState == State.Patrol && sonar != null)
         {
             sonarTimer += Time.deltaTime;
@@ -141,10 +162,10 @@ public class EnemyController : MonoBehaviour, IEnemy
         {
             sonarTimer = 0f;
         }
+
         if (animator != null)
             animator.SetInteger("State", (int)currentState);
     }
-
 
     private void ExecuteState()
     {
@@ -159,7 +180,6 @@ public class EnemyController : MonoBehaviour, IEnemy
                 break;
 
             case State.Investigate:
-                // Only move normally if not destroying hiding spots
                 if (!destroyingHideSpot && lastKnownPosition != Vector3.zero)
                     movement.MoveTo(lastKnownPosition);
                 break;
@@ -192,7 +212,6 @@ public class EnemyController : MonoBehaviour, IEnemy
     {
         if (currentState == newState) return;
 
-        // Investigate audio handling
         if (newState == State.Investigate)
             PlayInvestigateAudio();
         else if (currentState == State.Investigate && newState != State.Investigate)
@@ -209,10 +228,7 @@ public class EnemyController : MonoBehaviour, IEnemy
         if (chaseAudioSource == null || chaseClip == null) return;
 
         if (fadeOutCoroutine != null)
-        {
             StopCoroutine(fadeOutCoroutine);
-            fadeOutCoroutine = null;
-        }
 
         chaseAudioSource.clip = chaseClip;
         chaseAudioSource.volume = investigateStartVolume;
@@ -226,10 +242,10 @@ public class EnemyController : MonoBehaviour, IEnemy
     {
         if (!chaseAudioPlaying || chaseAudioSource == null) return;
 
-        fadeOutCoroutine = StartCoroutine(FadeOutInvestigateAudioCoroutine());
+        fadeOutCoroutine = StartCoroutine(FadeOutCoroutine());
     }
 
-    private IEnumerator FadeOutInvestigateAudioCoroutine()
+    private IEnumerator FadeOutCoroutine()
     {
         float startVolume = chaseAudioSource.volume;
         float t = 0f;
@@ -250,16 +266,20 @@ public class EnemyController : MonoBehaviour, IEnemy
     {
         lastKnownPosition = pos;
     }
-     public void ResetStateAfterLoad()
+
+    public void ResetStateAfterLoad()
     {
         currentState = State.Patrol;
     }
 
-   
+    // ======================================================
+    // IEnemy
+    // ======================================================
 
-    #region IEnemy Implementation
     public void AlertToPosition(Vector3 worldPos)
     {
+        if (Cheats.EnemyDisabled) return;
+
         if (Random.value <= settings.InvestigateChance)
         {
             lastKnownPosition = worldPos;
@@ -271,6 +291,8 @@ public class EnemyController : MonoBehaviour, IEnemy
 
     public void AlertToTarget(Transform targetTransform)
     {
+        if (Cheats.EnemyDisabled) return;
+
         target = targetTransform;
         lastKnownPosition = targetTransform.position;
         timeSinceSeen = 0f;
@@ -280,6 +302,8 @@ public class EnemyController : MonoBehaviour, IEnemy
 
     public void TakeDamage(int amount, Vector3 hitPoint)
     {
+        if (Cheats.EnemyDisabled) return;
+
         if (health != null)
         {
             health.TakeDamage(amount, hitPoint);
@@ -297,5 +321,4 @@ public class EnemyController : MonoBehaviour, IEnemy
     }
 
     public bool IsAlive => health == null || health.IsAlive;
-    #endregion
 }
