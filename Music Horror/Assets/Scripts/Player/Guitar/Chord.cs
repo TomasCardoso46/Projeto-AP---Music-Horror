@@ -31,6 +31,10 @@ public class Chord : MonoBehaviour
     [SerializeField] private ModeSwitch modeSwitch;
     [SerializeField] private VFXIntensityController vfxController;
 
+    [Header("Chord Animations")]
+    [SerializeField] private Animator targetAnimator;
+    [SerializeField] private List<string> chordAnimationNames = new();
+
     private int currentIndex = 0;
     private int currentMode = 0;
     private const int MAX_MODES = 2;
@@ -142,11 +146,24 @@ public class Chord : MonoBehaviour
         }
     }
 
+    void PlayCurrentAnimation()
+    {
+        if (targetAnimator == null)
+            return;
+
+        if (currentIndex >= chordAnimationNames.Count)
+            return;
+
+        string animationName = chordAnimationNames[currentIndex];
+
+        if (!string.IsNullOrEmpty(animationName))
+        {
+            targetAnimator.Play(animationName, 0, 0f);
+        }
+    }
+
     void PlayCurrentSound()
     {
-        /*if (!CanUseGuitar())
-            return;*/
-
         enemyAudioEmitter.EmitSound(SoundLevel.High, 3);
 
         if (currentMode >= modeSounds.Count)
@@ -171,9 +188,13 @@ public class Chord : MonoBehaviour
 
         sourceInstance.Play();
 
+        PlayCurrentAnimation();
+
         emitter.PlaySound(5);
+
         if (vfxController != null)
-        vfxController.Pulse();
+            vfxController.Pulse();
+
         Destroy(sourceInstance.gameObject,
             sourceInstance.clip.length);
     }
