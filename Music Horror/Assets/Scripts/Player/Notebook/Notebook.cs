@@ -1,13 +1,16 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class SwapObjectsAndScriptsWithSound : MonoBehaviour
+public class Notebook : MonoBehaviour
 {
     [Header("GameObjects")]
     [SerializeField] private List<GameObject> objectsToToggle = new List<GameObject>();
 
     [Header("Scripts (MonoBehaviours)")]
     [SerializeField] private List<MonoBehaviour> scriptsToToggle = new List<MonoBehaviour>();
+
+    [Header("Crosshair")]
+    [SerializeField] private CrosshairEnable crosshairController;
 
     [Header("Audio")]
     [SerializeField] private AudioSource audioSource;
@@ -16,7 +19,7 @@ public class SwapObjectsAndScriptsWithSound : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.J))
+        if (Input.GetKeyDown(KeyCode.Tab))
         {
             SwapStates();
         }
@@ -57,6 +60,14 @@ public class SwapObjectsAndScriptsWithSound : MonoBehaviour
             }
 
             script.enabled = newState;
+        }
+
+        if (crosshairController != null && firstTransition)
+        {
+            if (firstNewState)
+                crosshairController.HideCrosshair();
+            else
+                crosshairController.ShowCrosshair();
         }
 
         if (audioSource != null && firstTransition)
