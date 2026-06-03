@@ -54,9 +54,7 @@ public class AudioManager : MonoBehaviour
     {
         if (listener == null)
         {
-            AudioListener audioListener =
-                FindFirstObjectByType<AudioListener>();
-
+            AudioListener audioListener = FindFirstObjectByType<AudioListener>();
             if (audioListener != null)
                 listener = audioListener.transform;
         }
@@ -132,6 +130,38 @@ public class AudioManager : MonoBehaviour
 
     private void UpdateOcclusion(Muffle source)
     {
+        if (listener == null)
+            return;
+
+        // ----------------------------
+        // ❗ NEW: skip fully 2D audio
+        // ----------------------------
+        AudioSource[] audioSources = source.GetComponents<AudioSource>();
+
+        bool isFully2D = true;
+
+        for (int i = 0; i < audioSources.Length; i++)
+        {
+            if (audioSources[i] != null &&
+                audioSources[i].spatialBlend > 0.01f)
+            {
+                isFully2D = false;
+                break;
+            }
+        }
+
+        if (isFully2D)
+        {
+            source.ApplyMuffleSettings(
+                0f,
+                1f,
+                22000f,
+                22000f
+            );
+
+            return;
+        }
+
         Vector3 sourcePos = source.transform.position;
         Vector3 listenerPos = listener.position;
 
@@ -147,26 +177,34 @@ public class AudioManager : MonoBehaviour
             if (dist <= 0.01f)
                 continue;
 
-            if (Physics.Raycast(startPos, dir.normalized, dist, occlusionLayers))
+            if (Physics.Raycast(
+                    startPos,
+                    dir.normalized,
+                    dist,
+                    occlusionLayers,
+                    QueryTriggerInteraction.Ignore))
+            {
                 blockedRays++;
+            }
         }
 
-        float rawOcclusion = blockedRays / (float)rayOffsets.Length;
+        float rayOcclusion = blockedRays / (float)rayOffsets.Length;
 
         int wallCount = Physics.RaycastAll(
             sourcePos,
             (listenerPos - sourcePos).normalized,
             Vector3.Distance(sourcePos, listenerPos),
-            occlusionLayers).Length;
+            occlusionLayers,
+            QueryTriggerInteraction.Ignore).Length;
 
         float wallOcclusion = Mathf.Clamp01(wallCount / 3f);
 
         float finalOcclusion = Mathf.Clamp01(
-            (rawOcclusion * 0.7f) + (wallOcclusion * 0.3f)
+            (rayOcclusion * 0.7f) +
+            (wallOcclusion * 0.3f)
         );
 
         finalOcclusion = occlusionCurve.Evaluate(finalOcclusion);
-
         finalOcclusion *= maxOcclusionStrength;
 
         source.ApplyMuffleSettings(

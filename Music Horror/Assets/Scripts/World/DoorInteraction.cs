@@ -65,12 +65,8 @@ public class DoorInteraction : MonoBehaviour, IInteractable
 
     private void Update()
     {
-        if (!isPlayerInRange)
-            return;
-
-        if (AreAllSigilsInactive() && !hasUnlocked)
+        if (!hasUnlocked && AreAllSigilsInactive())
         {
-            Log("Sigils deactivated. Unlocking door.");
             UnlockDoor();
         }
     }
@@ -100,20 +96,16 @@ public class DoorInteraction : MonoBehaviour, IInteractable
             return;
         }
 
-        if (!isPlayerInRange)
-        {
-            Log("Player not in range.");
-            return;
-        }
-
-        ToggleDoor();
+        OpenDoor();
     }
 
     private void UnlockDoor()
     {
+        if (hasUnlocked) return;
+
         hasUnlocked = true;
 
-        if (navMeshObstacle != null && navMeshObstacle.enabled)
+        if (navMeshObstacle != null)
         {
             navMeshObstacle.enabled = false;
             Log("NavMeshObstacle disabled. AI can pass.");
@@ -128,32 +120,19 @@ public class DoorInteraction : MonoBehaviour, IInteractable
         }
     }
 
-    private void ToggleDoor(bool autoOpen = false)
+    private void OpenDoor()
     {
-        if (!isOpen)
-        {
-            targetRotation = DetermineOpenDirection();
-            isOpen = true;
+        if (isOpen) return;
 
-            Log("Door opening.");
+        targetRotation = DetermineOpenDirection();
+        isOpen = true;
 
-            if (autoOpen)
-                PlayAutoOpenSound();
-            else
-                PlayOpenSound();
+        Log("Door opening.");
 
-            EmitNormalSoundForPlayer();
-        }
-        else
-        {
-            targetRotation = closedRotation;
-            isOpen = false;
+        PlayOpenSound();
+        EmitNormalSoundForPlayer();
 
-            if (navMeshObstacle != null)
-                navMeshObstacle.enabled = true;
-
-            Log("Door closing.");
-        }
+        SetDoorToDefaultLayer();
     }
 
     private void AutoOpenDoor()
@@ -164,21 +143,19 @@ public class DoorInteraction : MonoBehaviour, IInteractable
         float side = Vector3.Dot(door.forward, reference);
 
         targetRotation = (side > 0) ? openRotationB : openRotationA;
-
         isOpen = true;
+
+        Log("Auto-opening door (opposite direction).");
 
         PlayAutoOpenSound();
         EmitNormalSoundForPlayer();
 
-        Log("Auto-opening door (opposite direction).");
+        SetDoorToDefaultLayer();
     }
 
     public void TriggerAutoOpenFromSpell()
     {
         if (!autoOpenWhenUnlocked)
-            return;
-
-        if (isOpen)
             return;
 
         AutoOpenDoor();
@@ -197,16 +174,19 @@ public class DoorInteraction : MonoBehaviour, IInteractable
 
     private void OpenDoorForEnemy(Transform enemy)
     {
-        if (!isOpen)
-        {
-            targetRotation = DetermineOpenDirectionForEnemy(enemy);
-            isOpen = true;
+        if (isOpen) return;
 
-            if (navMeshObstacle != null)
-                navMeshObstacle.enabled = false;
+        targetRotation = DetermineOpenDirectionForEnemy(enemy);
+        isOpen = true;
 
-            PlayOpenSound();
-        }
+        if (navMeshObstacle != null)
+            navMeshObstacle.enabled = false;
+
+        Log($"Door opened for enemy: {enemy.name}");
+
+        PlayOpenSound();
+
+        SetDoorToDefaultLayer();
     }
 
     private Quaternion DetermineOpenDirectionForEnemy(Transform enemy)
@@ -233,11 +213,26 @@ public class DoorInteraction : MonoBehaviour, IInteractable
             enemyAudioEmitter.EmitSound(EnemyAudioEmitter.SoundLevel.Normal);
     }
 
+    private void SetDoorToDefaultLayer()
+    {
+        if (door == null) return;
+
+        int defaultLayer = LayerMask.NameToLayer("Default");
+        SetLayerRecursively(door, defaultLayer);
+
+        Log("Door and children set to Default layer.");
+    }
+
+    private void SetLayerRecursively(Transform root, int layer)
+    {
+        root.gameObject.layer = layer;
+
+        foreach (Transform child in root)
+            SetLayerRecursively(child, layer);
+    }
+
     private void OnTriggerEnter(Collider other)
     {
-        if (AreAllSigilsInactive() && !hasUnlocked)
-            UnlockDoor();
-
         if (other.CompareTag(playerTag))
         {
             isPlayerInRange = true;
