@@ -16,7 +16,7 @@ public class FirstPersonRigidbodyController : MonoBehaviour
     [SerializeField] float leanOffsetAmount = 0.3f;
 
     [Header("Camera")]
-    [SerializeField] Transform cameraTransform;
+    [SerializeField] public Transform cameraTransform;
     [SerializeField] float cameraFollowSpeed = 15f;
     [SerializeField] float cameraHeight = 1.7f;
     [SerializeField] float crouchCameraHeight = 0.8f;
@@ -36,6 +36,7 @@ public class FirstPersonRigidbodyController : MonoBehaviour
     [SerializeField] Rigidbody rb;
 
     public bool isLoading;
+    public bool freezeCamera;
 
     float yaw;
     float pitch;
@@ -168,10 +169,9 @@ public class FirstPersonRigidbodyController : MonoBehaviour
     {
         Vector3 scale = transform.localScale;
 
-        if (isCrouching)
-            scale.y = Mathf.Lerp(scale.y, crouchHeight, Time.deltaTime * 10f);
-        else
-            scale.y = Mathf.Lerp(scale.y, normalHeight, Time.deltaTime * 10f);
+        float target = isCrouching ? crouchHeight : normalHeight;
+
+        scale.y = Mathf.Lerp(scale.y, target, Time.deltaTime * 10f);
 
         transform.localScale = scale;
     }
@@ -197,18 +197,13 @@ public class FirstPersonRigidbodyController : MonoBehaviour
         Vector3 leanOffset = transform.right * (currentLean / leanAngle) * leanOffsetAmount;
         targetPos += leanOffset;
 
-        float shakeAmount = walkShakeAmount;
-        float shakeSpeed = walkShakeSpeed;
+        float shakeAmount = isCrouching ? crouchShakeAmount : walkShakeAmount;
+        float shakeSpeed = isCrouching ? crouchShakeSpeed : walkShakeSpeed;
 
-        if (isSprinting && movementInput.magnitude > 0)
+        if (isSprinting)
         {
             shakeAmount = sprintShakeAmount;
             shakeSpeed = sprintShakeSpeed;
-        }
-        else if (isCrouching)
-        {
-            shakeAmount = crouchShakeAmount;
-            shakeSpeed = crouchShakeSpeed;
         }
 
         float shakeOffset =
@@ -217,6 +212,20 @@ public class FirstPersonRigidbodyController : MonoBehaviour
             shakeTime;
 
         targetPos += Vector3.up * shakeOffset;
+
+        // 🔴 HARD SNAP MODE (critical fix)
+        if (freezeCamera)
+        {
+            cameraVelocity = Vector3.zero;
+            yawVelocity = 0f;
+            pitchVelocity = 0f;
+
+            cameraTransform.position = targetPos;
+            cameraTransform.rotation = Quaternion.Euler(pitch, yaw, currentLean);
+
+            cameraYaw = yaw;
+            return;
+        }
 
         cameraTransform.position = Vector3.SmoothDamp(
             cameraTransform.position,
@@ -239,14 +248,23 @@ public class FirstPersonRigidbodyController : MonoBehaviour
             0.05f
         );
 
-        if (float.IsNaN(smoothPitch) || float.IsNaN(cameraYaw))
-            return;
-
         cameraTransform.rotation = Quaternion.Euler(
             smoothPitch,
             cameraYaw,
             currentLean
         );
+    }
+
+    public void HardResetCameraMotion()
+    {
+        cameraVelocity = Vector3.zero;
+        yawVelocity = 0f;
+        pitchVelocity = 0f;
+    }
+
+    public float GetCameraHeight()
+    {
+        return isCrouching ? crouchCameraHeight : cameraHeight;
     }
 
     public void ResetAfterLoad()

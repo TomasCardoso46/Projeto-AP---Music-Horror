@@ -16,15 +16,21 @@ public class MultiTeleportTrigger : MonoBehaviour
     [SerializeField] private Transform otherTargetAnchor;
     [SerializeField] private EnemyPatrol enemyPatrol;
 
-    [Header("NAVMESH AGENTS GROUP")]
+    [Header("NAVMESH AGENTS")]
     [SerializeField] private List<NavMeshAgent> navMeshAgents;
     [SerializeField] private Transform navSourceAnchor;
     [SerializeField] private Transform navTargetAnchor;
 
+    [Header("CAMERAS")]
+    [SerializeField] private FirstPersonRigidbodyController playerController;
+    [SerializeField] private Camera mainCamera;
+    [SerializeField] private Camera teleportCamera;
+    [SerializeField] private Transform teleportCameraTarget; 
+
     [Header("Settings")]
     [SerializeField] private bool triggerOnce = true;
 
-    private bool hasTriggered = false;
+    private bool hasTriggered;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -32,18 +38,41 @@ public class MultiTeleportTrigger : MonoBehaviour
         if (triggerOnce && hasTriggered) return;
 
         hasTriggered = true;
-        StartCoroutine(TeleportEndOfFrame());
+        StartCoroutine(TeleportSequence());
     }
 
-    private IEnumerator TeleportEndOfFrame()
+    private IEnumerator TeleportSequence()
     {
-        // Wait until all physics + trigger processing is fully done
+
+        playerController.freezeCamera = true;
+        playerController.HardResetCameraMotion();
+
+        teleportCamera.transform.SetPositionAndRotation(
+            teleportCameraTarget.position,
+            teleportCameraTarget.rotation
+        );
+
+
+        mainCamera.enabled = false;
+        teleportCamera.enabled = true;
+
+
         yield return new WaitForEndOfFrame();
 
-        // Now everything is safe to move without rendering artifacts
+
         TeleportGroup(playerObjects, playerSourceAnchor, playerTargetAnchor);
         TeleportGroup(otherObjects, otherSourceAnchor, otherTargetAnchor);
         TeleportNavMeshAgents(navMeshAgents, navSourceAnchor, navTargetAnchor);
+
+        Physics.SyncTransforms();
+        enemyPatrol?.SwitchPatrol(3);
+
+        yield return null;
+
+        teleportCamera.enabled = false;
+        mainCamera.enabled = true;
+
+        playerController.freezeCamera = false;
     }
 
     private void TeleportGroup(List<Transform> objects, Transform source, Transform target)
@@ -54,11 +83,11 @@ public class MultiTeleportTrigger : MonoBehaviour
         {
             if (obj == null) continue;
 
-            Vector3 relativePos = source.InverseTransformPoint(obj.position);
-            Quaternion relativeRot = Quaternion.Inverse(source.rotation) * obj.rotation;
+            Vector3 relPos = source.InverseTransformPoint(obj.position);
+            Quaternion relRot = Quaternion.Inverse(source.rotation) * obj.rotation;
 
-            obj.position = target.TransformPoint(relativePos);
-            obj.rotation = target.rotation * relativeRot;
+            obj.position = target.TransformPoint(relPos);
+            obj.rotation = target.rotation * relRot;
         }
     }
 
@@ -70,31 +99,19 @@ public class MultiTeleportTrigger : MonoBehaviour
         {
             if (agent == null) continue;
 
-            Transform obj = agent.transform;
+            Transform t = agent.transform;
 
-            Vector3 relativePos = source.InverseTransformPoint(obj.position);
-            Quaternion relativeRot = Quaternion.Inverse(source.rotation) * obj.rotation;
-
-            Vector3 newWorldPos = target.TransformPoint(relativePos);
-            Quaternion newWorldRot = target.rotation * relativeRot;
+            Vector3 relPos = source.InverseTransformPoint(t.position);
+            Vector3 newPos = target.TransformPoint(relPos);
 
             bool wasEnabled = agent.enabled;
 
-            // Prevent NavMesh from fighting the teleport
             agent.enabled = false;
-
-            obj.SetPositionAndRotation(newWorldPos, newWorldRot);
-
+            t.position = newPos;
             agent.enabled = wasEnabled;
 
-            // Hard snap NavMesh internal state to avoid one-frame ghosting
-            agent.Warp(newWorldPos);
-            agent.nextPosition = newWorldPos;
+            agent.Warp(newPos);
+            agent.nextPosition = newPos;
         }
-
-        // Ensure all transforms are fully synchronized before next render
-        Physics.SyncTransforms();
-
-        enemyPatrol?.SwitchPatrol(3);
     }
 }
