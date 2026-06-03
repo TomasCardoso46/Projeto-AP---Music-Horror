@@ -11,6 +11,9 @@ public class AudioManager : MonoBehaviour
     [Header("Occlusion Layers")]
     [SerializeField] private LayerMask occlusionLayers;
 
+    [Header("Block List (NO MUFFLE AUTO-ADD)")]
+    [SerializeField] private List<GameObject> blockedObjects = new();
+
     [Header("Performance")]
     [SerializeField] private float updateInterval = 0.15f;
     [SerializeField] private int sourcesPerUpdate = 4;
@@ -54,7 +57,9 @@ public class AudioManager : MonoBehaviour
     {
         if (listener == null)
         {
-            AudioListener audioListener = FindFirstObjectByType<AudioListener>();
+            AudioListener audioListener =
+                FindFirstObjectByType<AudioListener>();
+
             if (audioListener != null)
                 listener = audioListener.transform;
         }
@@ -99,6 +104,16 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+    private bool IsBlocked(GameObject go)
+    {
+        for (int i = 0; i < blockedObjects.Count; i++)
+        {
+            if (blockedObjects[i] == go)
+                return true;
+        }
+        return false;
+    }
+
     private void RefreshSources()
     {
         AudioSource[] allAudioSources = FindObjectsByType<AudioSource>(
@@ -119,6 +134,12 @@ public class AudioManager : MonoBehaviour
             if (!processedObjects.Add(go))
                 continue;
 
+            // -------------------------
+            // BLOCK LIST CHECK
+            // -------------------------
+            if (IsBlocked(go))
+                continue;
+
             Muffle muffle = go.GetComponent<Muffle>();
 
             if (muffle == null)
@@ -132,35 +153,6 @@ public class AudioManager : MonoBehaviour
     {
         if (listener == null)
             return;
-
-        // ----------------------------
-        // ❗ NEW: skip fully 2D audio
-        // ----------------------------
-        AudioSource[] audioSources = source.GetComponents<AudioSource>();
-
-        bool isFully2D = true;
-
-        for (int i = 0; i < audioSources.Length; i++)
-        {
-            if (audioSources[i] != null &&
-                audioSources[i].spatialBlend > 0.01f)
-            {
-                isFully2D = false;
-                break;
-            }
-        }
-
-        if (isFully2D)
-        {
-            source.ApplyMuffleSettings(
-                0f,
-                1f,
-                22000f,
-                22000f
-            );
-
-            return;
-        }
 
         Vector3 sourcePos = source.transform.position;
         Vector3 listenerPos = listener.position;
