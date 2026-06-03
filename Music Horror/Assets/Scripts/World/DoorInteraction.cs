@@ -13,8 +13,13 @@ public class DoorInteraction : MonoBehaviour, IInteractable
     [SerializeField] private float rotationSpeed = 3f;
 
     [Header("Audio")]
-    [SerializeField] private AudioSource openSoundSource;
+    [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip openSoundClip;
+    [SerializeField] private AudioClip autoOpenSoundClip;
+    [SerializeField] private AudioClip lockedSoundClip;
+
+    [Header("Auto Behaviour")]
+    [SerializeField] private bool autoOpenWhenUnlocked = false;
 
     [Header("Debug")]
     [SerializeField] private bool enableDebugLogs = true;
@@ -72,14 +77,18 @@ public class DoorInteraction : MonoBehaviour, IInteractable
 
     private void FixedUpdate()
     {
-        if (door != null)
-        {
-            door.localRotation = Quaternion.Lerp(
-                door.localRotation,
-                targetRotation,
-                rotationSpeed * Time.fixedDeltaTime
-            );
-        }
+        if (door == null) return;
+
+        float speed = rotationSpeed;
+
+        if (autoOpenWhenUnlocked)
+            speed *= 2f;
+
+        door.localRotation = Quaternion.Lerp(
+            door.localRotation,
+            targetRotation,
+            speed * Time.fixedDeltaTime
+        );
     }
 
     public void Interact()
@@ -87,6 +96,7 @@ public class DoorInteraction : MonoBehaviour, IInteractable
         if (!hasUnlocked)
         {
             Log("Tried to interact but door is locked.");
+            PlayLockedSound();
             return;
         }
 
@@ -110,9 +120,15 @@ public class DoorInteraction : MonoBehaviour, IInteractable
         }
 
         Log("Door unlocked.");
+
+        if (autoOpenWhenUnlocked)
+        {
+            Log("Auto-open enabled. Opening door.");
+            AutoOpenDoor();
+        }
     }
 
-    private void ToggleDoor()
+    private void ToggleDoor(bool autoOpen = false)
     {
         if (!isOpen)
         {
@@ -120,7 +136,12 @@ public class DoorInteraction : MonoBehaviour, IInteractable
             isOpen = true;
 
             Log("Door opening.");
-            PlayOpenSound();
+
+            if (autoOpen)
+                PlayAutoOpenSound();
+            else
+                PlayOpenSound();
+
             EmitNormalSoundForPlayer();
         }
         else
@@ -131,30 +152,51 @@ public class DoorInteraction : MonoBehaviour, IInteractable
             if (navMeshObstacle != null)
                 navMeshObstacle.enabled = true;
 
-            Log("Door closing. NavMeshObstacle re-enabled.");
+            Log("Door closing.");
         }
+    }
+
+    private void AutoOpenDoor()
+    {
+        if (isOpen) return;
+
+        Vector3 reference = transform.forward;
+        float side = Vector3.Dot(door.forward, reference);
+
+        targetRotation = (side > 0) ? openRotationB : openRotationA;
+
+        isOpen = true;
+
+        PlayAutoOpenSound();
+        EmitNormalSoundForPlayer();
+
+        Log("Auto-opening door (opposite direction).");
+    }
+
+    public void TriggerAutoOpenFromSpell()
+    {
+        if (!autoOpenWhenUnlocked)
+            return;
+
+        if (isOpen)
+            return;
+
+        AutoOpenDoor();
     }
 
     private Quaternion DetermineOpenDirection()
     {
         if (player == null)
-        {
-            Log("Player reference missing. Default open direction used.");
             return openRotationA;
-        }
 
-        Vector3 playerDirection = (player.position - transform.position).normalized;
-        float side = Vector3.Dot(transform.forward, playerDirection);
+        Vector3 dir = (player.position - transform.position).normalized;
+        float side = Vector3.Dot(transform.forward, dir);
 
-        Quaternion result = side > 0 ? openRotationB : openRotationA;
-
-        Log("Calculated open direction for player.");
-        return result;
+        return side > 0 ? openRotationB : openRotationA;
     }
 
     private void OpenDoorForEnemy(Transform enemy)
     {
-        Debug.LogWarning("tried to open door full");
         if (!isOpen)
         {
             targetRotation = DetermineOpenDirectionForEnemy(enemy);
@@ -163,68 +205,55 @@ public class DoorInteraction : MonoBehaviour, IInteractable
             if (navMeshObstacle != null)
                 navMeshObstacle.enabled = false;
 
-            Log($"Door opened automatically for enemy: {enemy.name}");
             PlayOpenSound();
         }
     }
 
     private Quaternion DetermineOpenDirectionForEnemy(Transform enemy)
     {
-        Vector3 direction = (enemy.position - transform.position).normalized;
-        float side = Vector3.Dot(transform.forward, direction);
+        Vector3 dir = (enemy.position - transform.position).normalized;
+        float side = Vector3.Dot(transform.forward, dir);
 
-        Log($"Calculated open direction for enemy: {enemy.name}");
         return side > 0 ? openRotationB : openRotationA;
     }
 
-    private void PlayOpenSound()
+    private void PlayOpenSound() => PlayClip(openSoundClip);
+    private void PlayAutoOpenSound() => PlayClip(autoOpenSoundClip);
+    private void PlayLockedSound() => PlayClip(lockedSoundClip);
+
+    private void PlayClip(AudioClip clip)
     {
-        if (openSoundSource != null && openSoundClip != null)
-        {
-            openSoundSource.PlayOneShot(openSoundClip);
-            Log("Open sound played.");
-        }
+        if (audioSource != null && clip != null)
+            audioSource.PlayOneShot(clip);
     }
 
     private void EmitNormalSoundForPlayer()
     {
         if (enemyAudioEmitter != null && player != null)
-        {
             enemyAudioEmitter.EmitSound(EnemyAudioEmitter.SoundLevel.Normal);
-            Log("Enemy sound emitted (Normal level).");
-        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (AreAllSigilsInactive() && !hasUnlocked)
-        {
-            Log("Trigger entered and sigils inactive. Unlocking door.");
             UnlockDoor();
-        }
 
         if (other.CompareTag(playerTag))
         {
             isPlayerInRange = true;
             player = other.transform;
-            Log("Player entered door trigger.");
         }
 
         if (other.CompareTag("Enemy") && hasUnlocked)
         {
-            Log($"Enemy entered trigger: {other.name}");
             OpenDoorForEnemy(other.transform);
-            Debug.LogWarning("tried to open door");
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag(playerTag))
-        {
             isPlayerInRange = false;
-            Log("Player exited door trigger.");
-        }
     }
 
     private bool AreAllSigilsInactive()
@@ -232,22 +261,16 @@ public class DoorInteraction : MonoBehaviour, IInteractable
         if (sigilsParent == null)
             return true;
 
-        foreach (Transform sigil in sigilsParent)
-            if (sigil.gameObject.activeSelf)
+        foreach (Transform s in sigilsParent)
+            if (s.gameObject.activeSelf)
                 return false;
 
         return true;
     }
 
-    private void Log(string message)
+    private void Log(string msg)
     {
         if (enableDebugLogs)
-            Debug.Log($"[DoorInteraction] {message}", this);
-    }
-
-    private void LogWarning(string message)
-    {
-        if (enableDebugLogs)
-            Debug.LogWarning($"[DoorInteraction] {message}", this);
+            Debug.Log($"[DoorInteraction] {msg}", this);
     }
 }
