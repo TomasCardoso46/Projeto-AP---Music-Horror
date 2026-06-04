@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
+[RequireComponent(typeof(AudioSource))]
 public class SoundBait : MonoBehaviour
 {
     [Header("Fade Settings")]
@@ -10,26 +12,34 @@ public class SoundBait : MonoBehaviour
     [SerializeField] private Material activeMaterial;
     [SerializeField] private float activeDuration = 5f;
 
+    [Header("Music Playlist")]
+    [SerializeField] private List<AudioClip> musicClips = new();
+
+    [Header("Speaker Pulse")]
+    [SerializeField] private bool pulseEnabled = true;
+    [SerializeField] private float pulseSpeed = 4f;
+    [SerializeField] private float pulseAmount = 0.1f;
+
     private AudioSource audioSource;
     private EnemyAudioEmitter emitter;
     private float startVolume;
 
     private Material originalMaterial;
-    private Material fadeMaterial;
 
     private Coroutine emitLoopCoroutine;
+    private Coroutine musicLoopCoroutine;
 
-    private bool enemyTriggered = false; // prevents double-trigger
+    private bool enemyTriggered = false;
 
-    void OnEnable()
+    private Vector3 originalScale;
+
+    private void OnEnable()
     {
         audioSource = GetComponent<AudioSource>();
         emitter = GetComponent<EnemyAudioEmitter>();
 
         if (objectRenderer == null)
             objectRenderer = GetComponentInChildren<Renderer>();
-
-        fadeMaterial = objectRenderer.material;
 
         startVolume = audioSource.volume;
 
@@ -40,11 +50,46 @@ public class SoundBait : MonoBehaviour
             objectRenderer.material = activeMaterial;
         }
 
-        audioSource.Play();
+        originalScale = transform.localScale;
+
+        musicLoopCoroutine = StartCoroutine(MusicLoop());
 
         emitLoopCoroutine = StartCoroutine(EmitHighSoundLoop());
 
         StartCoroutine(DeactivateAfterDelay());
+    }
+
+    private void Update()
+    {
+        if (!pulseEnabled)
+            return;
+
+        if (audioSource != null && audioSource.isPlaying)
+        {
+            float pulse = 1f + Mathf.Sin(Time.time * pulseSpeed) * pulseAmount;
+
+            transform.localScale = originalScale * pulse;
+        }
+    }
+
+    private IEnumerator MusicLoop()
+    {
+        while (true)
+        {
+            if (musicClips.Count > 0)
+            {
+                AudioClip randomClip = musicClips[Random.Range(0, musicClips.Count)];
+
+                audioSource.clip = randomClip;
+                audioSource.Play();
+
+                yield return new WaitForSeconds(randomClip.length);
+            }
+            else
+            {
+                yield return null;
+            }
+        }
     }
 
     private IEnumerator EmitHighSoundLoop()
@@ -62,13 +107,13 @@ public class SoundBait : MonoBehaviour
 
         RestoreMaterialAndStop();
 
-        this.enabled = false;
+        enabled = false;
     }
-
 
     private void OnTriggerEnter(Collider other)
     {
-        if (enemyTriggered) return;
+        if (enemyTriggered)
+            return;
 
         EnemyAttack enemyAttack = other.GetComponent<EnemyAttack>();
 
@@ -76,7 +121,6 @@ public class SoundBait : MonoBehaviour
         {
             enemyTriggered = true;
 
-            // Trigger ONLY the animation using EnemyAttack's animator reference
             enemyAttack.TriggerAttackAnimationOnly();
 
             RestoreMaterialAndStop();
@@ -85,7 +129,6 @@ public class SoundBait : MonoBehaviour
         }
     }
 
-
     private void RestoreMaterialAndStop()
     {
         if (originalMaterial != null)
@@ -93,9 +136,16 @@ public class SoundBait : MonoBehaviour
             objectRenderer.material = originalMaterial;
         }
 
+        transform.localScale = originalScale;
+
         if (emitLoopCoroutine != null)
         {
             StopCoroutine(emitLoopCoroutine);
+        }
+
+        if (musicLoopCoroutine != null)
+        {
+            StopCoroutine(musicLoopCoroutine);
         }
 
         if (audioSource != null)

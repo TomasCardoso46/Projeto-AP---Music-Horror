@@ -23,6 +23,8 @@ public class EnemyController : MonoBehaviour, IEnemy
     private Vector3 lastKnownPosition;
     private float timeSinceSeen;
 
+    private bool movementLocked = false;
+
     [SerializeField] private AudioSource chaseAudioSource;
     [SerializeField] private AudioClip chaseClip;
     [SerializeField] private float chaseFadeOutTime = 1.2f;
@@ -74,6 +76,8 @@ public class EnemyController : MonoBehaviour, IEnemy
 
     private void Update()
     {
+        if (movementLocked)
+        return;
         if (Cheats.EnemyDisabled)
         {
             target = null;
@@ -318,6 +322,11 @@ public class EnemyController : MonoBehaviour, IEnemy
         timeSinceSeen = 0f;
         investigateTimer = 0f;
         SetState(State.Investigate);
+    }
+
+    public void SetMovementLocked(bool locked)
+    {
+        movementLocked = locked;
     }
 
     public bool IsAlive => health == null || health.IsAlive;

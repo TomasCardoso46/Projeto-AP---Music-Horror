@@ -1,89 +1,100 @@
 using UnityEngine;
 using System.Collections;
 
-[RequireComponent(typeof(Collider))]
 public class EnemyAttack : MonoBehaviour
 {
     public EnemySettings settings;
-    [SerializeField] private bool canAttack = true;
-    private bool onCooldown = false;
-    private IEnemy owner;
-    public Animator animator;
 
-    [Header("Jumpscare Settings")]
-    [SerializeField] private Jumpscare jumpscare; 
+    [SerializeField] private bool canAttack = true;
+
+    private bool onCooldown = false;
+    private bool isAttacking = false;
+
+    private IEnemy owner;
+
+    [SerializeField] private Animator animator;
+    [SerializeField] private Jumpscare jumpscare;
+
+    private EnemyController enemyController;
+
+    private float attackLockDuration = 1.5f;
+
+    private float cachedPatrolSpeed;
+    private float cachedChaseSpeed;
+
+    private void Awake()
+    {
+        enemyController = GetComponentInParent<EnemyController>();
+    }
 
     public void Initialize(EnemySettings s, IEnemy enemyOwner)
     {
         settings = s;
         owner = enemyOwner;
+
+        cachedPatrolSpeed = settings.PatrolSpeed;
+        cachedChaseSpeed = settings.ChaseSpeed;
     }
 
     public void TryAttack(Transform target)
     {
-        animator.SetTrigger("animAttack");
-        if (!canAttack || onCooldown || target == null) return;
+        if (!canAttack || onCooldown || isAttacking || target == null)
+            return;
 
         float dist = Vector3.Distance(transform.position, target.position);
+
         if (dist <= settings.AttackRange)
         {
-            // Apply damage if applicable
-            var healthComp = target.GetComponent<EnemyHealth>() ?? target.GetComponentInChildren<EnemyHealth>();
-            if (healthComp != null)
-            {
-                Debug.Log("Attack");
-                healthComp.TakeDamage(settings.AttackDamage, transform.position);
-            }
-            else
-            {
-                target.SendMessage("TakeDamage", settings.AttackDamage, SendMessageOptions.DontRequireReceiver);
-                Debug.Log("Attack");
-            }
-
-            // Layer based behavior
-            int playerLayer = LayerMask.NameToLayer("Player");
-            int hidingLayer = LayerMask.NameToLayer("HidingSpot");
-
-            if (target.gameObject.layer == playerLayer)
-            {
-                // Player directly
-                if (jumpscare != null)
-                    jumpscare.TriggerJumpscare();
-            }
-            /*else if (target.gameObject.layer == hidingLayer)
-            {
-                // Get the HideSpot script
-                HideSpot hideSpot = target.GetComponent<HideSpot>();
-                if (hideSpot != null)
-                {
-                    // If the player is hiding, force them out first
-                    if (hideSpot.IsPlayerHiding)
-                    {
-                        Debug.Log("Player Inside");
-                        //hideSpot.ToggleHide();
-                        if (jumpscare != null)
-                            jumpscare.TriggerJumpscare();
-                    }
-                    else
-                    {
-                        
-                        Destroy(target.gameObject);
-                    }
-                }
-
-                
-            }*/
-
-            StartCoroutine(AttackCooldown());
+            StartCoroutine(PerformAttack(target));
         }
     }
 
-
-    private IEnumerator AttackCooldown()
+    private IEnumerator PerformAttack(Transform target)
     {
+        isAttacking = true;
         onCooldown = true;
-        yield return new WaitForSeconds(settings.AttackCooldown);
+
+        SetMovementLock(true);
+
+        if (animator != null)
+            animator.SetTrigger("animAttack");
+
+        var healthComp = target.GetComponent<EnemyHealth>() ??
+                         target.GetComponentInChildren<EnemyHealth>();
+
+        if (healthComp != null)
+        {
+            healthComp.TakeDamage(settings.AttackDamage, transform.position);
+        }
+        else
+        {
+            target.SendMessage("TakeDamage", settings.AttackDamage, SendMessageOptions.DontRequireReceiver);
+        }
+
+        if (target.gameObject.layer == LayerMask.NameToLayer("Player"))
+        {
+            jumpscare?.TriggerJumpscare();
+        }
+
+        yield return new WaitForSeconds(attackLockDuration);
+
+        SetMovementLock(false);
+
+        float remaining = Mathf.Max(0f, settings.AttackCooldown - attackLockDuration);
+
+        if (remaining > 0f)
+            yield return new WaitForSeconds(remaining);
+
         onCooldown = false;
+        isAttacking = false;
+    }
+
+    private void SetMovementLock(bool locked)
+    {
+        if (enemyController == null)
+            return;
+
+        enemyController.enabled = !locked;
     }
 
     public void DisableAttack()
@@ -93,10 +104,8 @@ public class EnemyAttack : MonoBehaviour
     }
 
     public void TriggerAttackAnimationOnly()
-{
-    if (animator != null)
     {
-        animator.SetTrigger("animAttack");
+        if (animator != null)
+            animator.SetTrigger("animAttack");
     }
-}
 }
