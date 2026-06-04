@@ -91,8 +91,6 @@ public class SaveManager : MonoBehaviour
 
         yield return null;
         yield return new WaitForEndOfFrame();
-
-        // ✅ CRITICAL: wait for deterministic player restore BEFORE anything else
         yield return ApplyPlayerTransform(data.player);
 
         RestoreEnemy(data.enemy);
@@ -124,7 +122,6 @@ public class SaveManager : MonoBehaviour
 
         if (rb != null)
         {
-            // ✅ fully freeze physics so NOTHING can override position
             rb.isKinematic = true;
             rb.linearVelocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
