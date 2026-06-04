@@ -22,8 +22,8 @@ public class SaveMenuController : MonoBehaviour
         if (latest == null)
             return;
 
-        UnityEngine.SceneManagement.SceneManager.LoadScene("Prototype");
-        SaveManager.Instance.LoadGame(latest.fileName);
+        PlayerPrefs.SetString("PendingSaveToLoad", latest.fileName);
+        SceneManager.LoadScene("Prototype");
     }
 
     public void NewGame()

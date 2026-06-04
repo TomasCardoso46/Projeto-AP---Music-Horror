@@ -21,14 +21,13 @@ public class LoadingManager : MonoBehaviour
     {
         AsyncOperation operation = SceneManager.LoadSceneAsync(sceneToLoad);
 
-        // IMPORTANT: prevents automatic scene switch
         operation.allowSceneActivation = false;
 
         float displayedProgress = 0f;
 
         while (!operation.isDone)
         {
-            // Unity progress goes 0 → 0.9 before activation
+
             float targetProgress = Mathf.Clamp01(operation.progress / 0.9f);
 
             // Smooth UI
@@ -40,10 +39,9 @@ public class LoadingManager : MonoBehaviour
             if (progressText)
                 progressText.text = Mathf.RoundToInt(displayedProgress * 100f) + "%";
 
-            // When fully loaded, allow scene switch
             if (operation.progress >= 0.9f)
             {
-                yield return new WaitForSeconds(0.3f); // optional polish delay
+                yield return new WaitForSeconds(0.3f); 
                 operation.allowSceneActivation = true;
             }
 
