@@ -15,15 +15,27 @@ public class LookPrompt : MonoBehaviour
     [Tooltip("-1 = Unlimited")]
     public int maxAppearances = 1;
 
+    [Header("Cooldown")]
+    [Tooltip("Seconds before this prompt can appear again.")]
+    public float reappearCooldown = 10f;
+
     private int appearanceCount = 0;
+    private float nextAllowedAppearanceTime = 0f;
 
     public bool CanAppear()
     {
-        return maxAppearances < 0 || appearanceCount < maxAppearances;
+        bool hasAppearancesLeft =
+            maxAppearances < 0 || appearanceCount < maxAppearances;
+
+        bool cooldownFinished =
+            Time.time >= nextAllowedAppearanceTime;
+
+        return hasAppearancesLeft && cooldownFinished;
     }
 
     public void RegisterAppearance()
     {
         appearanceCount++;
+        nextAllowedAppearanceTime = Time.time + reappearCooldown;
     }
 }
