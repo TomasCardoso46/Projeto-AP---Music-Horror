@@ -15,7 +15,10 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private AudioSource breathingSource;
     [SerializeField] private AudioSource footstepSource;
     [SerializeField] private AudioClip breathingClip;
-    [SerializeField] private AudioClip footstepClip;
+
+    [Header("Footstep Audio")]
+    [SerializeField] private AudioClip[] roamFootstepClips;
+    [SerializeField] private AudioClip[] chaseFootstepClips;
 
     [Header("Footstep")]
     [SerializeField] private float roamFootstepRate = 0.55f;
@@ -29,6 +32,9 @@ public class EnemyMovement : MonoBehaviour
 
     private Coroutine roamCoroutine;
     private float stepTimer = 0f;
+
+    private int lastRoamFootstepIndex = -1;
+    private int lastChaseFootstepIndex = -1;
 
     public void Initialize(EnemySettings s, IEnemy owner)
     {
@@ -102,7 +108,6 @@ public class EnemyMovement : MonoBehaviour
         agent.enabled = false;
     }
 
-
     public IEnumerator RoamAroundPoint(Vector3 center, float duration)
     {
         StopRoam();
@@ -129,7 +134,6 @@ public class EnemyMovement : MonoBehaviour
 
             float moveTimer = 0f;
 
-            // Move toward roam point
             while (true)
             {
                 if (elapsed >= duration)
@@ -145,7 +149,7 @@ public class EnemyMovement : MonoBehaviour
                 moveTimer += Time.deltaTime;
                 elapsed += Time.deltaTime;
 
-                if (moveTimer > 10f) // safety timeout
+                if (moveTimer > 10f)
                     break;
 
                 yield return null;
@@ -212,16 +216,68 @@ public class EnemyMovement : MonoBehaviour
 
         stepTimer += Time.deltaTime;
 
-        float rate = agent.speed == settings.ChaseSpeed
+        bool chasing = Mathf.Approximately(agent.speed, settings.ChaseSpeed);
+
+        float rate = chasing
             ? chaseFootstepRate
             : roamFootstepRate;
 
         if (stepTimer >= rate)
         {
-            if (footstepClip)
-                footstepSource.PlayOneShot(footstepClip);
+            if (chasing)
+                PlayRandomChaseFootstep();
+            else
+                PlayRandomRoamFootstep();
 
             stepTimer = 0f;
         }
+    }
+
+    private void PlayRandomRoamFootstep()
+    {
+        if (footstepSource == null || roamFootstepClips == null || roamFootstepClips.Length == 0)
+            return;
+
+        int index;
+
+        if (roamFootstepClips.Length == 1)
+        {
+            index = 0;
+        }
+        else
+        {
+            do
+            {
+                index = Random.Range(0, roamFootstepClips.Length);
+            }
+            while (index == lastRoamFootstepIndex);
+        }
+
+        lastRoamFootstepIndex = index;
+        footstepSource.PlayOneShot(roamFootstepClips[index]);
+    }
+
+    private void PlayRandomChaseFootstep()
+    {
+        if (footstepSource == null || chaseFootstepClips == null || chaseFootstepClips.Length == 0)
+            return;
+
+        int index;
+
+        if (chaseFootstepClips.Length == 1)
+        {
+            index = 0;
+        }
+        else
+        {
+            do
+            {
+                index = Random.Range(0, chaseFootstepClips.Length);
+            }
+            while (index == lastChaseFootstepIndex);
+        }
+
+        lastChaseFootstepIndex = index;
+        footstepSource.PlayOneShot(chaseFootstepClips[index]);
     }
 }

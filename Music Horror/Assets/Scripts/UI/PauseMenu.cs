@@ -9,6 +9,9 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] private CrosshairEnable crosshairController;
     [SerializeField] private MenuAudioController menuAudioController;
 
+    [Header("Disable While Paused")]
+    [SerializeField] private MonoBehaviour[] gameplayScripts;
+
     private void Start()
     {
         GameState.IsPaused = false;
@@ -41,6 +44,12 @@ public class PauseMenu : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
 
+        foreach (MonoBehaviour script in gameplayScripts)
+        {
+            if (script != null)
+                script.enabled = false;
+        }
+
         crosshairController?.HideCrosshair();
         menuAudioController?.OpenMenuAudio();
     }
@@ -55,6 +64,12 @@ public class PauseMenu : MonoBehaviour
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        foreach (MonoBehaviour script in gameplayScripts)
+        {
+            if (script != null)
+                script.enabled = true;
+        }
 
         crosshairController?.ShowCrosshair();
         menuAudioController?.CloseMenuAudio();
