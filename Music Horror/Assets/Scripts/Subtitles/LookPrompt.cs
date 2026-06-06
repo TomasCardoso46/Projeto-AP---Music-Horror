@@ -6,6 +6,9 @@ public class LookPrompt : MonoBehaviour
     [TextArea(3, 5)]
     public string promptText;
 
+    [Header("Voice")]
+    public AudioClip voiceClip;
+
     [Header("Detection")]
     public float maxDistance = 5f;
 

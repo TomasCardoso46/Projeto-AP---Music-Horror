@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-
 public class SpellModeSet
 {
     [Header("Spell Data")]
@@ -37,14 +36,26 @@ public class ChordSequenceManager : MonoBehaviour
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip unlockSound;
 
+    [Header("Voice Lines")]
+    [SerializeField] private AudioSource voiceSource;
+
+    [SerializeField, Range(0f, 100f)]
+    private float correctVoiceChance = 30f;
+
+    [SerializeField, Range(0f, 100f)]
+    private float incorrectVoiceChance = 30f;
+
+    [SerializeField] private List<AudioClip> correctVoiceLines = new();
+    [SerializeField] private List<AudioClip> incorrectVoiceLines = new();
+
     private float lastChordTime;
     private int currentMode = 0;
 
-    private List<string> playedChords = new List<string>();
+    private List<string> playedChords = new();
 
     private const int REQUIRED_CHORDS = 4;
 
-    void Update()
+    private void Update()
     {
         if (playedChords.Count > 0)
         {
@@ -72,7 +83,7 @@ public class ChordSequenceManager : MonoBehaviour
         }
     }
 
-    void CheckForSpellMatch()
+    private void CheckForSpellMatch()
     {
         if (currentMode >= spellModes.Count)
         {
@@ -81,7 +92,7 @@ public class ChordSequenceManager : MonoBehaviour
         }
 
         string sequence = string.Join("", playedChords);
-        var modeSet = spellModes[currentMode];
+        SpellModeSet modeSet = spellModes[currentMode];
 
         for (int i = 0; i < modeSet.spellSequences.Count; i++)
         {
@@ -95,18 +106,20 @@ public class ChordSequenceManager : MonoBehaviour
                 }
 
                 CastSpell(i);
+                TryPlayCorrectVoice();
                 ResetSequence();
                 return;
             }
         }
 
-        // no match
+        // No match
+        TryPlayIncorrectVoice();
         ResetSequence();
     }
 
-    void CastSpell(int index)
+    private void CastSpell(int index)
     {
-        var modeSet = spellModes[currentMode];
+        SpellModeSet modeSet = spellModes[currentMode];
 
         if (index < modeSet.spells.Count &&
             modeSet.spells[index] != null)
@@ -117,8 +130,7 @@ public class ChordSequenceManager : MonoBehaviour
                 emissionFadeTime
             );
 
-            modeSet.spells[index]
-                .Cast(Camera.main.transform);
+            modeSet.spells[index].Cast(Camera.main.transform);
 
             SpawnModePrefab(modeSet);
         }
@@ -141,7 +153,7 @@ public class ChordSequenceManager : MonoBehaviour
         }
     }
 
-    void SpawnModePrefab(SpellModeSet modeSet)
+    private void SpawnModePrefab(SpellModeSet modeSet)
     {
         if (modeSet.spawnPrefab == null)
             return;
@@ -150,7 +162,10 @@ public class ChordSequenceManager : MonoBehaviour
             ? modeSet.spawnParent
             : transform;
 
-        GameObject instance = Instantiate(modeSet.spawnPrefab, parent);
+        GameObject instance = Instantiate(
+            modeSet.spawnPrefab,
+            parent
+        );
 
         instance.transform.localPosition = Vector3.zero;
         instance.transform.localRotation = Quaternion.identity;
@@ -158,7 +173,49 @@ public class ChordSequenceManager : MonoBehaviour
         Destroy(instance, modeSet.prefabLifetime);
     }
 
-    void ResetSequence()
+    private void TryPlayCorrectVoice()
+    {
+        if (voiceSource == null)
+            return;
+
+        if (voiceSource.isPlaying)
+            return;
+
+        if (correctVoiceLines.Count == 0)
+            return;
+
+        if (Random.Range(0f, 100f) > correctVoiceChance)
+            return;
+
+        AudioClip clip = correctVoiceLines[
+            Random.Range(0, correctVoiceLines.Count)
+        ];
+
+        voiceSource.PlayOneShot(clip);
+    }
+
+    private void TryPlayIncorrectVoice()
+    {
+        if (voiceSource == null)
+            return;
+
+        if (voiceSource.isPlaying)
+            return;
+
+        if (incorrectVoiceLines.Count == 0)
+            return;
+
+        if (Random.Range(0f, 100f) > incorrectVoiceChance)
+            return;
+
+        AudioClip clip = incorrectVoiceLines[
+            Random.Range(0, incorrectVoiceLines.Count)
+        ];
+
+        voiceSource.PlayOneShot(clip);
+    }
+
+    private void ResetSequence()
     {
         playedChords.Clear();
     }

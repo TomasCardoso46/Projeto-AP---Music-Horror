@@ -9,6 +9,9 @@ public class LookPromptManager : MonoBehaviour
     [SerializeField] private TMP_Text promptText;
     [SerializeField] private CanvasGroup promptCanvasGroup;
 
+    [Header("Audio")]
+    [SerializeField] private AudioSource voiceAudioSource;
+
     [Header("Raycast Settings")]
     [SerializeField] private float rayDistance = 20f;
 
@@ -29,8 +32,6 @@ public class LookPromptManager : MonoBehaviour
     {
         HandleLookPrompt();
     }
-
-    #region LOOK PROMPTS
 
     private void HandleLookPrompt()
     {
@@ -59,30 +60,25 @@ public class LookPromptManager : MonoBehaviour
         activeLookPrompt = prompt;
         prompt.RegisterAppearance();
 
-        PlayPrompt(prompt.promptText, prompt.displayDuration);
+        PlayPrompt(
+            prompt.promptText,
+            prompt.displayDuration,
+            prompt.voiceClip
+        );
     }
 
-    #endregion
-
-    #region ZONE PROMPTS (external trigger)
-
-    public void TriggerZonePrompt(ZonePrompt zonePrompt)
-    {
-        if (zonePrompt == null || !zonePrompt.CanAppear())
-            return;
-
-        zonePrompt.RegisterAppearance();
-        PlayPrompt(zonePrompt.promptText, zonePrompt.displayDuration);
-    }
-
-    #endregion
-
-    #region CORE PROMPT SYSTEM
-
-    private void PlayPrompt(string text, float duration)
+    private void PlayPrompt(string text, float duration, AudioClip clip)
     {
         if (currentRoutine != null)
             StopCoroutine(currentRoutine);
+
+        if (voiceAudioSource != null)
+        {
+            voiceAudioSource.Stop();
+
+            if (clip != null)
+                voiceAudioSource.PlayOneShot(clip);
+        }
 
         currentRoutine = StartCoroutine(PromptRoutine(text, duration));
     }
@@ -92,13 +88,10 @@ public class LookPromptManager : MonoBehaviour
         promptText.text = text;
         promptText.gameObject.SetActive(true);
 
-        // Fade In
         yield return Fade(0f, 1f, fadeInDuration);
 
-        // Hold
         yield return new WaitForSeconds(duration);
 
-        // Fade Out
         yield return Fade(1f, 0f, fadeOutDuration);
 
         promptText.gameObject.SetActive(false);
@@ -120,6 +113,4 @@ public class LookPromptManager : MonoBehaviour
 
         promptCanvasGroup.alpha = to;
     }
-
-    #endregion
 }
