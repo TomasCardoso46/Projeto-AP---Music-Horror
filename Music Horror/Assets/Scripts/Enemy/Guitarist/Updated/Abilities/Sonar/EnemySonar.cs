@@ -7,6 +7,9 @@ public class EnemySonar : MonoBehaviour
     [Header("Activation")]
     public KeyCode testKey = KeyCode.Y;
 
+    [Header("Pre-Activation")]
+    public float staticEnableDuration = 2f;
+
     [Header("Audio")]
     public AudioSource audioSource;
     public AudioClip abilitySound;
@@ -45,11 +48,11 @@ public class EnemySonar : MonoBehaviour
             enemy = enemyObject.GetComponent<EnemyController>();
     }
 
-    void Update()
+    private void Update()
     {
         if (Input.GetKeyDown(testKey))
         {
-            ActivateAbility();
+            StartCoroutine(ActivateAbilitySequence());
         }
 
         if (abilityActive && playerInsideDetection && playerRb != null)
@@ -61,29 +64,55 @@ public class EnemySonar : MonoBehaviour
         }
     }
 
+    private IEnumerator ActivateAbilitySequence()
+    {
+        if (abilityActive)
+            yield break;
+
+        Static[] staticObjects = FindObjectsByType<Static>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+
+        foreach (Static obj in staticObjects)
+        {
+            if (obj != null)
+                obj.gameObject.SetActive(true);
+        }
+
+        yield return new WaitForSeconds(staticEnableDuration);
+
+        foreach (Static obj in staticObjects)
+        {
+            if (obj != null)
+                obj.gameObject.SetActive(false);
+        }
+
+        ActivateAbility();
+    }
+
     public void ActivateAbility()
     {
-        if (abilityActive) return;
+        if (abilityActive)
+            return;
 
         abilityActive = true;
 
-        // Play audio
-        if (audioSource && abilitySound)
+        if (audioSource != null && abilitySound != null)
         {
             audioSource.PlayOneShot(abilitySound);
         }
 
-        // Find player by layer
         FindPlayerRigidbody();
 
-        // Spawn main detection object
-        spawnedDetectionObject = Instantiate(detectionPrefab, transform.position, Quaternion.identity);
+        spawnedDetectionObject = Instantiate(
+            detectionPrefab,
+            transform.position,
+            Quaternion.identity
+        );
+
         spawnedDetectionObject.transform.localScale = Vector3.zero;
 
         DetectionTrigger trigger = spawnedDetectionObject.AddComponent<DetectionTrigger>();
         trigger.Initialize(this, playerLayer);
 
-        // Start routines
         StartCoroutine(GrowDetectionObject());
         StartCoroutine(PulseRoutine());
         StartCoroutine(AbilityDurationRoutine());
@@ -91,13 +120,16 @@ public class EnemySonar : MonoBehaviour
 
     private void FindPlayerRigidbody()
     {
-        GameObject[] allObjects = FindObjectsOfType<GameObject>();
+        GameObject[] allObjects = FindObjectsByType<GameObject>(
+            FindObjectsSortMode.None
+        );
 
         foreach (GameObject obj in allObjects)
         {
             if (((1 << obj.layer) & playerLayer) != 0)
             {
                 playerRb = obj.GetComponent<Rigidbody>();
+
                 if (playerRb != null)
                     return;
             }
@@ -113,7 +145,10 @@ public class EnemySonar : MonoBehaviour
             elapsed += Time.deltaTime;
 
             if (spawnedDetectionObject != null)
-                spawnedDetectionObject.transform.localScale += growthSpeed * Time.deltaTime;
+            {
+                spawnedDetectionObject.transform.localScale +=
+                    growthSpeed * Time.deltaTime;
+            }
 
             yield return null;
         }
@@ -125,7 +160,11 @@ public class EnemySonar : MonoBehaviour
         {
             if (pulsePrefab != null)
             {
-                Instantiate(pulsePrefab, transform.position, Quaternion.identity);
+                Instantiate(
+                    pulsePrefab,
+                    transform.position,
+                    Quaternion.identity
+                );
             }
 
             yield return new WaitForSeconds(pulseInterval);
@@ -143,13 +182,16 @@ public class EnemySonar : MonoBehaviour
         abilityActive = false;
         playerInsideDetection = false;
 
-        if (spawnedDetectionObject)
+        if (spawnedDetectionObject != null)
+        {
             Destroy(spawnedDetectionObject);
+        }
     }
 
     private void TriggerChase()
     {
-        FirstPersonRigidbodyController playerController = FindObjectOfType<FirstPersonRigidbodyController>();
+        FirstPersonRigidbodyController playerController =
+            FindFirstObjectByType<FirstPersonRigidbodyController>();
 
         if (playerController == null)
         {
@@ -157,10 +199,14 @@ public class EnemySonar : MonoBehaviour
             return;
         }
 
-        enemy.AlertToPosition(playerController.transform.position);
+        if (enemy != null)
+        {
+            enemy.AlertToPosition(playerController.transform.position);
+        }
+
+        OnChaseTriggered?.Invoke();
     }
 
-    // Called by DetectionTrigger
     public void SetPlayerInside(bool inside)
     {
         playerInsideDetection = inside;
