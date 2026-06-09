@@ -44,6 +44,12 @@ public class MainMenu : MonoBehaviour
         SceneManager.LoadScene("Menu");
     }
 
+    public void Credits()
+    {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        SceneManager.LoadScene("Victory");
+    }
     // This method quits the application
     public void Quit()
     {
