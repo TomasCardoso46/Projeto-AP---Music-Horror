@@ -69,7 +69,7 @@ public class ChordSequenceManager : MonoBehaviour
     public void SetMode(int mode)
     {
         currentMode = mode;
-        ResetSequence();
+        //ResetSequence();
     }
 
     public void RegisterChord(int chordIndex)

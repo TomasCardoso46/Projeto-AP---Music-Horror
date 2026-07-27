@@ -68,7 +68,7 @@ public class Chord : MonoBehaviour
 
     void HandleModeSwitch()
     {
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.Mouse0) || Input.GetKeyUp(KeyCode.Mouse0))
         {
             modeSwitch.PlayReverse();
             modeSwitch.SphereSwitcher();
