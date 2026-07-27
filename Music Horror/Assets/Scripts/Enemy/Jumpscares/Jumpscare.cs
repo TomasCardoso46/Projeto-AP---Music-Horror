@@ -15,7 +15,7 @@ public class Jumpscare : MonoBehaviour
     [SerializeField] private GameObject objectToShake;
     [SerializeField] private float shakeDuration = 0.5f;
     [SerializeField] private float shakeMagnitude = 15f;
-    [SerializeField] private enum ShakeAxis { X, Y, Z }
+    public enum ShakeAxis { X, Y, Z }
     [SerializeField] private ShakeAxis shakeAxis = ShakeAxis.Y;
 
     [Header("Enemy Settings")]
