@@ -2,23 +2,23 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class SpellModeSet
+public class SpellEntry
 {
-    [Header("Spell Data")]
-    public List<string> spellSequences;
-    public List<Spell> spells;
-    public List<GameObject> objectsToActivate;
+    [Header("Sequence")]
+    [Tooltip("Example: a1a2a3a4 or a1b2a3b4")]
+    public string sequence;
 
-    [Header("VFX (Per Mode)")]
-    public GameObject spawnPrefab;
-    public Transform spawnParent;
-    public float prefabLifetime = 2f;
+    [Header("Spell")]
+    public Spell spell;
+
+    [Header("Unlock Object")]
+    public GameObject objectToActivate;
 }
 
 public class ChordSequenceManager : MonoBehaviour
 {
-    [Header("Spell Modes")]
-    [SerializeField] private List<SpellModeSet> spellModes;
+    [Header("Spells")]
+    [SerializeField] private List<SpellEntry> spells = new();
 
     [Header("Sequence Lock")]
     [SerializeField] private SequenceLockController sequenceLockController;
@@ -31,6 +31,11 @@ public class ChordSequenceManager : MonoBehaviour
 
     [Header("Timing")]
     [SerializeField] private float sequenceTimeout = 3f;
+
+    [Header("Spell Cast VFX")]
+    [SerializeField] private GameObject spellCastPrefab;
+    [SerializeField] private Transform spellCastParent;
+    [SerializeField] private float spellCastLifetime = 2f;
 
     [Header("Unlock Audio")]
     [SerializeField] private AudioSource audioSource;
@@ -48,33 +53,46 @@ public class ChordSequenceManager : MonoBehaviour
     [SerializeField] private List<AudioClip> correctVoiceLines = new();
     [SerializeField] private List<AudioClip> incorrectVoiceLines = new();
 
-    private float lastChordTime;
-    private int currentMode = 0;
+    private readonly List<string> playedChords = new();
 
-    private List<string> playedChords = new();
+    private float lastChordTime;
 
     private const int REQUIRED_CHORDS = 4;
 
+    private string modePrefix;
+
     private void Update()
     {
-        if (playedChords.Count > 0)
+        if (playedChords.Count > 0 &&
+            Time.time - lastChordTime > sequenceTimeout)
         {
-            if (Time.time - lastChordTime > sequenceTimeout)
-            {
-                ResetSequence();
-            }
+            ResetSequence();
         }
     }
 
     public void SetMode(int mode)
     {
-        currentMode = mode;
-        ResetSequence();
     }
 
-    public void RegisterChord(int chordIndex)
+    public void RegisterChord(int chordIndex, int mode)
     {
-        playedChords.Add(chordIndex.ToString());
+        switch(mode)
+        {
+            case 0:
+                modePrefix = "a";
+                break;
+
+            case 1:
+                modePrefix = "b";
+                break;
+
+            case 2:
+                modePrefix = "c";
+                break;
+        }
+
+        playedChords.Add($"{modePrefix}{chordIndex}");
+
         lastChordTime = Time.time;
 
         if (playedChords.Count == REQUIRED_CHORDS)
@@ -85,64 +103,58 @@ public class ChordSequenceManager : MonoBehaviour
 
     private void CheckForSpellMatch()
     {
-        if (currentMode >= spellModes.Count)
-        {
-            ResetSequence();
-            return;
-        }
+        string sequence = string.Concat(playedChords);
 
-        string sequence = string.Join("", playedChords);
-        SpellModeSet modeSet = spellModes[currentMode];
-
-        for (int i = 0; i < modeSet.spellSequences.Count; i++)
+        for (int i = 0; i < spells.Count; i++)
         {
-            if (sequence == modeSet.spellSequences[i])
+            SpellEntry entry = spells[i];
+
+            if (sequence != entry.sequence)
+                continue;
+
+            if (sequenceLockController != null &&
+                sequenceLockController.IsSequenceLocked(sequence))
             {
-                if (sequenceLockController != null &&
-                    sequenceLockController.IsSequenceLocked(sequence))
-                {
-                    ResetSequence();
-                    return;
-                }
-
-                CastSpell(i);
-                TryPlayCorrectVoice();
                 ResetSequence();
                 return;
             }
+
+            CastSpell(entry);
+
+            TryPlayCorrectVoice();
+
+            ResetSequence();
+
+            return;
         }
 
-        // No match
         TryPlayIncorrectVoice();
+
         ResetSequence();
     }
-
-    private void CastSpell(int index)
+        private void CastSpell(SpellEntry entry)
     {
-        SpellModeSet modeSet = spellModes[currentMode];
-
-        if (index < modeSet.spells.Count &&
-            modeSet.spells[index] != null)
+        if (entry.spell != null)
         {
-            guitarEmission.TriggerSpellGlow(
-                modeSet.spells[index].spellColor,
-                emissionHoldTime,
-                emissionFadeTime
-            );
+            if (guitarEmission != null)
+            {
+                guitarEmission.TriggerSpellGlow(
+                    entry.spell.spellColor,
+                    emissionHoldTime,
+                    emissionFadeTime
+                );
+            }
 
-            modeSet.spells[index].Cast(Camera.main.transform);
+            entry.spell.Cast(Camera.main.transform);
 
-            SpawnModePrefab(modeSet);
+            SpawnSpellPrefab();
         }
 
-        if (index < modeSet.objectsToActivate.Count &&
-            modeSet.objectsToActivate[index] != null)
+        if (entry.objectToActivate != null)
         {
-            GameObject unlockObject = modeSet.objectsToActivate[index];
+            bool wasInactive = !entry.objectToActivate.activeSelf;
 
-            bool wasInactive = !unlockObject.activeSelf;
-
-            unlockObject.SetActive(true);
+            entry.objectToActivate.SetActive(true);
 
             if (wasInactive &&
                 audioSource != null &&
@@ -153,24 +165,24 @@ public class ChordSequenceManager : MonoBehaviour
         }
     }
 
-    private void SpawnModePrefab(SpellModeSet modeSet)
+    private void SpawnSpellPrefab()
     {
-        if (modeSet.spawnPrefab == null)
+        if (spellCastPrefab == null)
             return;
 
-        Transform parent = modeSet.spawnParent != null
-            ? modeSet.spawnParent
+        Transform parent = spellCastParent != null
+            ? spellCastParent
             : transform;
 
         GameObject instance = Instantiate(
-            modeSet.spawnPrefab,
+            spellCastPrefab,
             parent
         );
 
         instance.transform.localPosition = Vector3.zero;
         instance.transform.localRotation = Quaternion.identity;
 
-        Destroy(instance, modeSet.prefabLifetime);
+        Destroy(instance, spellCastLifetime);
     }
 
     private void TryPlayCorrectVoice()
@@ -213,6 +225,11 @@ public class ChordSequenceManager : MonoBehaviour
         ];
 
         voiceSource.PlayOneShot(clip);
+    }
+
+    public void ResetCurrentSequence()
+    {
+        ResetSequence();
     }
 
     private void ResetSequence()
