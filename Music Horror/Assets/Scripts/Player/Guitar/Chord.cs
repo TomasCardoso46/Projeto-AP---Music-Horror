@@ -38,7 +38,7 @@ public class Chord : MonoBehaviour
     private int currentIndex = 0;
     private int currentMode = 0;
 
-    private const int MAX_MODES = 2;
+    private const int MAX_MODES = 3;
 
     void Start()
     {
@@ -65,12 +65,46 @@ public class Chord : MonoBehaviour
 
     void HandleModeSwitch()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0) || Input.GetKeyUp(KeyCode.Mouse0))
+        if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             modeSwitch.PlayReverse();
-            modeSwitch.SphereSwitcher();
+            modeSwitch.SphereSwitcher(2);
 
-            currentMode++;
+            currentMode=1;
+
+            if (audioSourceForSwitch != null && switchSound != null)
+                audioSourceForSwitch.PlayOneShot(switchSound);
+
+            if (currentMode >= MAX_MODES)
+                currentMode = 0;
+
+            sequenceManager.SetMode(currentMode);
+
+            Debug.Log($"Switched Guitar Mode: {(currentMode == 0 ? "A" : "B")}");
+        }
+        if (Input.GetKeyDown(KeyCode.Mouse1))
+        {
+            modeSwitch.PlayReverse();
+            modeSwitch.SphereSwitcher(3);
+
+            currentMode=2;
+
+            if (audioSourceForSwitch != null && switchSound != null)
+                audioSourceForSwitch.PlayOneShot(switchSound);
+
+            if (currentMode >= MAX_MODES)
+                currentMode = 0;
+
+            sequenceManager.SetMode(currentMode);
+
+            Debug.Log($"Switched Guitar Mode: {(currentMode == 0 ? "A" : "B")}");
+        }
+        if (Input.GetKeyUp(KeyCode.Mouse1) || Input.GetKeyUp(KeyCode.Mouse0))
+        {
+            modeSwitch.PlayReverse();
+            modeSwitch.SphereSwitcher(1);
+
+            currentMode = 0;
 
             if (audioSourceForSwitch != null && switchSound != null)
                 audioSourceForSwitch.PlayOneShot(switchSound);

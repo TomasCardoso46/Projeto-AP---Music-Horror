@@ -59,6 +59,8 @@ public class ChordSequenceManager : MonoBehaviour
 
     private const int REQUIRED_CHORDS = 4;
 
+    private string modePrefix;
+
     private void Update()
     {
         if (playedChords.Count > 0 &&
@@ -68,15 +70,26 @@ public class ChordSequenceManager : MonoBehaviour
         }
     }
 
-    // Kept for compatibility with Chord.cs.
-    // We no longer separate spells by mode.
     public void SetMode(int mode)
     {
     }
 
     public void RegisterChord(int chordIndex, int mode)
     {
-        string modePrefix = mode == 0 ? "a" : "b";
+        switch(mode)
+        {
+            case 0:
+                modePrefix = "a";
+                break;
+
+            case 1:
+                modePrefix = "b";
+                break;
+
+            case 2:
+                modePrefix = "c";
+                break;
+        }
 
         playedChords.Add($"{modePrefix}{chordIndex}");
 

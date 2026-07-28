@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using UnityEngine;
 
 public class ModeSwitch : MonoBehaviour
@@ -17,6 +18,7 @@ public class ModeSwitch : MonoBehaviour
     [Header("Sphere Switch (GameObject Toggle)")]
     [SerializeField] private GameObject objectA;
     [SerializeField] private GameObject objectB;
+    [SerializeField] private GameObject objectC;
 
     private bool isUsingA = true;
 
@@ -40,7 +42,7 @@ public class ModeSwitch : MonoBehaviour
             if (!hasCompletedForward)
             {
                 hasCompletedForward = true;
-                OnForwardComplete();
+                OnForwardComplete(1);
             }
 
             isPlaying = false;
@@ -71,26 +73,45 @@ public class ModeSwitch : MonoBehaviour
             currentTime = clipLength;
     }
 
-    public void PlayAndSwitch()
+    public void PlayAndSwitch(int i)
     {
         PlayForward();
-        SphereSwitcher();
+        SphereSwitcher(i);
     }
 
-    private void OnForwardComplete()
+    private void OnForwardComplete(int i)
     {
-        SphereSwitcher();
+        SphereSwitcher(i);
         PlayReverse();
     }
 
-    public void SphereSwitcher()
+    public void SphereSwitcher(int mode)
     {
-        if (objectA == null || objectB == null) return;
+        switch(mode)
+        {
+            case 1: 
+                objectA.SetActive(true);
+                objectB.SetActive(false);
+                objectC.SetActive(false);
+                break;
 
-        isUsingA = !isUsingA;
+            case 2:
+                objectA.SetActive(false);
+                objectB.SetActive(true);
+                objectC.SetActive(false);
+                break;
 
-        objectA.SetActive(isUsingA);
-        objectB.SetActive(!isUsingA);
+            case 3:
+                objectA.SetActive(false);
+                objectB.SetActive(false);
+                objectC.SetActive(true);
+                break;
+
+        }
+
+
+        //objectA.SetActive(isUsingA);
+        //objectB.SetActive(!isUsingA);
     }
 
     public void ResetAnimation()
