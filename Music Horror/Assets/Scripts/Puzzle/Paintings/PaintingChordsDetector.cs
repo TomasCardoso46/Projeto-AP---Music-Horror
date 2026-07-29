@@ -3,20 +3,31 @@ using UnityEngine;
 public class PaintingChordsDetector : MonoBehaviour
 {
     [SerializeField] private GameObject objectToActivate;
-    [SerializeField] private KeyCode Chord;
-    public bool playerInside = false;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    [SerializeField] private GameObject objectToDeactivate;
+    [SerializeField] private KeyCode chord;
+    [SerializeField] private int queuePosition;
+    [SerializeField] private bool isLast;
+    [SerializeField] private Color color;
+    private bool playerInside = false;
+    private bool correctOrder = false;
     void Start()
     {
         
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if (playerInside && Input.GetKeyDown(Chord))
+        if (playerInside && Input.GetKeyDown(chord))
         {
-            objectToActivate.SetActive(true);
+            if (correctOrder)
+            {
+                objectToActivate.SetActive(true);
+                if (isLast)
+                {
+                    objectToDeactivate.SetActive(false);
+                }
+            }
+            
         }
     }
 
