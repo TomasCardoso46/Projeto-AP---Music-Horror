@@ -83,7 +83,11 @@ public class FirstPersonRigidbodyController : MonoBehaviour
             return;
 
         ReadInput();
-        HandleMouseLook();
+        if (!Input.GetMouseButton(0))
+        {
+            HandleMouseLook();
+        }
+        
         HandleLean();
         HandleCrouch();
         HandleStepShake();
@@ -213,7 +217,6 @@ public class FirstPersonRigidbodyController : MonoBehaviour
 
         targetPos += Vector3.up * shakeOffset;
 
-        // 🔴 HARD SNAP MODE (critical fix)
         if (freezeCamera)
         {
             cameraVelocity = Vector3.zero;
