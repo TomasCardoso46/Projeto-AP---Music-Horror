@@ -51,18 +51,18 @@ public class ChordSequenceManager : MonoBehaviour
     private float lastChordTime;
     private int currentMode = 0;
 
-    private List<string> playedChords = new();
+    private readonly List<string> playedChords = new();
 
     private const int REQUIRED_CHORDS = 4;
 
-    private void Update()
+    void Update()
     {
-        if (playedChords.Count > 0)
+        if (playedChords.Count == 0)
+            return;
+
+        if (Time.time - lastChordTime > sequenceTimeout)
         {
-            if (Time.time - lastChordTime > sequenceTimeout)
-            {
-                ResetSequence();
-            }
+            ResetSequence();
         }
     }
 
@@ -75,9 +75,10 @@ public class ChordSequenceManager : MonoBehaviour
     public void RegisterChord(int chordIndex)
     {
         playedChords.Add(chordIndex.ToString());
+
         lastChordTime = Time.time;
 
-        if (playedChords.Count == REQUIRED_CHORDS)
+        if (playedChords.Count >= REQUIRED_CHORDS)
         {
             CheckForSpellMatch();
         }
@@ -91,29 +92,33 @@ public class ChordSequenceManager : MonoBehaviour
             return;
         }
 
-        string sequence = string.Join("", playedChords);
         SpellModeSet modeSet = spellModes[currentMode];
+
+        string sequence = string.Join("", playedChords);
 
         for (int i = 0; i < modeSet.spellSequences.Count; i++)
         {
-            if (sequence == modeSet.spellSequences[i])
-            {
-                if (sequenceLockController != null &&
-                    sequenceLockController.IsSequenceLocked(sequence))
-                {
-                    ResetSequence();
-                    return;
-                }
+            if (sequence != modeSet.spellSequences[i])
+                continue;
 
-                CastSpell(i);
-                TryPlayCorrectVoice();
+            if (sequenceLockController != null &&
+                sequenceLockController.IsSequenceLocked(sequence))
+            {
                 ResetSequence();
                 return;
             }
+
+            CastSpell(i);
+
+            TryPlayCorrectVoice();
+
+            ResetSequence();
+
+            return;
         }
 
-        // No match
         TryPlayIncorrectVoice();
+
         ResetSequence();
     }
 
@@ -127,8 +132,7 @@ public class ChordSequenceManager : MonoBehaviour
             guitarEmission.TriggerSpellGlow(
                 modeSet.spells[index].spellColor,
                 emissionHoldTime,
-                emissionFadeTime
-            );
+                emissionFadeTime);
 
             modeSet.spells[index].Cast(Camera.main.transform);
 
@@ -164,8 +168,7 @@ public class ChordSequenceManager : MonoBehaviour
 
         GameObject instance = Instantiate(
             modeSet.spawnPrefab,
-            parent
-        );
+            parent);
 
         instance.transform.localPosition = Vector3.zero;
         instance.transform.localRotation = Quaternion.identity;
@@ -188,8 +191,7 @@ public class ChordSequenceManager : MonoBehaviour
             return;
 
         AudioClip clip = correctVoiceLines[
-            Random.Range(0, correctVoiceLines.Count)
-        ];
+            Random.Range(0, correctVoiceLines.Count)];
 
         voiceSource.PlayOneShot(clip);
     }
@@ -209,14 +211,23 @@ public class ChordSequenceManager : MonoBehaviour
             return;
 
         AudioClip clip = incorrectVoiceLines[
-            Random.Range(0, incorrectVoiceLines.Count)
-        ];
+            Random.Range(0, incorrectVoiceLines.Count)];
 
         voiceSource.PlayOneShot(clip);
     }
 
-    private void ResetSequence()
+    public void ResetSequence()
     {
         playedChords.Clear();
+    }
+
+    public string GetCurrentSequence()
+    {
+        return string.Join("", playedChords);
+    }
+
+    public bool HasSequenceStarted()
+    {
+        return playedChords.Count > 0;
     }
 }

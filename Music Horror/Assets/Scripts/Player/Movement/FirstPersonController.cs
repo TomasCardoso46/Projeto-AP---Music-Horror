@@ -38,6 +38,8 @@ public class FirstPersonRigidbodyController : MonoBehaviour
     public bool isLoading;
     public bool freezeCamera;
 
+    private bool cameraLookEnabled = true;
+
     float yaw;
     float pitch;
 
@@ -83,11 +85,7 @@ public class FirstPersonRigidbodyController : MonoBehaviour
             return;
 
         ReadInput();
-        if (!Input.GetMouseButton(0))
-        {
-            HandleMouseLook();
-        }
-        
+        HandleMouseLook();
         HandleLean();
         HandleCrouch();
         HandleStepShake();
@@ -146,6 +144,9 @@ public class FirstPersonRigidbodyController : MonoBehaviour
 
     void HandleMouseLook()
     {
+        if (!cameraLookEnabled)
+            return;
+
         float mouseX = Input.GetAxisRaw("Mouse X") * mouseSensitivity;
         float mouseY = Input.GetAxisRaw("Mouse Y") * mouseSensitivity;
 
@@ -282,5 +283,49 @@ public class FirstPersonRigidbodyController : MonoBehaviour
 
         cameraVelocity = Vector3.zero;
         shakeTime = 0f;
+    }
+
+    public void EnableCameraLook()
+    {
+        cameraLookEnabled = true;
+    }
+
+    public void DisableCameraLook()
+    {
+        cameraLookEnabled = false;
+    }
+
+    public bool IsCameraLookEnabled()
+    {
+        return cameraLookEnabled;
+    }
+
+    public void SetCursorLocked(bool locked)
+    {
+        if (locked)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+    }
+
+    public void CenterCursor()
+    {
+        Cursor.lockState = CursorLockMode.None;
+
+        Vector3 center = new Vector3(
+            Screen.width * 0.5f,
+            Screen.height * 0.5f,
+            0f);
+
+        Cursor.visible = true;
+
+    #if UNITY_EDITOR || UNITY_STANDALONE
+    #endif
     }
 }
