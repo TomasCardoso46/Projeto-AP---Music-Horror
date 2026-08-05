@@ -41,14 +41,14 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8215492046452263964}
   m_Enabled: 1
-  serializedVersion: 11
+  serializedVersion: 12
   m_Type: 2
-  m_Color: {r: 1, g: 0.8089154, b: 0.4481132, a: 1}
+  m_Color: {r: 0.8980392, g: 0.81960785, b: 0.67058825, a: 1}
   m_Intensity: 2
   m_Range: 50
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
-  m_CookieSize: 10
+  m_CookieSize2D: {x: 10, y: 10}
   m_Shadows:
     m_Type: 1
     m_Resolution: -1
@@ -89,7 +89,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 68.79, y: 0, z: 0, w: 0}
+  m_BoundingSphereOverride: {x: 1e-43, y: 0, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ForceVisible: 0
@@ -137,15 +137,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 7b3d77edd8d9d7b4585d722ae7e00084, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -83.35
+      value: -16.13
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 7b3d77edd8d9d7b4585d722ae7e00084, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.906
+      value: 1.762
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 7b3d77edd8d9d7b4585d722ae7e00084, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 3.208
+      value: -17.36
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 7b3d77edd8d9d7b4585d722ae7e00084, type: 3}
       propertyPath: m_LocalRotation.w
