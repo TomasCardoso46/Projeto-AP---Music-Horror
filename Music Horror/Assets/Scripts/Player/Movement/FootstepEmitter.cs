@@ -83,7 +83,7 @@ public class FootstepEmitter : MonoBehaviour
             case true when sprinting:
                 volume = sprintVolume;
                 pitch = 1.15f;
-                soundLevel = EnemyAudioEmitter.SoundLevel.High;
+                soundLevel = EnemyAudioEmitter.SoundLevel.Normal;
                 break;
             case true when crouching:
                 volume = crouchVolume;

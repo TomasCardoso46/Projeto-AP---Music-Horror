@@ -12,11 +12,14 @@ public class EnemyAudioEmitter : MonoBehaviour
     public bool IsEmittingNormal => normalSound;
     public bool IsEmittingHigh => highSound;
 
+    public System.Action<SoundLevel> OnSoundEmitted;
+
     /// <summary>
     /// Emits a sound of the specified type.
     /// </summary>
     public void EmitSound(SoundLevel level, float duration = 0.2f)
     {
+        OnSoundEmitted?.Invoke(level);
         StartCoroutine(EmitRoutine(level, duration));
     }
 

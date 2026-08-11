@@ -213,7 +213,6 @@ public class FirstPersonRigidbodyController : MonoBehaviour
 
         targetPos += Vector3.up * shakeOffset;
 
-        // 🔴 HARD SNAP MODE (critical fix)
         if (freezeCamera)
         {
             cameraVelocity = Vector3.zero;

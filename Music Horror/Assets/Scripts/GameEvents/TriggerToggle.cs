@@ -13,7 +13,7 @@ public class TriggerToggle : MonoBehaviour
     [SerializeField] private GameObject targetObject;
 
     [Header("Safety")]
-    [SerializeField] private string requiredTag = "Player"; // leave empty to ignore tag filtering
+    [SerializeField] private string requiredTag = "Player";
     [SerializeField] private bool triggerOnce = true;
 
     private bool hasTriggered = false;
