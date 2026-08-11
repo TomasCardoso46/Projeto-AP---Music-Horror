@@ -280,4 +280,38 @@ public class EnemyMovement : MonoBehaviour
         lastChaseFootstepIndex = index;
         footstepSource.PlayOneShot(chaseFootstepClips[index]);
     }
+
+    public IEnumerator ForceMoveTo(Vector3 position)
+    {
+        if (!agent.enabled)
+            agent.enabled = true;
+
+        if (!agent.isOnNavMesh)
+            yield break;
+
+        agent.isStopped = false;
+        agent.speed = settings.ChaseSpeed;
+        agent.SetDestination(position);
+
+        if (footstepSource)
+            footstepSource.pitch = chaseFootstepPitch;
+
+        while (agent.enabled)
+        {
+            if (!agent.pathPending &&
+                agent.remainingDistance <= agent.stoppingDistance + 0.1f)
+            {
+                break;
+            }
+            gameObject.SetActive(false);
+            yield return null;
+        }
+
+        if (agent.enabled)
+        {
+            agent.isStopped = true;
+            agent.ResetPath();
+        }
+        
+    }
 }

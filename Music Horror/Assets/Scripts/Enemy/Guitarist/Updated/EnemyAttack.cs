@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.AI;
 using System.Collections;
 
 public class EnemyAttack : MonoBehaviour
@@ -17,11 +16,11 @@ public class EnemyAttack : MonoBehaviour
     [SerializeField] private Jumpscare jumpscare;
 
     [Header("Post Attack Movement")]
+    [SerializeField] private EnemyMovement enemyMovement;
     [SerializeField] private HighSoundReaction highSoundReaction;
 
     private EnemyController enemyController;
     private EnemyPatrol enemyPatrol;
-    private NavMeshAgent navMeshAgent;
 
     private float attackLockDuration = 1.5f;
 
@@ -32,7 +31,9 @@ public class EnemyAttack : MonoBehaviour
     {
         enemyController = GetComponentInParent<EnemyController>();
         enemyPatrol = GetComponentInParent<EnemyPatrol>();
-        navMeshAgent = GetComponentInParent<NavMeshAgent>();
+
+        if (enemyMovement == null)
+            enemyMovement = GetComponentInParent<EnemyMovement>();
 
         if (highSoundReaction == null)
             highSoundReaction = GetComponentInParent<HighSoundReaction>();
@@ -96,14 +97,20 @@ public class EnemyAttack : MonoBehaviour
 
         yield return new WaitForSeconds(attackLockDuration);
 
+        // ============================================
+        // POST-ATTACK SEQUENCE
+        // ============================================
 
-        yield return StartCoroutine(MoveToHighSoundSpawnPoint());
+        yield return StartCoroutine(MoveToClosestSpawnPoint());
 
+        // Enable HighSoundReaction after reaching
+        // the destination.
         if (highSoundReaction != null)
         {
             highSoundReaction.enabled = true;
         }
 
+        // ============================================
 
         float remaining = Mathf.Max(
             0f,
@@ -117,18 +124,19 @@ public class EnemyAttack : MonoBehaviour
         isAttacking = false;
     }
 
-    private IEnumerator MoveToHighSoundSpawnPoint()
+    private IEnumerator MoveToClosestSpawnPoint()
     {
+        // Disable the normal enemy behaviour.
         if (enemyController != null)
             enemyController.enabled = false;
 
         if (enemyPatrol != null)
             enemyPatrol.enabled = false;
 
-        if (navMeshAgent == null)
+        if (enemyMovement == null)
         {
             Debug.LogWarning(
-                $"{name}: No NavMeshAgent found for post-attack movement."
+                $"{name}: EnemyMovement reference is missing."
             );
 
             yield break;
@@ -137,51 +145,31 @@ public class EnemyAttack : MonoBehaviour
         if (highSoundReaction == null)
         {
             Debug.LogWarning(
-                $"{name}: No HighSoundReaction assigned."
+                $"{name}: HighSoundReaction reference is missing."
             );
 
             yield break;
         }
 
-        Transform targetSpawn =
+        // Ask HighSoundReaction for the spawn point
+        // closest to the enemy's current position.
+        Transform closestSpawn =
             highSoundReaction.GetClosestSpawnPoint(transform.position);
 
-        if (targetSpawn == null)
+        if (closestSpawn == null)
         {
             Debug.LogWarning(
-                $"{name}: HighSoundReaction has no valid spawn points."
+                $"{name}: No valid spawn points were found."
             );
 
             yield break;
         }
 
-        navMeshAgent.enabled = true;
-
-        navMeshAgent.isStopped = false;
-        navMeshAgent.SetDestination(targetSpawn.position);
-
-        while (true)
-        {
-            if (!navMeshAgent.enabled)
-                yield break;
-
-            if (navMeshAgent.pathPending)
-            {
-                yield return null;
-                continue;
-            }
-
-            if (navMeshAgent.remainingDistance <=
-                navMeshAgent.stoppingDistance + 0.1f)
-            {
-                break;
-            }
-
-            yield return null;
-        }
-
-        navMeshAgent.isStopped = true;
-        navMeshAgent.ResetPath();
+        // Force the EnemyMovement component to navigate
+        // to the spawn point.
+        yield return StartCoroutine(
+            enemyMovement.ForceMoveTo(closestSpawn.position)
+        );
     }
 
     private void SetMovementLock(bool locked)

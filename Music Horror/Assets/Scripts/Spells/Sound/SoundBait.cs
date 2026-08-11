@@ -33,7 +33,6 @@ public class SoundBait : MonoBehaviour
 
     private Vector3 originalScale;
     
-    private EnemyAttack enemyAttack;
 
     private void OnEnable()
     {
@@ -127,7 +126,7 @@ public class SoundBait : MonoBehaviour
 
             RestoreMaterialAndStop();
 
-            enemyAttack.PerformAttack(gameObject.transform); 
+            StartCoroutine(enemyAttack.PerformAttack(gameObject.transform));
 
             Destroy(gameObject);
         }
