@@ -74,7 +74,6 @@ public class HighSoundReaction : MonoBehaviour
 
         StartCoroutine(CooldownRoutine());
 
-        // Last sound in the sequence
         if (currentClipIndex >= highSoundClips.Count)
         {
             TeleportObjectToClosestSpawnPoint();
@@ -112,15 +111,20 @@ public class HighSoundReaction : MonoBehaviour
         objectToTeleport.transform.position = closestSpawn.position;
 
         objectToTeleport.SetActive(true);
-        enabled = false;
     }
 
     private Transform FindClosestSpawnPoint()
     {
+        if (soundEmitter == null)
+            return null;
+
+        return GetClosestSpawnPoint(soundEmitter.transform.position);
+    }
+
+    public Transform GetClosestSpawnPoint(Vector3 position)
+    {
         Transform closestSpawn = null;
         float closestDistanceSqr = Mathf.Infinity;
-
-        Vector3 emitterPosition = soundEmitter.transform.position;
 
         foreach (Transform spawnPoint in spawnPoints)
         {
@@ -128,7 +132,7 @@ public class HighSoundReaction : MonoBehaviour
                 continue;
 
             float distanceSqr =
-                (spawnPoint.position - emitterPosition).sqrMagnitude;
+                (spawnPoint.position - position).sqrMagnitude;
 
             if (distanceSqr < closestDistanceSqr)
             {

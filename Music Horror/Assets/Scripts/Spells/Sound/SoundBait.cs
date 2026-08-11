@@ -32,6 +32,8 @@ public class SoundBait : MonoBehaviour
     private bool enemyTriggered = false;
 
     private Vector3 originalScale;
+    
+    private EnemyAttack enemyAttack;
 
     private void OnEnable()
     {
@@ -124,6 +126,8 @@ public class SoundBait : MonoBehaviour
             enemyAttack.TriggerAttackAnimationOnly();
 
             RestoreMaterialAndStop();
+
+            enemyAttack.PerformAttack(gameObject.transform); 
 
             Destroy(gameObject);
         }
