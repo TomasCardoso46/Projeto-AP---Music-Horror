@@ -5,7 +5,7 @@ public class EnemyAttack : MonoBehaviour
 {
     public EnemySettings settings;
 
-    [SerializeField] private bool canAttack = true;
+    public bool canAttack = true;
 
     private bool onCooldown = false;
     private bool isAttacking = false;

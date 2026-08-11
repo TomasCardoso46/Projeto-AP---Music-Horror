@@ -1,16 +1,22 @@
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 
 public class Spawnpoint : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [SerializeField] private HighSoundReaction highSoundReaction;
+    private void OnTriggerEnter(Collider other)
     {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        EnemyAttack enemyAttack = other.GetComponent<EnemyAttack>();
+        EnemyAudioEmitter enemyAudioEmitter = this.GetComponent<EnemyAudioEmitter>();
+
+        if (enemyAttack != null && !enemyAttack.canAttack)
+        {
+            enemyAttack.canAttack = true;
+            enemyAudioEmitter.StopSound();
+            highSoundReaction.ResetReaction();
+            other.gameObject.SetActive(false);
+        }
     }
 }

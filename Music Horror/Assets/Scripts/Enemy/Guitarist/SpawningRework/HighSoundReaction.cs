@@ -143,4 +143,13 @@ public class HighSoundReaction : MonoBehaviour
 
         return closestSpawn;
     }
+
+    public void ResetReaction()
+    {
+        // Stop any active cooldown
+        //StopAllCoroutines();
+
+        currentClipIndex = 0;
+        onCooldown = false;
+    }
 }

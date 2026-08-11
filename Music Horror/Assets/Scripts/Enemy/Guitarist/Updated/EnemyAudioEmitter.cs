@@ -1,4 +1,4 @@
-using System.Collections;
+using System;
 using UnityEngine;
 
 public class EnemyAudioEmitter : MonoBehaviour
@@ -12,33 +12,61 @@ public class EnemyAudioEmitter : MonoBehaviour
     public bool IsEmittingNormal => normalSound;
     public bool IsEmittingHigh => highSound;
 
-    public System.Action<SoundLevel> OnSoundEmitted;
+    public Action<SoundLevel> OnSoundEmitted;
 
-    /// <summary>
-    /// Emits a sound of the specified type.
-    /// </summary>
     public void EmitSound(SoundLevel level, float duration = 0.2f)
     {
         OnSoundEmitted?.Invoke(level);
         StartCoroutine(EmitRoutine(level, duration));
     }
 
-    private IEnumerator EmitRoutine(SoundLevel level, float duration)
+  
+    public void StartHighSound()
+    {
+        highSound = true;
+        OnSoundEmitted?.Invoke(SoundLevel.High);
+    }
+
+    
+    public void StopSound()
+    {
+        lowSound = false;
+        normalSound = false;
+        highSound = false;
+    }
+
+    private System.Collections.IEnumerator EmitRoutine(SoundLevel level, float duration)
     {
         switch (level)
         {
-            case SoundLevel.Low: lowSound = true; break;
-            case SoundLevel.Normal: normalSound = true; break;
-            case SoundLevel.High: highSound = true; break;
+            case SoundLevel.Low:
+                lowSound = true;
+                break;
+
+            case SoundLevel.Normal:
+                normalSound = true;
+                break;
+
+            case SoundLevel.High:
+                highSound = true;
+                break;
         }
 
         yield return new WaitForSeconds(duration);
 
         switch (level)
         {
-            case SoundLevel.Low: lowSound = false; break;
-            case SoundLevel.Normal: normalSound = false; break;
-            case SoundLevel.High: highSound = false; break;
+            case SoundLevel.Low:
+                lowSound = false;
+                break;
+
+            case SoundLevel.Normal:
+                normalSound = false;
+                break;
+
+            case SoundLevel.High:
+                highSound = false;
+                break;
         }
     }
 

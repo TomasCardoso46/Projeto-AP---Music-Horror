@@ -126,7 +126,13 @@ public class SoundBait : MonoBehaviour
 
             RestoreMaterialAndStop();
 
-            StartCoroutine(enemyAttack.PerformAttack(gameObject.transform));
+            //StartCoroutine(enemyAttack.PerformAttack(gameObject.transform));
+
+            enemyAttack.canAttack = false;
+
+            Spawnpoint closestSpawnpoint = FindClosestSpawnpoint(other.transform);
+
+            StartHighEmissionOnSpawnpoint(closestSpawnpoint);
 
             Destroy(gameObject);
         }
@@ -154,6 +160,49 @@ public class SoundBait : MonoBehaviour
         if (audioSource != null)
         {
             audioSource.Stop();
+        }
+    }
+
+    private Spawnpoint FindClosestSpawnpoint(Transform target)
+    {
+        Spawnpoint[] spawnpoints = FindObjectsByType<Spawnpoint>(
+            FindObjectsSortMode.None
+        );
+
+        Spawnpoint closest = null;
+        float closestDistance = Mathf.Infinity;
+
+        foreach (Spawnpoint spawnpoint in spawnpoints)
+        {
+            if (spawnpoint == this)
+                continue;
+
+            float distance = Vector3.Distance(
+                target.position,
+                spawnpoint.transform.position
+            );
+
+            if (distance < closestDistance)
+            {
+                closestDistance = distance;
+                closest = spawnpoint;
+            }
+        }
+
+        return closest;
+    }
+
+    private void StartHighEmissionOnSpawnpoint(Spawnpoint spawnpoint)
+    {
+        if (spawnpoint == null)
+            return;
+
+        EnemyAudioEmitter audioEmitter =
+            spawnpoint.GetComponent<EnemyAudioEmitter>();
+
+        if (audioEmitter != null)
+        {
+            audioEmitter.StartHighSound();
         }
     }
 }
