@@ -38,7 +38,6 @@ public class CanPickUp : MonoBehaviour, IInteractable
             return;
         }
 
-        // Spawn the inventory version of this object.
         GameObject heldObject =
             PlayerInventory.Instance.SpawnItem(itemID, heldItemParent);
 
@@ -51,9 +50,6 @@ public class CanPickUp : MonoBehaviour, IInteractable
             return;
         }
 
-        // -----------------------------------------------------
-        // CAN TAKE
-        // -----------------------------------------------------
 
         if (canTake)
         {
@@ -75,13 +71,9 @@ public class CanPickUp : MonoBehaviour, IInteractable
             );
         }
 
-        // -----------------------------------------------------
-        // CANNOT TAKE
-        // -----------------------------------------------------
 
         else
         {
-            // Set the X rotation of all PlayerInteract objects to 0.
             PlayerInteract[] playerInteracts =
                 FindObjectsByType<PlayerInteract>(FindObjectsSortMode.None);
 

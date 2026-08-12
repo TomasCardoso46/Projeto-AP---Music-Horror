@@ -43,18 +43,12 @@ public class HeldItemInteraction : MonoBehaviour
 
     private void ReleaseItem()
     {
-        // -----------------------------------------------------
-        // CAN TAKE
-        // -----------------------------------------------------
 
         if (canTake)
         {
             ReleaseTakeableItem();
         }
 
-        // -----------------------------------------------------
-        // CANNOT TAKE
-        // -----------------------------------------------------
 
         else
         {
@@ -64,7 +58,6 @@ public class HeldItemInteraction : MonoBehaviour
 
     private void ReleaseTakeableItem()
     {
-        // The original world object needs somewhere to go.
         if (originalObject == null)
         {
             Destroy(heldObject);
@@ -88,11 +81,9 @@ public class HeldItemInteraction : MonoBehaviour
         originalObject.transform.rotation =
             returnPosition.rotation;
 
-        // Re-enable the original object.
+        // Re enable the original object.
         originalObject.gameObject.SetActive(true);
 
-        // Only destroy the held object AFTER the original
-        // object has been successfully enabled.
         Destroy(heldObject);
 
         // Remove the inventory item.
