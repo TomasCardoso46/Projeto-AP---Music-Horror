@@ -12,7 +12,7 @@ LightingSettings:
   m_EnableRealtimeLightmaps: 0
   m_RealtimeEnvironmentLighting: 1
   m_BounceScale: 1
-  m_AlbedoBoost: 1
+  m_AlbedoBoost: 2
   m_IndirectOutputScale: 2
   m_UsingShadowmask: 1
   m_BakeBackend: 2
@@ -21,7 +21,7 @@ LightingSettings:
   m_UseMipmapLimits: 1
   m_BakeResolution: 40
   m_Padding: 2
-  m_LightmapCompression: 3
+  m_LightmapCompression: 1
   m_LightmapPackingMode: 1
   m_LightmapPackingMethod: 0
   m_XAtlasPackingAttempts: 16384
@@ -50,7 +50,7 @@ LightingSettings:
   m_PVREnvironmentSampleCount: 32
   m_PVREnvironmentReferencePointCount: 2048
   m_LightProbeSampleCountMultiplier: 4
-  m_PVRBounces: 8
+  m_PVRBounces: 16
   m_PVRMinBounces: 1
   m_PVREnvironmentImportanceSampling: 1
   m_PVRFilteringMode: 1
