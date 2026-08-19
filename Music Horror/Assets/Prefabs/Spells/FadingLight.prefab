@@ -42,14 +42,14 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 302362711939834948}
   m_Enabled: 1
-  serializedVersion: 11
+  serializedVersion: 12
   m_Type: 0
-  m_Color: {r: 0.5330188, g: 0.96154284, b: 1, a: 1}
+  m_Color: {r: 0.9665694, g: 0, b: 1, a: 1}
   m_Intensity: 15
   m_Range: 10
   m_SpotAngle: 60.690662
   m_InnerSpotAngle: 30.681175
-  m_CookieSize: 10
+  m_CookieSize2D: {x: 10, y: 10}
   m_Shadows:
     m_Type: 0
     m_Resolution: -1
