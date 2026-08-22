@@ -34,12 +34,20 @@ public class SaveManager : MonoBehaviour
         SaveSystem.Init();
     }
 
-    public void BindScene(Transform playerT, EnemyController enemyController, Transform drawings, MonoBehaviour playerCtrl)
+    public void BindScene(
+        Transform playerT,
+        EnemyController enemyController,
+        Transform drawings,
+        MonoBehaviour playerCtrl,
+        SceneSaveBinder saveBinder)
     {
         player = playerT;
         enemy = enemyController;
         drawingsRoot = drawings;
         playerController = playerCtrl;
+
+        // Give the binder access to the SaveManager's loading process
+        saveBinder.Initialize();
     }
 
     public void CreateManualSave()
@@ -51,13 +59,21 @@ public class SaveManager : MonoBehaviour
         }
 
         string id = "manual_" + Guid.NewGuid();
-        SaveSystem.SaveToFile(id, BuildSave("Manual", lastCheckpointName, lastCheckpointImage));
+
+        SaveSystem.SaveToFile(
+            id,
+            BuildSave("Manual", lastCheckpointName, lastCheckpointImage)
+        );
+
         manualSaves.Add(id);
     }
 
     public void CreateAutoSave()
     {
-        SaveSystem.SaveToFile("auto", BuildSave("Auto", lastCheckpointName, lastCheckpointImage));
+        SaveSystem.SaveToFile(
+            "auto",
+            BuildSave("Auto", lastCheckpointName, lastCheckpointImage)
+        );
     }
 
     public void CreateForcedSave(string locationName, string imageKey)
@@ -66,13 +82,19 @@ public class SaveManager : MonoBehaviour
         lastCheckpointImage = imageKey;
 
         string id = "forced_" + locationName + "_" + Guid.NewGuid();
-        SaveSystem.SaveToFile(id, BuildSave("Forced", locationName, imageKey));
+
+        SaveSystem.SaveToFile(
+            id,
+            BuildSave("Forced", locationName, imageKey)
+        );
     }
 
     public void LoadGame(string fileName)
     {
         SaveData data = SaveSystem.LoadFromFile(fileName);
-        if (data == null) return;
+
+        if (data == null)
+            return;
 
         StartCoroutine(LoadRoutine(data));
     }
@@ -82,6 +104,7 @@ public class SaveManager : MonoBehaviour
         IsLoading = true;
 
         var controller = playerController as FirstPersonRigidbodyController;
+
         if (controller != null)
             controller.isLoading = true;
 
@@ -91,10 +114,18 @@ public class SaveManager : MonoBehaviour
 
         yield return null;
         yield return new WaitForEndOfFrame();
+
+        // Restore player
         yield return ApplyPlayerTransform(data.player);
 
+        // Restore enemy
         RestoreEnemy(data.enemy);
+
+        // Restore spells
         RestoreSpells(data.unlockedSpells);
+
+        // Apply checkpoint-specific GameObjects
+        ApplyCheckpointObjects(data.locationName);
 
         yield return new WaitForEndOfFrame();
 
@@ -123,6 +154,7 @@ public class SaveManager : MonoBehaviour
         if (rb != null)
         {
             rb.isKinematic = true;
+
             rb.linearVelocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
 
@@ -146,14 +178,39 @@ public class SaveManager : MonoBehaviour
     {
         enemy.transform.position = ToVector3(data.position);
         enemy.transform.eulerAngles = ToVector3(data.rotation);
+
         enemy.currentState = (EnemyController.State)data.state;
+
         enemy.ResetStateAfterLoad();
     }
 
     private void RestoreSpells(List<string> spells)
     {
+        if (drawingsRoot == null)
+            return;
+
         foreach (Transform child in drawingsRoot)
-            child.gameObject.SetActive(spells.Contains(child.name));
+        {
+            child.gameObject.SetActive(
+                spells != null && spells.Contains(child.name)
+            );
+        }
+    }
+
+    private void ApplyCheckpointObjects(string checkpointName)
+    {
+        SceneSaveBinder binder = FindFirstObjectByType<SceneSaveBinder>();
+
+        if (binder == null)
+        {
+            Debug.LogWarning(
+                "SaveManager: No SceneSaveBinder found in the current scene."
+            );
+
+            return;
+        }
+
+        binder.ApplyCheckpoint(checkpointName);
     }
 
     private void DisableGameplaySystems()
@@ -178,7 +235,10 @@ public class SaveManager : MonoBehaviour
         Physics.autoSimulation = true;
     }
 
-    private SaveData BuildSave(string type, string locationName, string imageKey)
+    private SaveData BuildSave(
+        string type,
+        string locationName,
+        string imageKey)
     {
         return new SaveData
         {
@@ -223,13 +283,25 @@ public class SaveManager : MonoBehaviour
     {
         List<string> result = new List<string>();
 
+        if (drawingsRoot == null)
+            return result;
+
         foreach (Transform child in drawingsRoot)
+        {
             if (child.gameObject.activeSelf)
                 result.Add(child.name);
+        }
 
         return result;
     }
 
-    public string GetLastCheckpointName() => lastCheckpointName;
-    public string GetLastCheckpointImage() => lastCheckpointImage;
+    public string GetLastCheckpointName()
+    {
+        return lastCheckpointName;
+    }
+
+    public string GetLastCheckpointImage()
+    {
+        return lastCheckpointImage;
+    }
 }
