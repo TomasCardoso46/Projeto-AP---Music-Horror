@@ -48,9 +48,29 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 8ab95fd4461303640abc42bbd33eacae, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 1816f2cf0d662f3439b71cc9b3f0241a, type: 2}
+    - target: {fileID: -7511558181221131132, guid: 8ab95fd4461303640abc42bbd33eacae, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: f733e74838d22704cacbc3b85bcecae1, type: 2}
+    - target: {fileID: -2029015610380073729, guid: 8ab95fd4461303640abc42bbd33eacae, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 2b9bec54f7251774f8c3f020f7be5ac5, type: 2}
     - target: {fileID: 919132149155446097, guid: 8ab95fd4461303640abc42bbd33eacae, type: 3}
       propertyPath: m_Name
       value: MergedArtSmallDoorway
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 8ab95fd4461303640abc42bbd33eacae, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 3629882343812104264, guid: 8ab95fd4461303640abc42bbd33eacae, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
