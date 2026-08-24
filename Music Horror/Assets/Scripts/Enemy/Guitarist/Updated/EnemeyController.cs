@@ -48,6 +48,11 @@ public class EnemyController : MonoBehaviour, IEnemy
     private bool destroyingHideSpot = false;
     private Transform player;
 
+    private void Start()
+    {
+        this.gameObject.SetActive(false);
+    }
+
     private void Reset()
     {
         perception = GetComponent<EnemyPerception>();

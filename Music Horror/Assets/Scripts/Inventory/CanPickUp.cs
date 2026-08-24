@@ -28,18 +28,27 @@ public class CanPickUp : MonoBehaviour, IInteractable
     {
         if (string.IsNullOrEmpty(itemID))
         {
-            Debug.LogWarning(gameObject.name + " has no Item ID.");
+            Debug.LogWarning(
+                gameObject.name + " has no Item ID."
+            );
+
             return;
         }
 
         if (heldItemParent == null)
         {
-            Debug.LogWarning("No held item parent assigned.");
+            Debug.LogWarning(
+                "No held item parent assigned."
+            );
+
             return;
         }
 
         GameObject heldObject =
-            PlayerInventory.Instance.SpawnItem(itemID, heldItemParent);
+            PlayerInventory.Instance.SpawnItem(
+                itemID,
+                heldItemParent
+            );
 
         if (heldObject == null)
         {
@@ -49,7 +58,6 @@ public class CanPickUp : MonoBehaviour, IInteractable
 
             return;
         }
-
 
         if (canTake)
         {
@@ -61,7 +69,8 @@ public class CanPickUp : MonoBehaviour, IInteractable
                 heldObject.GetComponent<HeldItemInteraction>();
 
             if (interaction == null)
-                interaction = heldObject.AddComponent<HeldItemInteraction>();
+                interaction =
+                    heldObject.AddComponent<HeldItemInteraction>();
 
             interaction.Setup(
                 this,
@@ -70,18 +79,16 @@ public class CanPickUp : MonoBehaviour, IInteractable
                 returnPosition
             );
         }
-
-
         else
         {
-            PlayerInteract[] playerInteracts =
-                FindObjectsByType<PlayerInteract>(FindObjectsSortMode.None);
+            FirstPersonRigidbodyController playerController =
+                FindFirstObjectByType<
+                    FirstPersonRigidbodyController
+                >();
 
-            foreach (PlayerInteract playerInteract in playerInteracts)
+            if (playerController != null)
             {
-                Vector3 rotation = playerInteract.transform.eulerAngles;
-                rotation.x = 0f;
-                playerInteract.transform.eulerAngles = rotation;
+                playerController.SmoothResetCamera();
             }
 
             gameObject.SetActive(false);
@@ -90,7 +97,8 @@ public class CanPickUp : MonoBehaviour, IInteractable
                 heldObject.GetComponent<HeldItemInteraction>();
 
             if (interaction == null)
-                interaction = heldObject.AddComponent<HeldItemInteraction>();
+                interaction =
+                    heldObject.AddComponent<HeldItemInteraction>();
 
             interaction.Setup(
                 this,

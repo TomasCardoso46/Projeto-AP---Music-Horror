@@ -35,6 +35,9 @@ public class FirstPersonRigidbodyController : MonoBehaviour
     [Header("References")]
     [SerializeField] Rigidbody rb;
 
+    [Header("Smooth Camera Rotation")]
+    [SerializeField] float smoothRotationDuration = 0.5f;
+
     public bool isLoading;
     public bool freezeCamera;
 
@@ -59,9 +62,17 @@ public class FirstPersonRigidbodyController : MonoBehaviour
     bool isSprinting;
     bool crouchState;
 
+    bool inputLocked;
+
+    bool smoothRotationActive;
+    float smoothRotationTimer;
+    float smoothRotationStartPitch;
+    float smoothRotationTargetPitch;
+
     void Awake()
     {
-        if (!rb) rb = GetComponent<Rigidbody>();
+        if (!rb)
+            rb = GetComponent<Rigidbody>();
 
         rb.freezeRotation = true;
         rb.interpolation = RigidbodyInterpolation.Interpolate;
@@ -82,10 +93,14 @@ public class FirstPersonRigidbodyController : MonoBehaviour
         if (GameState.IsPaused || isLoading)
             return;
 
-        ReadInput();
-        HandleMouseLook();
-        HandleLean();
-        HandleCrouch();
+        if (!inputLocked)
+        {
+            ReadInput();
+            HandleMouseLook();
+            HandleLean();
+            HandleCrouch();
+        }
+
         HandleStepShake();
     }
 
@@ -95,7 +110,11 @@ public class FirstPersonRigidbodyController : MonoBehaviour
             return;
 
         UpdateCamera();
-        HandleMovement();
+
+        if (!inputLocked)
+            HandleMovement();
+        else
+            StopMovement();
     }
 
     void ReadInput()
@@ -126,10 +145,13 @@ public class FirstPersonRigidbodyController : MonoBehaviour
     {
         float speed = walkSpeed;
 
-        if (isSprinting) speed = sprintSpeed;
-        else if (isCrouching) speed = crouchSpeed;
+        if (isSprinting)
+            speed = sprintSpeed;
+        else if (isCrouching)
+            speed = crouchSpeed;
 
-        Vector3 moveDir = transform.TransformDirection(movementInput) * speed;
+        Vector3 moveDir =
+            transform.TransformDirection(movementInput) * speed;
 
         Vector3 velocity = new Vector3(
             moveDir.x,
@@ -140,17 +162,30 @@ public class FirstPersonRigidbodyController : MonoBehaviour
         rb.linearVelocity = velocity;
     }
 
+    void StopMovement()
+    {
+        rb.linearVelocity = new Vector3(
+            0f,
+            rb.linearVelocity.y,
+            0f
+        );
+    }
+
     void HandleMouseLook()
     {
-        float mouseX = Input.GetAxisRaw("Mouse X") * mouseSensitivity;
-        float mouseY = Input.GetAxisRaw("Mouse Y") * mouseSensitivity;
+        float mouseX =
+            Input.GetAxisRaw("Mouse X") * mouseSensitivity;
+
+        float mouseY =
+            Input.GetAxisRaw("Mouse Y") * mouseSensitivity;
 
         yaw += mouseX;
         pitch -= mouseY;
 
         pitch = Mathf.Clamp(pitch, -90f, 90f);
 
-        transform.rotation = Quaternion.Euler(0f, yaw, 0f);
+        transform.rotation =
+            Quaternion.Euler(0f, yaw, 0f);
     }
 
     void HandleLean()
@@ -162,43 +197,86 @@ public class FirstPersonRigidbodyController : MonoBehaviour
         else
             targetLean = 0f;
 
-        currentLean = Mathf.Lerp(currentLean, targetLean, Time.deltaTime * leanSpeed);
+        currentLean = Mathf.Lerp(
+            currentLean,
+            targetLean,
+            Time.deltaTime * leanSpeed
+        );
     }
 
     void HandleCrouch()
     {
         Vector3 scale = transform.localScale;
 
-        float target = isCrouching ? crouchHeight : normalHeight;
+        float target =
+            isCrouching ? crouchHeight : normalHeight;
 
-        scale.y = Mathf.Lerp(scale.y, target, Time.deltaTime * 10f);
+        scale.y = Mathf.Lerp(
+            scale.y,
+            target,
+            Time.deltaTime * 10f
+        );
 
         transform.localScale = scale;
     }
 
     void HandleStepShake()
     {
-        bool isMoving = movementInput.x != 0 || movementInput.z != 0;
+        if (inputLocked)
+        {
+            shakeTime = Mathf.Lerp(
+                shakeTime,
+                0f,
+                Time.deltaTime * 10f
+            );
+
+            return;
+        }
+
+        bool isMoving =
+            movementInput.x != 0 ||
+            movementInput.z != 0;
 
         if (isMoving)
             shakeTime = 1f;
         else
-            shakeTime = Mathf.Lerp(shakeTime, 0f, Time.deltaTime * 5f);
+            shakeTime = Mathf.Lerp(
+                shakeTime,
+                0f,
+                Time.deltaTime * 5f
+            );
     }
 
     void UpdateCamera()
     {
-        if (!cameraTransform) return;
+        if (!cameraTransform)
+            return;
 
-        float targetHeight = isCrouching ? crouchCameraHeight : cameraHeight;
+        float targetHeight =
+            isCrouching
+                ? crouchCameraHeight
+                : cameraHeight;
 
-        Vector3 targetPos = transform.position + Vector3.up * targetHeight;
+        Vector3 targetPos =
+            transform.position +
+            Vector3.up * targetHeight;
 
-        Vector3 leanOffset = transform.right * (currentLean / leanAngle) * leanOffsetAmount;
+        Vector3 leanOffset =
+            transform.right *
+            (currentLean / leanAngle) *
+            leanOffsetAmount;
+
         targetPos += leanOffset;
 
-        float shakeAmount = isCrouching ? crouchShakeAmount : walkShakeAmount;
-        float shakeSpeed = isCrouching ? crouchShakeSpeed : walkShakeSpeed;
+        float shakeAmount =
+            isCrouching
+                ? crouchShakeAmount
+                : walkShakeAmount;
+
+        float shakeSpeed =
+            isCrouching
+                ? crouchShakeSpeed
+                : walkShakeSpeed;
 
         if (isSprinting)
         {
@@ -220,38 +298,110 @@ public class FirstPersonRigidbodyController : MonoBehaviour
             pitchVelocity = 0f;
 
             cameraTransform.position = targetPos;
-            cameraTransform.rotation = Quaternion.Euler(pitch, yaw, currentLean);
+
+            cameraTransform.rotation =
+                Quaternion.Euler(
+                    pitch,
+                    yaw,
+                    currentLean
+                );
 
             cameraYaw = yaw;
+
             return;
         }
 
-        cameraTransform.position = Vector3.SmoothDamp(
-            cameraTransform.position,
-            targetPos,
-            ref cameraVelocity,
-            1f / cameraFollowSpeed
-        );
+        cameraTransform.position =
+            Vector3.SmoothDamp(
+                cameraTransform.position,
+                targetPos,
+                ref cameraVelocity,
+                1f / cameraFollowSpeed
+            );
 
-        cameraYaw = Mathf.SmoothDampAngle(
-            cameraYaw,
-            yaw,
-            ref yawVelocity,
-            0.05f
-        );
+        cameraYaw =
+            Mathf.SmoothDampAngle(
+                cameraYaw,
+                yaw,
+                ref yawVelocity,
+                0.05f
+            );
 
-        float smoothPitch = Mathf.SmoothDampAngle(
-            cameraTransform.eulerAngles.x,
-            pitch,
-            ref pitchVelocity,
-            0.05f
-        );
+        float targetPitch;
 
-        cameraTransform.rotation = Quaternion.Euler(
-            smoothPitch,
-            cameraYaw,
-            currentLean
-        );
+        if (smoothRotationActive)
+        {
+            smoothRotationTimer += Time.deltaTime;
+
+            float t =
+                smoothRotationTimer /
+                smoothRotationDuration;
+
+            t = Mathf.Clamp01(t);
+
+            t = t * t * (3f - 2f * t);
+
+            targetPitch =
+                Mathf.Lerp(
+                    smoothRotationStartPitch,
+                    smoothRotationTargetPitch,
+                    t
+                );
+
+            if (smoothRotationTimer >= smoothRotationDuration)
+            {
+                smoothRotationActive = false;
+
+                pitch = smoothRotationTargetPitch;
+
+                targetPitch = smoothRotationTargetPitch;
+
+                pitchVelocity = 0f;
+
+                inputLocked = true;
+            }
+        }
+        else
+        {
+            targetPitch = pitch;
+        }
+
+        float smoothPitch =
+            Mathf.SmoothDampAngle(
+                cameraTransform.eulerAngles.x,
+                targetPitch,
+                ref pitchVelocity,
+                0.05f
+            );
+
+        cameraTransform.rotation =
+            Quaternion.Euler(
+                smoothPitch,
+                cameraYaw,
+                currentLean
+            );
+    }
+
+    public void SmoothResetCamera()
+    {
+        smoothRotationStartPitch = pitch;
+        smoothRotationTargetPitch = 0f;
+
+        smoothRotationTimer = 0f;
+        smoothRotationActive = true;
+
+        pitchVelocity = 0f;
+        inputLocked = true;
+    }
+
+    public void LockPlayer()
+    {
+        inputLocked = true;
+    }
+
+    public void UnlockPlayer()
+    {
+        inputLocked = false;
     }
 
     public void HardResetCameraMotion()
@@ -263,7 +413,9 @@ public class FirstPersonRigidbodyController : MonoBehaviour
 
     public float GetCameraHeight()
     {
-        return isCrouching ? crouchCameraHeight : cameraHeight;
+        return isCrouching
+            ? crouchCameraHeight
+            : cameraHeight;
     }
 
     public void ResetAfterLoad()
@@ -278,5 +430,8 @@ public class FirstPersonRigidbodyController : MonoBehaviour
 
         cameraVelocity = Vector3.zero;
         shakeTime = 0f;
+
+        smoothRotationActive = false;
+        inputLocked = false;
     }
 }

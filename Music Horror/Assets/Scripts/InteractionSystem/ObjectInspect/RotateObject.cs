@@ -2,16 +2,16 @@ using UnityEngine;
 
 public class RotateObject : MonoBehaviour
 {
-    [SerializeField] private GameObject objectToMove;
-    [SerializeField] private float rotationSpeed;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [SerializeField] private float rotationSpeed = 5f;
+
+    private Bounds objectBounds;
+
+    private void Start()
     {
-        objectToMove = this.gameObject;
+        CalculateBounds();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
         if (Input.GetMouseButton(1))
         {
@@ -19,14 +19,47 @@ public class RotateObject : MonoBehaviour
         }
     }
 
+    private void CalculateBounds()
+    {
+        Renderer[] renderers = GetComponentsInChildren<Renderer>();
+
+        if (renderers.Length == 0)
+        {
+            objectBounds = new Bounds(transform.position, Vector3.zero);
+            return;
+        }
+
+        objectBounds = renderers[0].bounds;
+
+        foreach (Renderer renderer in renderers)
+        {
+            objectBounds.Encapsulate(renderer.bounds);
+        }
+    }
+
     private void RotateObjectWithMouse()
     {
-        // Get the mouse movement
         float mouseX = Input.GetAxis("Mouse X");
         float mouseY = Input.GetAxis("Mouse Y");
 
-        // Rotate the object based on mouse movement
-        objectToMove.transform.Rotate(Vector3.up, mouseX * -rotationSpeed, Space.World);
-        objectToMove.transform.Rotate(Vector3.left, mouseY * rotationSpeed, Space.World);
+        // Get the visual center of the object in world space
+        Vector3 center = objectBounds.center;
+
+        // Horizontal rotation around the visual center
+        transform.RotateAround(
+            center,
+            Vector3.up,
+            -mouseX * rotationSpeed
+        );
+
+        // Vertical rotation around the visual center
+        transform.RotateAround(
+            center,
+            transform.right,
+            mouseY * rotationSpeed
+        );
+
+        // Recalculate because the bounds have changed after rotation
+        CalculateBounds();
     }
 }

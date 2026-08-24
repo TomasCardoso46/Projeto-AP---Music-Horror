@@ -25,7 +25,9 @@ public class HeldItemInteraction : MonoBehaviour
         returnPosition = returnTransform;
 
         playerController =
-            FindFirstObjectByType<FirstPersonRigidbodyController>();
+            FindFirstObjectByType<
+                FirstPersonRigidbodyController
+            >();
 
         initialized = true;
     }
@@ -43,13 +45,10 @@ public class HeldItemInteraction : MonoBehaviour
 
     private void ReleaseItem()
     {
-
         if (canTake)
         {
             ReleaseTakeableItem();
         }
-
-
         else
         {
             ReleaseTemporaryItem();
@@ -74,19 +73,16 @@ public class HeldItemInteraction : MonoBehaviour
             return;
         }
 
-        // Teleport the original object first.
         originalObject.transform.position =
             returnPosition.position;
 
         originalObject.transform.rotation =
             returnPosition.rotation;
 
-        // Re enable the original object.
         originalObject.gameObject.SetActive(true);
 
         Destroy(heldObject);
 
-        // Remove the inventory item.
         if (PlayerInventory.Instance != null)
         {
             PlayerInventory.Instance.RemoveItem(
@@ -97,19 +93,16 @@ public class HeldItemInteraction : MonoBehaviour
 
     private void ReleaseTemporaryItem()
     {
-        // Destroy the held object.
         if (heldObject != null)
         {
             Destroy(heldObject);
         }
 
-        // Re-enable original world object.
         if (originalObject != null)
         {
             originalObject.gameObject.SetActive(true);
         }
 
-        // Restore player control.
         EnablePlayer();
     }
 
@@ -118,12 +111,14 @@ public class HeldItemInteraction : MonoBehaviour
         if (playerController == null)
         {
             playerController =
-                FindFirstObjectByType<FirstPersonRigidbodyController>();
+                FindFirstObjectByType<
+                    FirstPersonRigidbodyController
+                >();
         }
 
         if (playerController != null)
         {
-            playerController.enabled = false;
+            playerController.LockPlayer();
         }
     }
 
@@ -132,12 +127,14 @@ public class HeldItemInteraction : MonoBehaviour
         if (playerController == null)
         {
             playerController =
-                FindFirstObjectByType<FirstPersonRigidbodyController>();
+                FindFirstObjectByType<
+                    FirstPersonRigidbodyController
+                >();
         }
 
         if (playerController != null)
         {
-            playerController.enabled = true;
+            playerController.UnlockPlayer();
             playerController.HardResetCameraMotion();
         }
     }
