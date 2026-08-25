@@ -7,7 +7,15 @@ using UnityEngine;
 [RequireComponent(typeof(EnemyAttack))]
 public class EnemyController : MonoBehaviour, IEnemy
 {
-    public enum State { Idle, Patrol, Investigate, Chase, Attack, Dead }
+    public enum State
+    {
+        Idle,
+        Patrol,
+        Investigate,
+        Chase,
+        Attack,
+        Dead
+    }
 
     [SerializeField] private EnemySettings settings;
     [SerializeField] private Animator animator;
@@ -25,17 +33,35 @@ public class EnemyController : MonoBehaviour, IEnemy
 
     private bool movementLocked = false;
 
+    [Header("Chase Audio")]
     [SerializeField] private AudioSource chaseAudioSource;
     [SerializeField] private AudioClip chaseClip;
     [SerializeField] private float chaseFadeOutTime = 1.2f;
     [SerializeField][Range(0f, 1f)] private float investigateStartVolume = 1f;
+    [SerializeField] private float chaseLoseTrackDelay = 2f;
 
     private Coroutine fadeOutCoroutine;
+    private Coroutine loseTrackCoroutine;
     private bool chaseAudioPlaying = false;
 
+    [Header("Enemy Chase Sounds")]
+    [SerializeField] private AudioSource enemyChaseSounds;
+    [SerializeField] private AudioClip[] enemyChaseSoundClips;
+    [SerializeField] private float enemyChaseSoundVolume = 1f;
+    [SerializeField] private float perceptionSoundCooldown = 2f;
+
+    private Coroutine perceptionSoundCoroutine;
+    private bool perceptionSoundPlaying = false;
+    private bool perceptionSoundQueued = false;
+
+    private AudioClip lastPlayedPerceptionSound;
+    private float lastPerceptionSoundTime = -Mathf.Infinity;
+
+    [Header("Investigate")]
     [SerializeField] private float minInvestigateTime = 3f;
     private float investigateTimer = 0f;
 
+    [Header("Sonar")]
     [SerializeField] private EnemySonar sonar;
     [SerializeField] private float sonarCooldown = 5f;
     private float sonarTimer = 0f;
@@ -50,7 +76,7 @@ public class EnemyController : MonoBehaviour, IEnemy
 
     private void Start()
     {
-        this.gameObject.SetActive(false);
+        gameObject.SetActive(false);
     }
 
     private void Reset()
@@ -71,20 +97,30 @@ public class EnemyController : MonoBehaviour, IEnemy
         perception.Initialize(settings, this);
         movement.Initialize(settings, this);
         attack.Initialize(settings, this);
+
         if (health != null)
             health.Initialize(this);
 
         currentState = State.Patrol;
 
         player = GameObject.FindGameObjectWithTag("Player")?.transform;
+
+        if (enemyChaseSounds != null)
+        {
+            enemyChaseSounds.loop = false;
+            enemyChaseSounds.playOnAwake = false;
+        }
     }
 
     private void Update()
     {
         if (movementLocked)
-        return;
+            return;
+
         if (Cheats.EnemyDisabled)
         {
+            StopAllAudio();
+
             target = null;
             lastKnownPosition = Vector3.zero;
             timeSinceSeen = 0f;
@@ -93,8 +129,11 @@ public class EnemyController : MonoBehaviour, IEnemy
             if (currentState != State.Patrol)
                 SetState(State.Patrol);
 
-            if (perception != null) perception.enabled = false;
-            if (attack != null) attack.enabled = false;
+            if (perception != null)
+                perception.enabled = false;
+
+            if (attack != null)
+                attack.enabled = false;
 
             movement.Patrol();
 
@@ -105,12 +144,12 @@ public class EnemyController : MonoBehaviour, IEnemy
 
             return;
         }
-        else
-        {
-            if (perception != null) perception.enabled = true;
-            if (attack != null) attack.enabled = true;
-        }
 
+        if (perception != null)
+            perception.enabled = true;
+
+        if (attack != null)
+            attack.enabled = true;
 
         if (health != null && !health.IsAlive)
         {
@@ -126,6 +165,8 @@ public class EnemyController : MonoBehaviour, IEnemy
             lastKnownPosition = target.position;
             timeSinceSeen = 0f;
             investigateTimer = 0f;
+
+            CancelLoseTrackTimer();
 
             if (Vector3.Distance(transform.position, target.position) <= settings.AttackRange)
                 SetState(State.Attack);
@@ -145,10 +186,19 @@ public class EnemyController : MonoBehaviour, IEnemy
                 lastKnownPosition = Vector3.zero;
             }
 
-            if (lastKnownPosition != Vector3.zero && timeSinceSeen <= settings.MemoryTime)
+            if (currentState == State.Chase)
+                StartLoseTrackTimer();
+
+            if (lastKnownPosition != Vector3.zero &&
+                timeSinceSeen <= settings.MemoryTime)
+            {
                 SetState(State.Investigate);
-            else if (currentState == State.Investigate && investigateTimer < minInvestigateTime)
+            }
+            else if (currentState == State.Investigate &&
+                     investigateTimer < minInvestigateTime)
+            {
                 SetState(State.Investigate);
+            }
             else
             {
                 SetState(State.Patrol);
@@ -161,6 +211,7 @@ public class EnemyController : MonoBehaviour, IEnemy
         if (currentState == State.Patrol && sonar != null)
         {
             sonarTimer += Time.deltaTime;
+
             if (sonarTimer >= sonarCooldown)
             {
                 sonar.ActivateAbility();
@@ -189,42 +240,76 @@ public class EnemyController : MonoBehaviour, IEnemy
                 break;
 
             case State.Investigate:
-                if (!destroyingHideSpot && lastKnownPosition != Vector3.zero)
+                if (!destroyingHideSpot &&
+                    lastKnownPosition != Vector3.zero)
+                {
                     movement.MoveTo(lastKnownPosition);
+                }
+
                 break;
 
             case State.Chase:
                 if (target != null)
                     movement.Chase(target);
+
                 break;
 
             case State.Attack:
                 if (target != null)
                 {
-                    Vector3 lookAt = new Vector3(target.position.x, transform.position.y, target.position.z);
+                    Vector3 lookAt = new Vector3(
+                        target.position.x,
+                        transform.position.y,
+                        target.position.z
+                    );
+
                     transform.LookAt(lookAt);
+
                     attack.TryAttack(target);
                 }
                 else
+                {
                     SetState(State.Patrol);
+                }
+
                 break;
 
             case State.Dead:
                 movement.DisableMovement();
                 attack.DisableAttack();
-                FadeOutInvestigateAudio();
+                StopAllAudio();
                 break;
         }
     }
 
     public void SetState(State newState)
     {
-        if (currentState == newState) return;
+        if (currentState == newState)
+            return;
+
+        State previousState = currentState;
 
         if (newState == State.Investigate)
+        {
             PlayInvestigateAudio();
-        else if (currentState == State.Investigate && newState != State.Investigate)
+        }
+        else if (previousState == State.Investigate &&
+                 newState != State.Investigate)
+        {
             FadeOutInvestigateAudio();
+        }
+
+        if (newState == State.Chase)
+        {
+            PlayChaseAudio();
+        }
+
+        if (previousState == State.Chase &&
+            newState != State.Chase &&
+            newState != State.Attack)
+        {
+            StartLoseTrackTimer();
+        }
 
         if (newState == State.Patrol)
             sonarTimer = 0f;
@@ -234,22 +319,36 @@ public class EnemyController : MonoBehaviour, IEnemy
 
     private void PlayInvestigateAudio()
     {
-        if (chaseAudioSource == null || chaseClip == null) return;
+        CancelLoseTrackTimer();
 
-        if (fadeOutCoroutine != null)
-            StopCoroutine(fadeOutCoroutine);
+        if (chaseAudioSource != null &&
+            chaseClip != null)
+        {
+            if (fadeOutCoroutine != null)
+            {
+                StopCoroutine(fadeOutCoroutine);
+                fadeOutCoroutine = null;
+            }
 
-        chaseAudioSource.clip = chaseClip;
-        chaseAudioSource.volume = investigateStartVolume;
-        chaseAudioSource.loop = true;
-        chaseAudioSource.Play();
+            chaseAudioSource.clip = chaseClip;
+            chaseAudioSource.volume = investigateStartVolume;
+            chaseAudioSource.loop = true;
 
-        chaseAudioPlaying = true;
+            if (!chaseAudioSource.isPlaying)
+                chaseAudioSource.Play();
+
+            chaseAudioPlaying = true;
+        }
     }
 
     private void FadeOutInvestigateAudio()
     {
-        if (!chaseAudioPlaying || chaseAudioSource == null) return;
+        if (!chaseAudioPlaying ||
+            chaseAudioSource == null)
+            return;
+
+        if (fadeOutCoroutine != null)
+            StopCoroutine(fadeOutCoroutine);
 
         fadeOutCoroutine = StartCoroutine(FadeOutCoroutine());
     }
@@ -262,13 +361,299 @@ public class EnemyController : MonoBehaviour, IEnemy
         while (t < chaseFadeOutTime)
         {
             t += Time.deltaTime;
-            chaseAudioSource.volume = Mathf.Lerp(startVolume, 0f, t / chaseFadeOutTime);
+
+            chaseAudioSource.volume = Mathf.Lerp(
+                startVolume,
+                0f,
+                t / chaseFadeOutTime
+            );
+
             yield return null;
         }
 
         chaseAudioSource.Stop();
         chaseAudioSource.volume = investigateStartVolume;
+
         chaseAudioPlaying = false;
+        fadeOutCoroutine = null;
+    }
+
+    private void PlayChaseAudio()
+    {
+        CancelLoseTrackTimer();
+
+        if (chaseAudioSource != null &&
+            chaseClip != null)
+        {
+            if (fadeOutCoroutine != null)
+            {
+                StopCoroutine(fadeOutCoroutine);
+                fadeOutCoroutine = null;
+            }
+
+            chaseAudioSource.clip = chaseClip;
+            chaseAudioSource.volume = investigateStartVolume;
+            chaseAudioSource.loop = true;
+
+            if (!chaseAudioSource.isPlaying)
+                chaseAudioSource.Play();
+
+            chaseAudioPlaying = true;
+        }
+    }
+
+    public void PerceivedSomething()
+    {
+        if (Cheats.EnemyDisabled)
+            return;
+
+        if (enemyChaseSounds == null)
+            return;
+
+        if (enemyChaseSoundClips == null ||
+            enemyChaseSoundClips.Length == 0)
+            return;
+
+        if (perceptionSoundPlaying)
+        {
+            perceptionSoundQueued = true;
+            return;
+        }
+
+        float timeSinceLastSound =
+            Time.time - lastPerceptionSoundTime;
+
+        if (timeSinceLastSound < perceptionSoundCooldown)
+        {
+            perceptionSoundQueued = true;
+
+            if (perceptionSoundCoroutine == null)
+            {
+                perceptionSoundCoroutine =
+                    StartCoroutine(WaitForPerceptionSoundCooldown());
+            }
+
+            return;
+        }
+
+        PlayPerceptionSound();
+    }
+
+    private IEnumerator WaitForPerceptionSoundCooldown()
+    {
+        float remaining =
+            perceptionSoundCooldown -
+            (Time.time - lastPerceptionSoundTime);
+
+        if (remaining > 0f)
+            yield return new WaitForSeconds(remaining);
+
+        perceptionSoundCoroutine = null;
+
+        if (perceptionSoundQueued)
+        {
+            perceptionSoundQueued = false;
+
+            if (!perceptionSoundPlaying)
+                PlayPerceptionSound();
+        }
+    }
+
+    private void PlayPerceptionSound()
+    {
+        AudioClip clip = GetRandomPerceptionSound();
+
+        if (clip == null)
+            return;
+
+        if (perceptionSoundCoroutine != null)
+        {
+            StopCoroutine(perceptionSoundCoroutine);
+            perceptionSoundCoroutine = null;
+        }
+
+        perceptionSoundCoroutine =
+            StartCoroutine(PerceptionSoundCoroutine(clip));
+    }
+
+    private IEnumerator PerceptionSoundCoroutine(AudioClip clip)
+    {
+        perceptionSoundPlaying = true;
+        perceptionSoundQueued = false;
+
+        lastPlayedPerceptionSound = clip;
+        lastPerceptionSoundTime = Time.time;
+
+        enemyChaseSounds.volume = enemyChaseSoundVolume;
+        enemyChaseSounds.loop = false;
+        enemyChaseSounds.clip = clip;
+
+        enemyChaseSounds.Play();
+
+        while (enemyChaseSounds.isPlaying)
+            yield return null;
+
+        enemyChaseSounds.clip = null;
+
+        perceptionSoundPlaying = false;
+        perceptionSoundCoroutine = null;
+
+        if (perceptionSoundQueued)
+        {
+            float remaining =
+                perceptionSoundCooldown -
+                (Time.time - lastPerceptionSoundTime);
+
+            if (remaining > 0f)
+            {
+                perceptionSoundCoroutine =
+                    StartCoroutine(WaitForPerceptionSoundCooldown());
+            }
+            else
+            {
+                perceptionSoundQueued = false;
+                PlayPerceptionSound();
+            }
+        }
+    }
+
+    private AudioClip GetRandomPerceptionSound()
+    {
+        if (enemyChaseSoundClips == null ||
+            enemyChaseSoundClips.Length == 0)
+            return null;
+
+        List<AudioClip> validClips =
+            new List<AudioClip>();
+
+        foreach (AudioClip clip in enemyChaseSoundClips)
+        {
+            if (clip != null &&
+                clip != lastPlayedPerceptionSound)
+            {
+                validClips.Add(clip);
+            }
+        }
+
+        if (validClips.Count == 0)
+        {
+            foreach (AudioClip clip in enemyChaseSoundClips)
+            {
+                if (clip != null)
+                    validClips.Add(clip);
+            }
+        }
+
+        if (validClips.Count == 0)
+            return null;
+
+        return validClips[
+            Random.Range(0, validClips.Count)
+        ];
+    }
+
+    private void StopPerceptionSounds()
+    {
+        perceptionSoundQueued = false;
+        perceptionSoundPlaying = false;
+        lastPlayedPerceptionSound = null;
+        lastPerceptionSoundTime = -Mathf.Infinity;
+
+        if (perceptionSoundCoroutine != null)
+        {
+            StopCoroutine(perceptionSoundCoroutine);
+            perceptionSoundCoroutine = null;
+        }
+
+        if (enemyChaseSounds != null)
+        {
+            enemyChaseSounds.Stop();
+            enemyChaseSounds.clip = null;
+        }
+    }
+
+    private void StartLoseTrackTimer()
+    {
+        if (!chaseAudioPlaying)
+            return;
+
+        if (loseTrackCoroutine != null)
+            return;
+
+        loseTrackCoroutine =
+            StartCoroutine(LoseTrackTimerCoroutine());
+    }
+
+    private IEnumerator LoseTrackTimerCoroutine()
+    {
+        float timer = 0f;
+
+        while (timer < chaseLoseTrackDelay)
+        {
+            if (perception != null &&
+                perception.HasTarget)
+            {
+                loseTrackCoroutine = null;
+                yield break;
+            }
+
+            if (currentState == State.Chase)
+            {
+                loseTrackCoroutine = null;
+                yield break;
+            }
+
+            timer += Time.deltaTime;
+
+            yield return null;
+        }
+
+        FadeOutAllChaseAudio();
+
+        loseTrackCoroutine = null;
+    }
+
+    private void CancelLoseTrackTimer()
+    {
+        if (loseTrackCoroutine != null)
+        {
+            StopCoroutine(loseTrackCoroutine);
+            loseTrackCoroutine = null;
+        }
+    }
+
+    private void FadeOutAllChaseAudio()
+    {
+        if (chaseAudioPlaying &&
+            chaseAudioSource != null)
+        {
+            if (fadeOutCoroutine != null)
+                StopCoroutine(fadeOutCoroutine);
+
+            fadeOutCoroutine =
+                StartCoroutine(FadeOutCoroutine());
+        }
+    }
+
+    private void StopAllAudio()
+    {
+        CancelLoseTrackTimer();
+
+        if (fadeOutCoroutine != null)
+        {
+            StopCoroutine(fadeOutCoroutine);
+            fadeOutCoroutine = null;
+        }
+
+        if (chaseAudioSource != null)
+        {
+            chaseAudioSource.Stop();
+            chaseAudioSource.volume = investigateStartVolume;
+        }
+
+        chaseAudioPlaying = false;
+
+        StopPerceptionSounds();
     }
 
     public void SetLastKnownPosition(Vector3 pos)
@@ -278,44 +663,47 @@ public class EnemyController : MonoBehaviour, IEnemy
 
     public void ResetStateAfterLoad()
     {
+        StopAllAudio();
         currentState = State.Patrol;
     }
 
-    // ======================================================
-    // IEnemy
-    // ======================================================
-
     public void AlertToPosition(Vector3 worldPos)
     {
-        if (Cheats.EnemyDisabled) return;
+        if (Cheats.EnemyDisabled)
+            return;
 
         if (Random.value <= settings.InvestigateChance)
         {
             lastKnownPosition = worldPos;
             timeSinceSeen = 0f;
             investigateTimer = 0f;
+
             SetState(State.Investigate);
         }
     }
 
     public void AlertToTarget(Transform targetTransform)
     {
-        if (Cheats.EnemyDisabled) return;
+        if (Cheats.EnemyDisabled)
+            return;
 
         target = targetTransform;
         lastKnownPosition = targetTransform.position;
         timeSinceSeen = 0f;
         investigateTimer = 0f;
+
         SetState(State.Chase);
     }
 
     public void TakeDamage(int amount, Vector3 hitPoint)
     {
-        if (Cheats.EnemyDisabled) return;
+        if (Cheats.EnemyDisabled)
+            return;
 
         if (health != null)
         {
             health.TakeDamage(amount, hitPoint);
+
             if (!health.IsAlive)
             {
                 SetState(State.Dead);
@@ -326,6 +714,7 @@ public class EnemyController : MonoBehaviour, IEnemy
         lastKnownPosition = hitPoint;
         timeSinceSeen = 0f;
         investigateTimer = 0f;
+
         SetState(State.Investigate);
     }
 
@@ -334,5 +723,6 @@ public class EnemyController : MonoBehaviour, IEnemy
         movementLocked = locked;
     }
 
-    public bool IsAlive => health == null || health.IsAlive;
+    public bool IsAlive =>
+        health == null || health.IsAlive;
 }

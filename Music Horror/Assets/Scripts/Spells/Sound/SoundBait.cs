@@ -1,10 +1,23 @@
 using UnityEngine;
+using UnityEngine.AI;
 using System.Collections;
 using System.Collections.Generic;
 
 [RequireComponent(typeof(AudioSource))]
 public class SoundBait : MonoBehaviour
 {
+    [System.Serializable]
+    public class AttackSound
+    {
+        public AudioClip clip;
+
+        [Range(0f, 1f)]
+        public float volume = 1f;
+
+        [Tooltip("AudioSource used to play this sound. If empty, PlayClipAtPoint will be used.")]
+        public AudioSource audioSource;
+    }
+
     [Header("Fade Settings")]
     [SerializeField] private Renderer objectRenderer;
 
@@ -23,6 +36,21 @@ public class SoundBait : MonoBehaviour
     [Header("Enemy Attack")]
     [SerializeField] private float attackDisableDuration = 5f;
 
+    [Header("Attack Start Effects")]
+    [SerializeField] private float attackEffectDelay = 0f;
+
+    [Tooltip("Each sound can have its own AudioSource and volume.")]
+    [SerializeField] private List<AttackSound> attackSounds = new();
+
+    [Header("Smoke Effect")]
+    [SerializeField] private GameObject smokePrefab;
+    [SerializeField] private Transform smokeLocation;
+
+    [Header("Enemy")]
+    [SerializeField] private bool enableEnemy = false;
+    [SerializeField] private GameObject enemy;
+    [SerializeField] private EnemyAudioEmitter alternateEnemyAudioEmitter;
+
     private AudioSource audioSource;
     private EnemyAudioEmitter emitter;
     private float startVolume;
@@ -38,8 +66,19 @@ public class SoundBait : MonoBehaviour
 
     private void OnEnable()
     {
+        if (enableEnemy)
+        {
+            emitter = alternateEnemyAudioEmitter;
+
+            if (enemy != null)
+                enemy.SetActive(true);
+        }
+        else
+        {
+            emitter = GetComponent<EnemyAudioEmitter>();
+        }
+
         audioSource = GetComponent<AudioSource>();
-        emitter = GetComponent<EnemyAudioEmitter>();
 
         if (objectRenderer == null)
             objectRenderer = GetComponentInChildren<Renderer>();
@@ -133,21 +172,15 @@ public class SoundBait : MonoBehaviour
 
             RestoreMaterialAndStop();
 
-            // The coroutine must finish before destroying this object,
-            // otherwise the coroutine would be stopped along with it.
             StartCoroutine(DisableEnemyScriptsDuringAttack(enemyAttack));
         }
     }
 
     private IEnumerator DisableEnemyScriptsDuringAttack(EnemyAttack enemyAttack)
     {
-        // Get every MonoBehaviour attached to the same GameObject
-        // as EnemyAttack.
+
         MonoBehaviour[] scripts = enemyAttack.GetComponents<MonoBehaviour>();
 
-        // Keep track of only the scripts that were originally enabled.
-        // This prevents us from accidentally enabling scripts that were
-        // already disabled before the attack.
         List<MonoBehaviour> disabledScripts = new List<MonoBehaviour>();
 
         foreach (MonoBehaviour script in scripts)
@@ -155,7 +188,6 @@ public class SoundBait : MonoBehaviour
             if (script == null)
                 continue;
 
-            // EnemyAttack must remain enabled.
             if (script == enemyAttack)
                 continue;
 
@@ -166,13 +198,39 @@ public class SoundBait : MonoBehaviour
             }
         }
 
-        // Trigger the attack while all other scripts are disabled.
+        // Disable the NavMeshAgent separately.
+        NavMeshAgent navMeshAgent = enemyAttack.GetComponent<NavMeshAgent>();
+
+        bool navMeshAgentWasEnabled = false;
+
+        if (navMeshAgent != null && navMeshAgent.enabled)
+        {
+            navMeshAgentWasEnabled = true;
+            navMeshAgent.enabled = false;
+        }
+
         enemyAttack.TriggerAttackAnimationOnly();
 
-        // Keep the enemy locked for the specified amount of time.
-        yield return new WaitForSeconds(attackDisableDuration);
 
-        // Restore the scripts that were enabled before the attack.
+        if (attackEffectDelay > 0f)
+        {
+            yield return new WaitForSeconds(attackEffectDelay);
+        }
+
+
+        PlayAttackStartSounds();
+
+
+        SpawnSmoke();
+
+
+        float remainingLockTime = attackDisableDuration - attackEffectDelay;
+
+        if (remainingLockTime > 0f)
+        {
+            yield return new WaitForSeconds(remainingLockTime);
+        }
+
         foreach (MonoBehaviour script in disabledScripts)
         {
             if (script != null)
@@ -181,8 +239,64 @@ public class SoundBait : MonoBehaviour
             }
         }
 
-        // The bait has finished its job.
+        if (navMeshAgent != null && navMeshAgentWasEnabled)
+        {
+            navMeshAgent.enabled = true;
+        }
+
         Destroy(gameObject);
+    }
+
+    private void PlayAttackStartSounds()
+    {
+        foreach (AttackSound sound in attackSounds)
+        {
+            if (sound == null || sound.clip == null)
+                continue;
+
+
+            if (sound.audioSource != null)
+            {
+                sound.audioSource.PlayOneShot(
+                    sound.clip,
+                    sound.volume
+                );
+            }
+
+            else
+            {
+                GameObject tempAudioObject = new GameObject(
+                    "Attack Sound - " + sound.clip.name
+                );
+
+                tempAudioObject.transform.position = transform.position;
+
+                AudioSource tempSource =
+                    tempAudioObject.AddComponent<AudioSource>();
+
+                tempSource.clip = sound.clip;
+                tempSource.volume = sound.volume;
+                tempSource.spatialBlend = 1f;
+                tempSource.Play();
+
+                Destroy(
+                    tempAudioObject,
+                    sound.clip.length + 0.1f
+                );
+            }
+        }
+    }
+
+    private void SpawnSmoke()
+    {
+        if (smokePrefab == null || smokeLocation == null)
+            return;
+
+        Instantiate(
+            smokePrefab,
+            smokeLocation.position,
+            smokeLocation.rotation
+        );
     }
 
     private void RestoreMaterialAndStop()

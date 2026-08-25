@@ -142,19 +142,19 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: ccd38528f2c82554e9475c1faa098474, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -273.659
+      value: -20.904999
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ccd38528f2c82554e9475c1faa098474, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 61.5
+      value: -3.1559982
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ccd38528f2c82554e9475c1faa098474, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 52.48075
+      value: -26.557
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ccd38528f2c82554e9475c1faa098474, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.000003904104
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ccd38528f2c82554e9475c1faa098474, type: 3}
       propertyPath: m_LocalRotation.x
@@ -162,7 +162,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ccd38528f2c82554e9475c1faa098474, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 1
+      value: -0.0000037103891
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ccd38528f2c82554e9475c1faa098474, type: 3}
       propertyPath: m_LocalRotation.z
@@ -174,7 +174,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ccd38528f2c82554e9475c1faa098474, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 180
+      value: -360
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ccd38528f2c82554e9475c1faa098474, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -376,8 +376,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.84
-  m_Center: {x: 0.36282563, y: 0.000000029802322, z: -0.00000014901161}
+  m_Radius: 0.7081525
+  m_Center: {x: 0.49467307, y: 0.000000059604645, z: -0.00000011920918}
 --- !u!114 &8939495861144525151
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -393,6 +393,23 @@ MonoBehaviour:
   objectRenderer: {fileID: 8046288743783899660}
   activeMaterial: {fileID: 2100000, guid: 8801144271ab76f418af4a7776629578, type: 2}
   activeDuration: 7
+  musicClips:
+  - {fileID: 8300000, guid: 95a35fb1f547b3f4da488cea9fea0a97, type: 3}
+  - {fileID: 8300000, guid: 672138ea6b34e084e94eadcd9301d539, type: 3}
+  pulseEnabled: 1
+  pulseSpeed: 4
+  pulseAmount: 0.1
+  attackDisableDuration: 5
+  attackEffectDelay: 0
+  attackSounds:
+  - clip: {fileID: 8300000, guid: 074ef5c47709ff44ebdef1aab899e98a, type: 3}
+    volume: 0.266
+    audioSource: {fileID: 1896665035265025019}
+  smokePrefab: {fileID: 0}
+  smokeLocation: {fileID: 0}
+  enableEnemy: 0
+  enemy: {fileID: 0}
+  alternateEnemyAudioEmitter: {fileID: 0}
 --- !u!114 &1461144360535197076
 MonoBehaviour:
   m_ObjectHideFlags: 0

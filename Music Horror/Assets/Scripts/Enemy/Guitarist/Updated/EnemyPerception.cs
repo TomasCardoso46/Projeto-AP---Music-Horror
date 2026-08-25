@@ -8,9 +8,13 @@ public class EnemyPerception : MonoBehaviour
 
     private EnemySettings settings;
     private EnemyController controller;
+
     private Transform _target;
+
     public Transform Target => _target;
     public bool HasTarget { get; private set; }
+
+    private bool previouslyPerceivedSomething = false;
 
     public void Initialize(EnemySettings settingsAsset, EnemyController owner)
     {
@@ -22,55 +26,116 @@ public class EnemyPerception : MonoBehaviour
     {
         HasTarget = false;
 
+        bool perceivedSomething = false;
+
         GameObject found = GameObject.FindWithTag(targetTag);
+
         if (found != null)
         {
             Transform t = found.transform;
+
             if (CanSee(t))
             {
                 HasTarget = true;
                 _target = t;
+                perceivedSomething = true;
+
+                if (!previouslyPerceivedSomething)
+                {
+                    controller.PerceivedSomething();
+                }
+
+                previouslyPerceivedSomething = true;
+
                 return;
             }
         }
 
-        // Hearing: sphere overlap to detect noisy objects
-        Collider[] hits = Physics.OverlapSphere(transform.position, settings.HighHearingRange); // use largest
+        Collider[] hits = Physics.OverlapSphere(
+            transform.position,
+            settings.HighHearingRange
+        );
+
         foreach (var col in hits)
         {
             var emitter = col.GetComponent<EnemyAudioEmitter>();
+
             if (emitter != null)
             {
-                float distance = Vector3.Distance(transform.position, emitter.transform.position);
+                float distance = Vector3.Distance(
+                    transform.position,
+                    emitter.transform.position
+                );
 
-                if ((emitter.IsEmittingHigh && distance <= settings.HighHearingRange) ||
-                    (emitter.IsEmittingNormal && distance <= settings.NormalHearingRange) ||
-                    (emitter.IsEmittingLow && distance <= settings.LowHearingRange))
+                if ((emitter.IsEmittingHigh &&
+                     distance <= settings.HighHearingRange) ||
+                    (emitter.IsEmittingNormal &&
+                     distance <= settings.NormalHearingRange) ||
+                    (emitter.IsEmittingLow &&
+                     distance <= settings.LowHearingRange))
                 {
-                    controller.AlertToPosition(emitter.transform.position);
+                    perceivedSomething = true;
+
+                    if (!previouslyPerceivedSomething)
+                    {
+                        controller.PerceivedSomething();
+                    }
+
+                    previouslyPerceivedSomething = true;
+
+                    controller.AlertToPosition(
+                        emitter.transform.position
+                    );
+
                     return;
                 }
             }
         }
 
+        if (!perceivedSomething)
+        {
+            previouslyPerceivedSomething = false;
+        }
     }
 
     private bool CanSee(Transform t)
     {
-        Vector3 dir = (t.position - transform.position);
+        Vector3 dir = t.position - transform.position;
         float dist = dir.magnitude;
-        if (dist > settings.SightRange) return false;
+
+        if (dist > settings.SightRange)
+            return false;
+
         dir.Normalize();
 
-        float angle = Vector3.Angle(transform.forward, dir);
-        if (angle > settings.SightFOV * 0.5f) return false;
+        float angle = Vector3.Angle(
+            transform.forward,
+            dir
+        );
 
-        Ray ray = new Ray(transform.position + Vector3.up * 0.8f, dir);
-        if (Physics.Raycast(ray, out RaycastHit hit, settings.SightRange, ~0))
+        if (angle > settings.SightFOV * 0.5f)
+            return false;
+
+        Ray ray = new Ray(
+            transform.position + Vector3.up * 0.8f,
+            dir
+        );
+
+        if (Physics.Raycast(
+            ray,
+            out RaycastHit hit,
+            settings.SightRange,
+            ~0))
         {
-            if (hit.transform == t || hit.transform.IsChildOf(t)) return true;
+            if (hit.transform == t ||
+                hit.transform.IsChildOf(t))
+            {
+                return true;
+            }
+
             return false;
         }
+
         return false;
     }
 }
