@@ -20,6 +20,9 @@ public class SoundBait : MonoBehaviour
     [SerializeField] private float pulseSpeed = 4f;
     [SerializeField] private float pulseAmount = 0.1f;
 
+    [Header("Enemy Attack")]
+    [SerializeField] private float attackDisableDuration = 5f;
+
     private AudioSource audioSource;
     private EnemyAudioEmitter emitter;
     private float startVolume;
@@ -43,9 +46,10 @@ public class SoundBait : MonoBehaviour
 
         startVolume = audioSource.volume;
 
-        originalMaterial = objectRenderer.material;
+        if (objectRenderer != null)
+            originalMaterial = objectRenderer.material;
 
-        if (activeMaterial != null)
+        if (activeMaterial != null && objectRenderer != null)
         {
             objectRenderer.material = activeMaterial;
         }
@@ -53,7 +57,6 @@ public class SoundBait : MonoBehaviour
         originalScale = transform.localScale;
 
         musicLoopCoroutine = StartCoroutine(MusicLoop());
-
         emitLoopCoroutine = StartCoroutine(EmitHighSoundLoop());
 
         StartCoroutine(DeactivateAfterDelay());
@@ -96,7 +99,14 @@ public class SoundBait : MonoBehaviour
     {
         while (true)
         {
-            emitter.EmitSound(EnemyAudioEmitter.SoundLevel.High, 0.3f);
+            if (emitter != null)
+            {
+                emitter.EmitSound(
+                    EnemyAudioEmitter.SoundLevel.High,
+                    0.3f
+                );
+            }
+
             yield return new WaitForSeconds(0.1f);
         }
     }
@@ -121,17 +131,63 @@ public class SoundBait : MonoBehaviour
         {
             enemyTriggered = true;
 
-            enemyAttack.TriggerAttackAnimationOnly();
-
             RestoreMaterialAndStop();
 
-            Destroy(gameObject);
+            // The coroutine must finish before destroying this object,
+            // otherwise the coroutine would be stopped along with it.
+            StartCoroutine(DisableEnemyScriptsDuringAttack(enemyAttack));
         }
+    }
+
+    private IEnumerator DisableEnemyScriptsDuringAttack(EnemyAttack enemyAttack)
+    {
+        // Get every MonoBehaviour attached to the same GameObject
+        // as EnemyAttack.
+        MonoBehaviour[] scripts = enemyAttack.GetComponents<MonoBehaviour>();
+
+        // Keep track of only the scripts that were originally enabled.
+        // This prevents us from accidentally enabling scripts that were
+        // already disabled before the attack.
+        List<MonoBehaviour> disabledScripts = new List<MonoBehaviour>();
+
+        foreach (MonoBehaviour script in scripts)
+        {
+            if (script == null)
+                continue;
+
+            // EnemyAttack must remain enabled.
+            if (script == enemyAttack)
+                continue;
+
+            if (script.enabled)
+            {
+                script.enabled = false;
+                disabledScripts.Add(script);
+            }
+        }
+
+        // Trigger the attack while all other scripts are disabled.
+        enemyAttack.TriggerAttackAnimationOnly();
+
+        // Keep the enemy locked for the specified amount of time.
+        yield return new WaitForSeconds(attackDisableDuration);
+
+        // Restore the scripts that were enabled before the attack.
+        foreach (MonoBehaviour script in disabledScripts)
+        {
+            if (script != null)
+            {
+                script.enabled = true;
+            }
+        }
+
+        // The bait has finished its job.
+        Destroy(gameObject);
     }
 
     private void RestoreMaterialAndStop()
     {
-        if (originalMaterial != null)
+        if (originalMaterial != null && objectRenderer != null)
         {
             objectRenderer.material = originalMaterial;
         }
@@ -141,11 +197,13 @@ public class SoundBait : MonoBehaviour
         if (emitLoopCoroutine != null)
         {
             StopCoroutine(emitLoopCoroutine);
+            emitLoopCoroutine = null;
         }
 
         if (musicLoopCoroutine != null)
         {
             StopCoroutine(musicLoopCoroutine);
+            musicLoopCoroutine = null;
         }
 
         if (audioSource != null)

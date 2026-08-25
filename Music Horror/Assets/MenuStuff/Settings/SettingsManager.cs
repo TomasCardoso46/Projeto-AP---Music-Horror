@@ -1,3 +1,4 @@
+
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
@@ -46,7 +47,6 @@ public class SettingsManager : MonoBehaviour
         ApplyGammaToAllVolumes();
     }
 
-
     public void SetVolume(float value)
     {
         volume = Mathf.Clamp01(value);
@@ -56,7 +56,6 @@ public class SettingsManager : MonoBehaviour
         PlayerPrefs.SetFloat(VolumeKey, volume);
         PlayerPrefs.Save();
     }
-
 
     public void SetGamma(float value)
     {
@@ -72,7 +71,7 @@ public class SettingsManager : MonoBehaviour
     {
         Volume[] volumes = FindObjectsByType<Volume>(FindObjectsSortMode.None);
 
-        float g = Mathf.Clamp(gamma, 0.1f, 3f);
+        float exposure = Mathf.Clamp(gamma, 0.1f, 3f);
 
         foreach (var v in volumes)
         {
@@ -81,13 +80,11 @@ public class SettingsManager : MonoBehaviour
 
             if (v.profile.TryGet(out ColorAdjustments colorAdjustments))
             {
-                colorAdjustments.colorFilter.overrideState = true;
-
-                colorAdjustments.colorFilter.value = new Color(g, g, g, 1f);
+                colorAdjustments.postExposure.overrideState = true;
+                colorAdjustments.postExposure.value = exposure;
             }
         }
     }
-
 
     public void SetCrouchMode(bool value)
     {
@@ -96,7 +93,6 @@ public class SettingsManager : MonoBehaviour
         PlayerPrefs.SetInt(CrouchKey, value ? 1 : 0);
         PlayerPrefs.Save();
     }
-
 
     void LoadSettings()
     {
@@ -115,7 +111,6 @@ public class SettingsManager : MonoBehaviour
         SetCrouchMode(defaultCrouchToggle);
     }
 
-
     public void EnterSettings()
     {
         Cursor.lockState = CursorLockMode.None;
@@ -127,3 +122,4 @@ public class SettingsManager : MonoBehaviour
         
     }
 }
+
