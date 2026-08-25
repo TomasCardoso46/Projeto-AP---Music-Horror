@@ -22,7 +22,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3ab959c832955f644812b7f20660dc0c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -236.41
+      value: -253.31006
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3ab959c832955f644812b7f20660dc0c, type: 3}
       propertyPath: m_LocalPosition.y
@@ -30,7 +30,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3ab959c832955f644812b7f20660dc0c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 101.74
+      value: 113.642914
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3ab959c832955f644812b7f20660dc0c, type: 3}
       propertyPath: m_LocalRotation.w
@@ -64,6 +64,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 3ab959c832955f644812b7f20660dc0c, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: c0c034f6096e58a4ca7c867d7956e320, type: 2}
     - target: {fileID: 919132149155446097, guid: 3ab959c832955f644812b7f20660dc0c, type: 3}
       propertyPath: m_Name
       value: CorpseLyingDown1
