@@ -508,7 +508,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70a80b707a5391a49a7928056874c2ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RotateObject
-  objectToMove: {fileID: 3593075546733833079}
   rotationSpeed: 1
 --- !u!114 &3608527208191706607
 MonoBehaviour:

@@ -508,7 +508,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70a80b707a5391a49a7928056874c2ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RotateObject
-  objectToMove: {fileID: 3593075546733833079}
   rotationSpeed: 1
 --- !u!114 &3608527208191706607
 MonoBehaviour:
@@ -663,9 +662,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Ive got Knives and Guns for days
-
-    Lets all go out in different ways'
+  m_text: "i dont think he sees me\ni dont think he can see at all\nbut i hear him
+    constantly running around \nhunting mice"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 30f1bf912bbc92b41a1b978cf3ddb150, type: 2}
   m_sharedMaterial: {fileID: -4329910768124186837, guid: 30f1bf912bbc92b41a1b978cf3ddb150, type: 2}
