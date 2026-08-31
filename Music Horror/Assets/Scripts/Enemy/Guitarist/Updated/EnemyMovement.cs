@@ -11,6 +11,16 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private EnemyController controller;
     [SerializeField] private Animator animator;
 
+    [Header("Animation Speed")]
+    [SerializeField] private float animationReferenceSpeed = 2.0f;
+    [SerializeField] private float minimumAnimationSpeed = 0.0f;
+    [SerializeField] private float maximumAnimationSpeed = 3.0f;
+    [SerializeField] private float animationSpeedSmoothTime = 0.08f;
+    [SerializeField] private float idleAnimationSpeed = 1.0f;
+
+    [Header("Rotation Settings")]
+    [SerializeField] private float turnSnapAngle = 70f;
+
     [Header("Audio Settings")]
     [SerializeField] private AudioSource breathingSource;
     [SerializeField] private AudioSource footstepSource;
@@ -20,9 +30,7 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private AudioClip[] roamFootstepClips;
     [SerializeField] private AudioClip[] chaseFootstepClips;
 
-    [Header("Footstep")]
-    [SerializeField] private float roamFootstepRate = 0.55f;
-    [SerializeField] private float chaseFootstepRate = 0.35f;
+    [Header("Footstep Pitch")]
     [SerializeField] private float roamFootstepPitch = 1.0f;
     [SerializeField] private float chaseFootstepPitch = 1.3f;
 
@@ -31,16 +39,20 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private float maxRoamPointWait = 2.5f;
 
     private Coroutine roamCoroutine;
-    private float stepTimer = 0f;
 
     private int lastRoamFootstepIndex = -1;
     private int lastChaseFootstepIndex = -1;
+
+    private float currentAnimationSpeed;
+    private float animationSpeedVelocity;
 
     public void Initialize(EnemySettings s, IEnemy owner)
     {
         settings = s;
         controller = owner as EnemyController;
         agent ??= GetComponent<NavMeshAgent>();
+
+        agent.updateRotation = true;
 
         if (breathingSource && breathingClip)
         {
@@ -56,18 +68,25 @@ public class EnemyMovement : MonoBehaviour
             footstepSource.spatialBlend = 1f;
             footstepSource.rolloffMode = AudioRolloffMode.Logarithmic;
         }
+
+        if (animator)
+        {
+            animator.speed = idleAnimationSpeed;
+            currentAnimationSpeed = idleAnimationSpeed;
+        }
     }
 
     public void Idle()
     {
         StopRoam();
+
         agent.isStopped = true;
-        stepTimer = 0f;
     }
 
     public void Patrol()
     {
         StopRoam();
+
         agent.isStopped = false;
         agent.speed = settings.PatrolSpeed;
 
@@ -77,9 +96,11 @@ public class EnemyMovement : MonoBehaviour
 
     public void MoveTo(Vector3 pos)
     {
-        if (!agent.isOnNavMesh) return;
+        if (!agent.isOnNavMesh)
+            return;
 
         StopRoam();
+
         agent.isStopped = false;
         agent.speed = settings.ChaseSpeed;
         agent.SetDestination(pos);
@@ -90,9 +111,11 @@ public class EnemyMovement : MonoBehaviour
 
     public void Chase(Transform t)
     {
-        if (!agent.isOnNavMesh) return;
+        if (!agent.isOnNavMesh)
+            return;
 
         StopRoam();
+
         agent.isStopped = false;
         agent.speed = settings.ChaseSpeed;
         agent.SetDestination(t.position);
@@ -104,6 +127,7 @@ public class EnemyMovement : MonoBehaviour
     public void DisableMovement()
     {
         StopRoam();
+
         agent.isStopped = true;
         agent.enabled = false;
     }
@@ -122,7 +146,10 @@ public class EnemyMovement : MonoBehaviour
         {
             Vector3 target;
 
-            if (!EnemyUtilities.RandomNavSphere(center, settings.RoamRadius, out target))
+            if (!EnemyUtilities.RandomNavSphere(
+                    center,
+                    settings.RoamRadius,
+                    out target))
             {
                 yield return null;
                 elapsed += Time.deltaTime;
@@ -130,6 +157,7 @@ public class EnemyMovement : MonoBehaviour
             }
 
             agent.isStopped = false;
+            agent.speed = settings.PatrolSpeed;
             agent.SetDestination(target);
 
             float moveTimer = 0f;
@@ -160,7 +188,11 @@ public class EnemyMovement : MonoBehaviour
 
             agent.isStopped = true;
 
-            float waitTime = Random.Range(minRoamPointWait, maxRoamPointWait);
+            float waitTime = Random.Range(
+                minRoamPointWait,
+                maxRoamPointWait
+            );
+
             float waitTimer = 0f;
 
             while (waitTimer < waitTime)
@@ -192,8 +224,86 @@ public class EnemyMovement : MonoBehaviour
 
     private void Update()
     {
-        HandleFootsteps();
+        HandleRotationSnap();
         HandleAnimations();
+        HandleAnimationSpeed();
+    }
+
+    private void HandleAnimationSpeed()
+    {
+        if (animator == null || !agent.enabled)
+            return;
+
+        bool moving = agent.velocity.sqrMagnitude > 0.001f;
+
+        if (!moving)
+        {
+            currentAnimationSpeed = Mathf.SmoothDamp(
+                currentAnimationSpeed,
+                idleAnimationSpeed,
+                ref animationSpeedVelocity,
+                animationSpeedSmoothTime
+            );
+
+            animator.speed = currentAnimationSpeed;
+            return;
+        }
+
+        float actualSpeed = agent.velocity.magnitude;
+
+        float targetAnimationSpeed = actualSpeed / animationReferenceSpeed;
+
+        targetAnimationSpeed = Mathf.Clamp(
+            targetAnimationSpeed,
+            minimumAnimationSpeed,
+            maximumAnimationSpeed
+        );
+
+        currentAnimationSpeed = Mathf.SmoothDamp(
+            currentAnimationSpeed,
+            targetAnimationSpeed,
+            ref animationSpeedVelocity,
+            animationSpeedSmoothTime
+        );
+
+        animator.speed = currentAnimationSpeed;
+    }
+
+    private void HandleRotationSnap()
+    {
+        if (!agent.enabled)
+            return;
+
+        if (agent.isStopped)
+            return;
+
+        if (agent.desiredVelocity.sqrMagnitude < 0.01f)
+            return;
+
+        Vector3 desiredDirection = agent.desiredVelocity;
+        desiredDirection.y = 0f;
+
+        if (desiredDirection.sqrMagnitude < 0.01f)
+            return;
+
+        desiredDirection.Normalize();
+
+        Vector3 forward = transform.forward;
+        forward.y = 0f;
+        forward.Normalize();
+
+        float angle = Vector3.Angle(
+            forward,
+            desiredDirection
+        );
+
+        if (angle >= turnSnapAngle)
+        {
+            transform.rotation = Quaternion.LookRotation(
+                desiredDirection,
+                Vector3.up
+            );
+        }
     }
 
     private void HandleAnimations()
@@ -203,39 +313,15 @@ public class EnemyMovement : MonoBehaviour
             !agent.isStopped &&
             agent.velocity.sqrMagnitude > 0.1f;
 
-        animator.SetBool("animIsWalking", walking);
+        if (animator)
+            animator.SetBool("animIsWalking", walking);
     }
 
-    private void HandleFootsteps()
+    public void PlayRoamFootstep()
     {
-        if (agent.velocity.sqrMagnitude < 0.1f || agent.isStopped)
-        {
-            stepTimer = 0f;
-            return;
-        }
-
-        stepTimer += Time.deltaTime;
-
-        bool chasing = Mathf.Approximately(agent.speed, settings.ChaseSpeed);
-
-        float rate = chasing
-            ? chaseFootstepRate
-            : roamFootstepRate;
-
-        if (stepTimer >= rate)
-        {
-            if (chasing)
-                PlayRandomChaseFootstep();
-            else
-                PlayRandomRoamFootstep();
-
-            stepTimer = 0f;
-        }
-    }
-
-    private void PlayRandomRoamFootstep()
-    {
-        if (footstepSource == null || roamFootstepClips == null || roamFootstepClips.Length == 0)
+        if (footstepSource == null ||
+            roamFootstepClips == null ||
+            roamFootstepClips.Length == 0)
             return;
 
         int index;
@@ -248,18 +334,28 @@ public class EnemyMovement : MonoBehaviour
         {
             do
             {
-                index = Random.Range(0, roamFootstepClips.Length);
+                index = Random.Range(
+                    0,
+                    roamFootstepClips.Length
+                );
             }
             while (index == lastRoamFootstepIndex);
         }
 
         lastRoamFootstepIndex = index;
-        footstepSource.PlayOneShot(roamFootstepClips[index]);
+
+        footstepSource.pitch = roamFootstepPitch;
+
+        footstepSource.PlayOneShot(
+            roamFootstepClips[index]
+        );
     }
 
-    private void PlayRandomChaseFootstep()
+    public void PlayChaseFootstep()
     {
-        if (footstepSource == null || chaseFootstepClips == null || chaseFootstepClips.Length == 0)
+        if (footstepSource == null ||
+            chaseFootstepClips == null ||
+            chaseFootstepClips.Length == 0)
             return;
 
         int index;
@@ -272,12 +368,41 @@ public class EnemyMovement : MonoBehaviour
         {
             do
             {
-                index = Random.Range(0, chaseFootstepClips.Length);
+                index = Random.Range(
+                    0,
+                    chaseFootstepClips.Length
+                );
             }
             while (index == lastChaseFootstepIndex);
         }
 
         lastChaseFootstepIndex = index;
-        footstepSource.PlayOneShot(chaseFootstepClips[index]);
+
+        footstepSource.pitch = chaseFootstepPitch;
+
+        footstepSource.PlayOneShot(
+            chaseFootstepClips[index]
+        );
+    }
+
+    public void PlayFootstep()
+    {
+        if (controller == null)
+        {
+            PlayRoamFootstep();
+            return;
+        }
+
+        switch (controller.currentState)
+        {
+            case EnemyController.State.Investigate:
+            case EnemyController.State.Chase:
+                PlayChaseFootstep();
+                break;
+
+            default:
+                PlayRoamFootstep();
+                break;
+        }
     }
 }
