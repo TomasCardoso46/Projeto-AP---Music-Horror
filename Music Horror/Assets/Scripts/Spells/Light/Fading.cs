@@ -1,10 +1,18 @@
 using UnityEngine;
 
+[RequireComponent(typeof(Light))]
 public class Fading : MonoBehaviour
 {
-    [Header("Light Settings")]
+    [Header("UV Light Settings")]
     [SerializeField] private float initialIntensity = 5f;
     [SerializeField] private float decayRate = 1f;
+
+    [Tooltip("Color of the UV flashlight.")]
+    [SerializeField] private Color uvColor = new Color(0.35f, 0f, 1f);
+
+    [SerializeField] private float range = 10f;
+
+    [SerializeField] private float spotAngle = 45f;
 
     [Header("Recharge Settings")]
     [SerializeField] private KeyCode rechargeKey = KeyCode.E;
@@ -13,14 +21,26 @@ public class Fading : MonoBehaviour
     private Light lightComponent;
     private float currentIntensity;
 
+    public Light UVLight => lightComponent;
+    public float CurrentIntensity => currentIntensity;
+
     private void Awake()
     {
         lightComponent = GetComponent<Light>();
 
         currentIntensity = initialIntensity;
-        lightComponent.intensity = currentIntensity;
 
+        SetupUVLight();
         AttachToFlashlight();
+    }
+
+    private void SetupUVLight()
+    {
+        lightComponent.type = LightType.Spot;
+        lightComponent.color = uvColor;
+        lightComponent.intensity = currentIntensity;
+        lightComponent.range = range;
+        lightComponent.spotAngle = spotAngle;
     }
 
     private void AttachToFlashlight()
@@ -30,11 +50,13 @@ public class Fading : MonoBehaviour
         if (flashlight != null)
         {
             transform.SetParent(flashlight.transform);
+
             transform.localPosition = Vector3.zero;
+            transform.localRotation = Quaternion.identity;
         }
         else
         {
-            Debug.LogWarning("FadingFollowLight: No Flashlight component found in scene.");
+            Debug.LogWarning("Fading: No Flashlight component found in scene.");
         }
     }
 
