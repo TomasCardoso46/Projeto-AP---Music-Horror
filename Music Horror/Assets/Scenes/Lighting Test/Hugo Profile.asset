@@ -92,14 +92,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.ShadowsMidtonesHighlights
   active: 1
   shadows:
-    m_OverrideState: 0
-    m_Value: {x: 0.6033988, y: 1, z: 0.99205863, w: 0.15203196}
+    m_OverrideState: 1
+    m_Value: {x: 1, y: 0.8924482, z: 0.9305531, w: 0.042795915}
   midtones:
     m_OverrideState: 0
-    m_Value: {x: 0.7204963, y: 1, z: 0.5769111, w: 0.34446767}
+    m_Value: {x: 0.35362053, y: 0.6582975, z: 1, w: 0.230345}
   highlights:
     m_OverrideState: 0
-    m_Value: {x: 1, y: 1, z: 1, w: 0}
+    m_Value: {x: 0.72771424, y: 0.8439786, z: 1, w: 0}
   shadowsStart:
     m_OverrideState: 1
     m_Value: 0
@@ -215,10 +215,10 @@ MonoBehaviour:
     m_Value: 2
   intensity:
     m_OverrideState: 1
-    m_Value: 0.256
+    m_Value: 0.18
   response:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 1
   texture:
     m_OverrideState: 0
     m_Value: {fileID: 0}
@@ -243,10 +243,10 @@ MonoBehaviour:
     m_Value: {x: 0.5, y: 0.5}
   intensity:
     m_OverrideState: 1
-    m_Value: 0.153
+    m_Value: 0.36
   smoothness:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 0.25
   rounded:
     m_OverrideState: 0
     m_Value: 0
@@ -305,10 +305,10 @@ MonoBehaviour:
   active: 1
   lift:
     m_OverrideState: 0
-    m_Value: {x: 1, y: 1, z: 1, w: 0}
+    m_Value: {x: 0.9999456, y: 0.82249117, z: 1, w: -0.057061322}
   gamma:
     m_OverrideState: 1
-    m_Value: {x: 0.94775444, y: 0.9923865, z: 1, w: 0.09367681}
+    m_Value: {x: 0.87704235, y: 0.92537355, z: 1, w: 0.09367681}
   gain:
     m_OverrideState: 0
     m_Value: {x: 1, y: 1, z: 1, w: 0.0070260107}
@@ -326,7 +326,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.ColorCurves
   active: 1
   master:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value:
       <length>k__BackingField: 4
       m_Loop: 0
@@ -509,13 +509,31 @@ MonoBehaviour:
   lumVsSat:
     m_OverrideState: 1
     m_Value:
-      <length>k__BackingField: 0
+      <length>k__BackingField: 2
       m_Loop: 0
       m_ZeroValue: 0.5
       m_Range: 1
       m_Curve:
         serializedVersion: 2
-        m_Curve: []
+        m_Curve:
+        - serializedVersion: 3
+          time: 0.3043478
+          value: 0.5775862
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 0.798419
+          value: 0.62931037
+          inSlope: 1.8538789
+          outSlope: 1.8538789
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
