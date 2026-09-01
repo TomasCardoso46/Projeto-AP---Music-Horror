@@ -11,34 +11,51 @@ public class SettingsMenuUI : MonoBehaviour
     [SerializeField] GameObject menuRoot;
     [SerializeField] GameObject previousMenuRoot;
 
+    private SettingsManager settingsManager;
+
     void Start()
     {
-        var s = SettingsManager.Instance;
+        settingsManager = SettingsManager.Instance;
+
+        if (settingsManager == null)
+        {
+            Debug.LogError("SettingsMenuUI: SettingsManager.Instance is null. Make sure a SettingsManager exists in the scene before the SettingsMenuUI starts.");
+            return;
+        }
 
         RefreshUI();
 
-        volumeSlider.onValueChanged.AddListener(s.SetVolume);
-        gammaSlider.onValueChanged.AddListener(s.SetGamma);
-        crouchToggle.onValueChanged.AddListener(s.SetCrouchMode);
+        volumeSlider.onValueChanged.AddListener(settingsManager.SetVolume);
+        gammaSlider.onValueChanged.AddListener(settingsManager.SetGamma);
+        crouchToggle.onValueChanged.AddListener(settingsManager.SetCrouchMode);
 
         resetButton.onClick.AddListener(() =>
         {
-            s.ResetSettings();
+            settingsManager.ResetSettings();
             RefreshUI();
         });
     }
 
     void RefreshUI()
     {
-        var s = SettingsManager.Instance;
+        if (settingsManager == null)
+            return;
 
-        volumeSlider.SetValueWithoutNotify(s.volume);
-        gammaSlider.SetValueWithoutNotify(s.gamma);
-        crouchToggle.SetIsOnWithoutNotify(s.crouchToggleMode);
+        volumeSlider.SetValueWithoutNotify(settingsManager.volume);
+        gammaSlider.SetValueWithoutNotify(settingsManager.gamma);
+        crouchToggle.SetIsOnWithoutNotify(settingsManager.crouchToggleMode);
     }
 
     public void Open()
     {
+        settingsManager = SettingsManager.Instance;
+
+        if (settingsManager == null)
+        {
+            Debug.LogError("SettingsMenuUI: Cannot open settings because SettingsManager.Instance is null.");
+            return;
+        }
+
         RefreshUI();
 
         if (previousMenuRoot != null)
@@ -46,7 +63,7 @@ public class SettingsMenuUI : MonoBehaviour
 
         menuRoot.SetActive(true);
 
-        SettingsManager.Instance.EnterSettings();
+        settingsManager.EnterSettings();
     }
 
     public void Close()
@@ -56,6 +73,7 @@ public class SettingsMenuUI : MonoBehaviour
         if (previousMenuRoot != null)
             previousMenuRoot.SetActive(true);
 
-        SettingsManager.Instance.ExitSettings();
+        if (settingsManager != null)
+            settingsManager.ExitSettings();
     }
 }

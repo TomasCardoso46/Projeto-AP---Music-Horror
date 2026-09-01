@@ -1,4 +1,3 @@
-
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
@@ -59,7 +58,7 @@ public class SettingsManager : MonoBehaviour
 
     public void SetGamma(float value)
     {
-        gamma = value;
+        gamma = Mathf.Clamp(value, 0.5f, 2.5f);
 
         ApplyGammaToAllVolumes();
 
@@ -69,21 +68,7 @@ public class SettingsManager : MonoBehaviour
 
     public void ApplyGammaToAllVolumes()
     {
-        Volume[] volumes = FindObjectsByType<Volume>(FindObjectsSortMode.None);
-
-        float exposure = Mathf.Clamp(gamma, 0.1f, 3f);
-
-        foreach (var v in volumes)
-        {
-            if (v == null || v.profile == null)
-                continue;
-
-            if (v.profile.TryGet(out ColorAdjustments colorAdjustments))
-            {
-                colorAdjustments.postExposure.overrideState = true;
-                colorAdjustments.postExposure.value = exposure;
-            }
-        }
+        Shader.SetGlobalFloat("_GlobalGamma", gamma);
     }
 
     public void SetCrouchMode(bool value)
@@ -97,10 +82,18 @@ public class SettingsManager : MonoBehaviour
     void LoadSettings()
     {
         volume = PlayerPrefs.GetFloat(VolumeKey, defaultVolume);
+
         gamma = PlayerPrefs.GetFloat(GammaKey, defaultGamma);
-        crouchToggleMode = PlayerPrefs.GetInt(CrouchKey, defaultCrouchToggle ? 1 : 0) == 1;
+        gamma = Mathf.Clamp(gamma, 0.5f, 2.5f);
+
+        crouchToggleMode =
+            PlayerPrefs.GetInt(
+                CrouchKey,
+                defaultCrouchToggle ? 1 : 0
+            ) == 1;
 
         AudioListener.volume = volume;
+
         ApplyGammaToAllVolumes();
     }
 
@@ -122,4 +115,3 @@ public class SettingsManager : MonoBehaviour
         
     }
 }
-

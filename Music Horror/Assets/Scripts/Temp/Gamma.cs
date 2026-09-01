@@ -2,57 +2,55 @@ using UnityEngine;
 
 public class Gamma : MonoBehaviour
 {
-    [SerializeField] private float gammaStep = 0.1f;
-    [SerializeField] private float minGamma = 0.1f;
-    [SerializeField] private float maxGamma = 3f;
+    public static Gamma Instance;
 
-    private float currentGamma = 1f;
-    private float originalGamma;
+    [Header("Gamma Settings")]
+    [SerializeField] private float minGamma = 0.5f;
+    [SerializeField] private float maxGamma = 2.5f;
+    [SerializeField] private float defaultGamma = 1f;
 
-    void Start()
+    public float CurrentGamma { get; private set; }
+
+    void Awake()
     {
-        originalGamma = currentGamma;
-        Shader.SetGlobalFloat("_GlobalGamma", currentGamma);
-    }
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.P))
+        if (Instance != null && Instance != this)
         {
-            IncreaseGamma();
+            Destroy(gameObject);
+            return;
         }
 
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            DecreaseGamma();
-        }
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
 
-        if (Input.GetKeyDown(KeyCode.I))
-        {
-            ResetGamma();
-        }
-    }
-
-    void IncreaseGamma()
-    {
-        currentGamma = Mathf.Clamp(currentGamma + gammaStep, minGamma, maxGamma);
+        CurrentGamma = defaultGamma;
         ApplyGamma();
     }
 
-    void DecreaseGamma()
+    public void SetGamma(float value)
     {
-        currentGamma = Mathf.Clamp(currentGamma - gammaStep, minGamma, maxGamma);
+        CurrentGamma = Mathf.Clamp(value, minGamma, maxGamma);
+
         ApplyGamma();
     }
 
-    void ResetGamma()
+    public void ResetGamma()
     {
-        currentGamma = originalGamma;
+        CurrentGamma = defaultGamma;
+
         ApplyGamma();
     }
 
     void ApplyGamma()
     {
-        Shader.SetGlobalFloat("_GlobalGamma", currentGamma);
+        Shader.SetGlobalFloat("_GlobalGamma", CurrentGamma);
+    }
+
+    void OnDestroy()
+    {
+        if (Instance == this)
+        {
+            Shader.SetGlobalFloat("_GlobalGamma", 1f);
+            Instance = null;
+        }
     }
 }

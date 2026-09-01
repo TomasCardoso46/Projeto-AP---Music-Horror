@@ -178,6 +178,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2154392076684130444, guid: 098f9c8d9d6ca2e41893d1f162b438c8, type: 3}
       insertIndex: -1
       addedObject: {fileID: 915250327}
+    - targetCorrespondingSourceObject: {fileID: 2154392076684130444, guid: 098f9c8d9d6ca2e41893d1f162b438c8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 915250329}
   m_SourcePrefab: {fileID: 100100000, guid: 098f9c8d9d6ca2e41893d1f162b438c8, type: 3}
 --- !u!1 &207813963
 GameObject:
@@ -1287,6 +1290,21 @@ MonoBehaviour:
   volume: {fileID: 915250325}
   changeAmount: 0.25
   bloomCompensation: 1
+--- !u!114 &915250329
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 915250324}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7b7d85780f773b4b8506a8376c423b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Gamma
+  minGamma: 0.5
+  maxGamma: 2.5
+  defaultGamma: 1
 --- !u!1 &1100759749
 GameObject:
   m_ObjectHideFlags: 0
@@ -5579,7 +5597,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 8883593796162562739}
   m_Direction: 0
   m_MinValue: 0.7
-  m_MaxValue: 3
+  m_MaxValue: 1.25
   m_WholeNumbers: 0
   m_Value: 1
   m_OnValueChanged:

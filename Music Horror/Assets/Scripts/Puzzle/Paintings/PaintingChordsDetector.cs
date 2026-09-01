@@ -1,10 +1,20 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.LowLevel;
 
 public class PaintingChordsDetector : MonoBehaviour
 {
+    [Header("Objects")]
     [SerializeField] private GameObject objectToActivate;
     [SerializeField] private GameObject objectToDeactivate;
-    [SerializeField] private KeyCode chord;
+
+    [Header("Keyboard Input")]
+    [SerializeField] private KeyCode keyboardChord;
+
+    [Header("Gamepad Input")]
+    [SerializeField] private GamepadButton gamepadChord;
+
+    [Header("Queue Settings")]
     [SerializeField] private int queuePosition;
     [SerializeField] private bool isLast;
 
@@ -19,12 +29,20 @@ public class PaintingChordsDetector : MonoBehaviour
         this.manager = manager;
     }
 
-    void Update()
+    private void Update()
     {
         if (!playerInside)
             return;
 
-        if (Input.GetKeyDown(chord))
+        // Keyboard input
+        if (Input.GetKeyDown(keyboardChord))
+        {
+            manager.TryInteract(this);
+            return;
+        }
+
+        // Gamepad input
+        if (Gamepad.current != null && Gamepad.current[gamepadChord].wasPressedThisFrame)
         {
             manager.TryInteract(this);
         }
