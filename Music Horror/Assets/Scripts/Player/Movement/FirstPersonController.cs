@@ -21,6 +21,7 @@ public class FirstPersonRigidbodyController : MonoBehaviour
     [SerializeField] float cameraFollowSpeed = 15f;
     [SerializeField] float cameraHeight = 1.7f;
     [SerializeField] float crouchCameraHeight = 0.8f;
+    [SerializeField] private float gamepadLookSensitivity = 150f;
 
     [Header("Head Bob")]
     [SerializeField] float walkShakeAmount = 0.05f;
@@ -69,6 +70,8 @@ public class FirstPersonRigidbodyController : MonoBehaviour
     float smoothRotationTimer;
     float smoothRotationStartPitch;
     float smoothRotationTargetPitch;
+    private bool gamepadCrouchState = false;
+    private bool gamepadSprintState = false;
 
     void Awake()
     {
@@ -118,7 +121,7 @@ public class FirstPersonRigidbodyController : MonoBehaviour
             StopMovement();
     }
 
-    void ReadInput()
+   void ReadInput()
     {
         movementInput = new Vector3(
             Input.GetAxisRaw("Horizontal"),
@@ -126,21 +129,43 @@ public class FirstPersonRigidbodyController : MonoBehaviour
             Input.GetAxisRaw("Vertical")
         ).normalized;
 
+        if (Gamepad.current != null &&
+            Gamepad.current.rightStickButton.wasPressedThisFrame)
+        {
+            gamepadCrouchState = !gamepadCrouchState;
+
+            if (gamepadCrouchState)
+                gamepadSprintState = false;
+        }
+
         if (SettingsManager.Instance != null &&
             SettingsManager.Instance.crouchToggleMode)
         {
-            if (Input.GetKeyDown(KeyCode.LeftControl) || Gamepad.current.rightStickButton.wasPressedThisFrame)
+            if (Input.GetKeyDown(KeyCode.LeftControl))
                 crouchState = !crouchState;
 
-            isCrouching = crouchState;
+            isCrouching = crouchState || gamepadCrouchState;
         }
         else
         {
-            isCrouching = Input.GetKey(KeyCode.LeftControl) || Gamepad.current.rightStickButton.isPressed;
-            
+            isCrouching = Input.GetKey(KeyCode.LeftControl) || gamepadCrouchState;
         }
 
-        isSprinting = Input.GetKey(KeyCode.LeftShift) && !isCrouching || Gamepad.current.leftStickButton.isPressed;
+        if (Gamepad.current != null &&
+            Gamepad.current.leftStickButton.wasPressedThisFrame)
+        {
+            gamepadSprintState = !gamepadSprintState;
+
+            if (gamepadSprintState)
+                gamepadCrouchState = false;
+        }
+
+        if (movementInput.sqrMagnitude <= 0.01f)
+            gamepadSprintState = false;
+
+        isSprinting =
+            (Input.GetKey(KeyCode.LeftShift) && !isCrouching) ||
+            (gamepadSprintState && !isCrouching);
     }
 
     void HandleMovement()
@@ -175,25 +200,27 @@ public class FirstPersonRigidbodyController : MonoBehaviour
 
     void HandleMouseLook()
     {
-        float mouseX =
-            Input.GetAxisRaw("Mouse X") * mouseSensitivity;
-        float joystickX =
-            Input.GetAxis("HorizontalRight") * mouseSensitivity;
+        float mouseX = Input.GetAxisRaw("Mouse X") * mouseSensitivity;
+        float mouseY = Input.GetAxisRaw("Mouse Y") * mouseSensitivity;
 
-        float mouseY =
-            Input.GetAxisRaw("Mouse Y") * mouseSensitivity;
-        float joystickY =
-            Input.GetAxis("VerticalRight") * mouseSensitivity;
+        float joystickX = 0f;
+        float joystickY = 0f;
+
+        if (Gamepad.current != null)
+        {
+            joystickX = Gamepad.current.rightStick.x.ReadValue();
+            joystickY = Gamepad.current.rightStick.y.ReadValue();
+        }
 
         yaw += mouseX;
-        yaw += joystickX;
         pitch -= mouseY;
-        pitch -= joystickY;
+
+        yaw += joystickX * gamepadLookSensitivity * Time.deltaTime;
+        pitch -= joystickY * gamepadLookSensitivity * Time.deltaTime;
 
         pitch = Mathf.Clamp(pitch, -90f, 90f);
 
-        transform.rotation =
-            Quaternion.Euler(0f, yaw, 0f);
+        transform.rotation = Quaternion.Euler(0f, yaw, 0f);
     }
 
     void HandleLean()
