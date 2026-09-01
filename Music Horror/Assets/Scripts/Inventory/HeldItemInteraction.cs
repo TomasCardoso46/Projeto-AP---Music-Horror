@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class HeldItemInteraction : MonoBehaviour
 {
@@ -37,7 +38,7 @@ public class HeldItemInteraction : MonoBehaviour
         if (!initialized)
             return;
 
-        if (Input.GetKeyDown(KeyCode.F))
+        if (Input.GetKeyDown(KeyCode.F) || Gamepad.current.rightShoulder.wasPressedThisFrame)
         {
             ReleaseItem();
         }

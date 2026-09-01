@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class FirstPersonRigidbodyController : MonoBehaviour
 {
@@ -128,17 +129,18 @@ public class FirstPersonRigidbodyController : MonoBehaviour
         if (SettingsManager.Instance != null &&
             SettingsManager.Instance.crouchToggleMode)
         {
-            if (Input.GetKeyDown(KeyCode.LeftControl))
+            if (Input.GetKeyDown(KeyCode.LeftControl) || Gamepad.current.rightStickButton.wasPressedThisFrame)
                 crouchState = !crouchState;
 
             isCrouching = crouchState;
         }
         else
         {
-            isCrouching = Input.GetKey(KeyCode.LeftControl);
+            isCrouching = Input.GetKey(KeyCode.LeftControl) || Gamepad.current.rightStickButton.isPressed;
+            
         }
 
-        isSprinting = Input.GetKey(KeyCode.LeftShift) && !isCrouching;
+        isSprinting = Input.GetKey(KeyCode.LeftShift) && !isCrouching || Gamepad.current.leftStickButton.isPressed;
     }
 
     void HandleMovement()
@@ -175,12 +177,18 @@ public class FirstPersonRigidbodyController : MonoBehaviour
     {
         float mouseX =
             Input.GetAxisRaw("Mouse X") * mouseSensitivity;
+        float joystickX =
+            Input.GetAxis("HorizontalRight") * mouseSensitivity;
 
         float mouseY =
             Input.GetAxisRaw("Mouse Y") * mouseSensitivity;
+        float joystickY =
+            Input.GetAxis("VerticalRight") * mouseSensitivity;
 
         yaw += mouseX;
+        yaw += joystickX;
         pitch -= mouseY;
+        pitch -= joystickY;
 
         pitch = Mathf.Clamp(pitch, -90f, 90f);
 
@@ -190,9 +198,9 @@ public class FirstPersonRigidbodyController : MonoBehaviour
 
     void HandleLean()
     {
-        if (Input.GetKey(KeyCode.Q))
+        if (Input.GetKey(KeyCode.Q) || Gamepad.current.leftTrigger.isPressed)
             targetLean = leanAngle;
-        else if (Input.GetKey(KeyCode.E))
+        else if (Input.GetKey(KeyCode.E) || Gamepad.current.rightTrigger.isPressed)
             targetLean = -leanAngle;
         else
             targetLean = 0f;

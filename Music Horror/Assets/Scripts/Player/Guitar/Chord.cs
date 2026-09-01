@@ -1,5 +1,8 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.LowLevel;
 using static EnemyAudioEmitter;
 
 public class Chord : MonoBehaviour
@@ -38,6 +41,7 @@ public class Chord : MonoBehaviour
     private int currentIndex = 0;
     private int currentMode = 0;
     private const int MAX_MODES = 2;
+    private string controllerInput;
 
     void Start()
     {
@@ -68,7 +72,7 @@ public class Chord : MonoBehaviour
 
     void HandleModeSwitch()
     {
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.R) || Gamepad.current.leftShoulder.wasPressedThisFrame)
         {
             modeSwitch.PlayReverse();
             modeSwitch.SphereSwitcher();
@@ -102,14 +106,37 @@ public class Chord : MonoBehaviour
 
     void HandleNumberShortcuts()
     {
-        for (int i = 0; i < targetPositions.Count && i < 9; i++)
+        if(Gamepad.current.buttonWest.wasPressedThisFrame|| Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            MoveToIndex(0);
+            PlayCurrentSound();
+        }
+        else if (Gamepad.current.buttonSouth.wasPressedThisFrame || Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            MoveToIndex(1);
+            PlayCurrentSound();
+        }
+        else if (Gamepad.current.buttonEast.wasPressedThisFrame || Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            MoveToIndex(2);
+            PlayCurrentSound();
+        }
+        else if (Gamepad.current.buttonNorth.wasPressedThisFrame || Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            MoveToIndex(3);
+            PlayCurrentSound();
+        }
+        
+
+        /*for (int i = 0; i < targetPositions.Count && i < 9; i++)
         {
             if (Input.GetKeyDown(KeyCode.Alpha1 + i))
             {
+
                 MoveToIndex(i);
                 PlayCurrentSound();
             }
-        }
+        }*/
     }
 
     /*bool CanUseGuitar()

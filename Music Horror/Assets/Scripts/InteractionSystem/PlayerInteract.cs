@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerInteract : MonoBehaviour
 {
@@ -21,7 +22,7 @@ public class PlayerInteract : MonoBehaviour
     {
         DetectInteractable();
 
-        if (Input.GetKeyDown(KeyCode.F) && currentInteractable != null)
+        if (Input.GetKeyDown(KeyCode.F) && currentInteractable != null || Gamepad.current.rightShoulder.wasPressedThisFrame)
         {
             currentInteractable.Interact();
         }

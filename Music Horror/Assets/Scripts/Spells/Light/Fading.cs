@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Light))]
 public class Fading : MonoBehaviour
@@ -84,7 +85,7 @@ public class Fading : MonoBehaviour
 
     private void HandleRecharge()
     {
-        if (Input.GetKeyDown(rechargeKey))
+        if (Input.GetKeyDown(KeyCode.Alpha2) || Gamepad.current.buttonSouth.wasPressedThisFrame)
         {
             currentIntensity += rechargeAmount;
             currentIntensity = Mathf.Min(currentIntensity, initialIntensity);
