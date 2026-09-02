@@ -18,10 +18,10 @@ MonoBehaviour:
     m_Value: 1
   threshold:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 11.32
   intensity:
     m_OverrideState: 1
-    m_Value: 0.65
+    m_Value: 3.07
   scatter:
     m_OverrideState: 1
     m_Value: 0.68
@@ -65,7 +65,7 @@ MonoBehaviour:
   active: 1
   postExposure:
     m_OverrideState: 1
-    m_Value: 0.33
+    m_Value: 2.11
   contrast:
     m_OverrideState: 1
     m_Value: -5
@@ -88,7 +88,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d7fd9488000d3734a9e00ee676215985, type: 3}
-  m_Name: Hugo Profile v2
+  m_Name: Door
   m_EditorClassIdentifier: Unity.RenderPipelines.Core.Runtime::UnityEngine.Rendering.VolumeProfile
   components:
   - {fileID: -9200618716736474394}
