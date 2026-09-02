@@ -1,14 +1,45 @@
 using UnityEngine;
 
-public class InfoEnabler : MonoBehaviour
+public class InfoEnabler : MonoBehaviour, IInteractable
 {
+    [Header("Info")]
     [SerializeField] private GameObject objectToToggle;
 
-    private void Update()
+    [Header("Blur")]
+    [SerializeField] private UIBlurException blur;
+
+    public void Interact()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        FirstPersonRigidbodyController playerController =
+            FindFirstObjectByType<FirstPersonRigidbodyController>();
+
+        bool shouldEnable = !objectToToggle.activeSelf;
+
+        objectToToggle.SetActive(shouldEnable);
+
+        if (shouldEnable)
         {
-            objectToToggle.SetActive(!objectToToggle.activeSelf);
+            if (blur != null)
+            {
+                blur.EnableBlur();
+            }
+
+            if (playerController != null)
+            {
+                playerController.enabled = false;
+            }
+        }
+        else
+        {
+            if (blur != null)
+            {
+                blur.DisableBlur();
+            }
+
+            if (playerController != null)
+            {
+                playerController.enabled = true;
+            }
         }
     }
 }

@@ -1,5 +1,4 @@
 using UnityEngine;
-
 public class FPSLimiter : MonoBehaviour
 {
     [SerializeField] private int targetFPS = 60;

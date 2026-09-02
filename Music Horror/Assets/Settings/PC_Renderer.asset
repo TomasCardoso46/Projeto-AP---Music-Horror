@@ -49,7 +49,8 @@ MonoBehaviour:
   - {fileID: 7833122117494664109}
   - {fileID: -3617725083943145915}
   - {fileID: 6662500613957034531}
-  m_RendererFeatureMap: ad6b866f10d7b46c456e8c243442cbcd2322bb4a02f5755c
+  - {fileID: 5290812514435438203}
+  m_RendererFeatureMap: ad6b866f10d7b46c456e8c243442cbcd2322bb4a02f5755c7b961d30f3bd6c49
   m_UseNativeRenderPass: 1
   xrSystemData: {fileID: 0}
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
@@ -78,6 +79,23 @@ MonoBehaviour:
   m_DepthTextureFormat: 0
   m_AccurateGbufferNormals: 0
   m_IntermediateTextureMode: 0
+--- !u!114 &5290812514435438203
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8952281a9c20dad42a9acbdaffce53f0, type: 3}
+  m_Name: ScreenBlurRendererFeature
+  m_EditorClassIdentifier: Assembly-CSharp::ScreenBlurRendererFeature
+  m_Active: 1
+  settings:
+    blurStrength: 3
+    iterations: 2
+    injectionPoint: 500
 --- !u!114 &6662500613957034531
 MonoBehaviour:
   m_ObjectHideFlags: 0

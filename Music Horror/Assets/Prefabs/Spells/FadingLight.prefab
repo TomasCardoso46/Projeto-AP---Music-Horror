@@ -141,6 +141,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Fading
   initialIntensity: 20
-  decayRate: 5
+  decayRate: 3
+  uvColor: {r: 0.35, g: 0, b: 1, a: 1}
+  range: 10
+  spotAngle: 45
   rechargeKey: 53
   rechargeAmount: 3
