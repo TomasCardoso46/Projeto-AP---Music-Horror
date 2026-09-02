@@ -191,7 +191,7 @@ public class Chord : MonoBehaviour
 
     void PlayCurrentSound()
     {
-        enemyAudioEmitter.EmitSound(SoundLevel.High, 3);
+        enemyAudioEmitter.EmitSound(SoundLevel.High, 1);
 
         if (currentMode >= modeSounds.Count)
             return;
