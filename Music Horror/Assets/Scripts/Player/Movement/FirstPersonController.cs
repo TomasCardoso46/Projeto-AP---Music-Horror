@@ -60,9 +60,9 @@ public class FirstPersonRigidbodyController : MonoBehaviour
     Vector3 cameraVelocity;
     Vector3 movementInput;
 
-    bool isCrouching;
-    bool isSprinting;
-    bool crouchState;
+    public bool isCrouching;
+    public bool isSprinting;
+    public bool crouchState;
 
     bool inputLocked;
 
@@ -155,6 +155,7 @@ public class FirstPersonRigidbodyController : MonoBehaviour
             Gamepad.current.leftStickButton.wasPressedThisFrame)
         {
             gamepadSprintState = !gamepadSprintState;
+            isSprinting = gamepadSprintState;
 
             if (gamepadSprintState)
                 gamepadCrouchState = false;

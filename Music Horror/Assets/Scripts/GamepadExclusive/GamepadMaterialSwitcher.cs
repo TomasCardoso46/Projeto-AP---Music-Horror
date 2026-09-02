@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering.Universal;
 
 public class GamepadMaterialSwitcher : MonoBehaviour
 {
@@ -8,8 +9,18 @@ public class GamepadMaterialSwitcher : MonoBehaviour
     public class MaterialEntry
     {
         public Renderer targetRenderer;
+        public DecalProjector decalProjector;
+        public SpriteRenderer sprite;
+        public MeshRenderer meshRenderer;
+        public Sprite spriteA;
+        public Sprite spriteB;
         public Material materialA;
         public Material materialB;
+        public Mesh meshA;
+        public Mesh meshB;
+        public bool isDecal;
+        public bool isSprite;
+        public bool isMesh;
     }
 
     [Header("Objects")]
@@ -46,19 +57,41 @@ public class GamepadMaterialSwitcher : MonoBehaviour
 
     private void ApplyMaterials()
     {
+        
+
         foreach (MaterialEntry entry in objects)
         {
-            if (entry.targetRenderer == null)
-                continue;
 
             Material materialToUse = gamepadConnected
                 ? entry.materialB
                 : entry.materialA;
-
             if (materialToUse == null)
                 continue;
 
-            entry.targetRenderer.material = materialToUse;
+            if (entry.isSprite)
+            {
+                Sprite spriteToUse = gamepadConnected
+                    ? entry.spriteA
+                    : entry.spriteB;
+
+                if (spriteToUse == null)
+                    continue;
+
+                entry.sprite.sprite = spriteToUse;
+            }
+
+
+
+            //entry.targetRenderer.material = materialToUse;
+            if (entry.isDecal)
+            {
+                entry.decalProjector.material = materialToUse;
+            }
+            else
+            {
+                entry.targetRenderer.material = materialToUse;
+            }
         }
     }
+
 }

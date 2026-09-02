@@ -6,6 +6,7 @@ public class FootstepEmitter : MonoBehaviour
     [Header("References")]
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private EnemyAudioEmitter enemyAudioEmitter;
+    [SerializeField] private FirstPersonRigidbodyController movement;
 
     [Header("Footstep Clips")]
     [SerializeField] private AudioClip[] footstepClips;
@@ -39,8 +40,9 @@ public class FootstepEmitter : MonoBehaviour
     private void Update()
     {
         bool isMoving = Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0;
-        bool isCrouching = Input.GetKey(KeyCode.LeftControl);
-        bool isSprinting = Input.GetKey(KeyCode.LeftShift) && !isCrouching;
+        bool isCrouching = movement.isCrouching;
+        bool isSprinting = movement.isSprinting;
+        
 
         if (!isMoving)
         {
