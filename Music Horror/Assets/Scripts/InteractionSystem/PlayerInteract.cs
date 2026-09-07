@@ -12,6 +12,7 @@ public class PlayerInteract : MonoBehaviour
 
     private Camera cam;
     private IInteractable currentInteractable;
+    [SerializeField] private Chord chord;
 
     private void Start()
     {
@@ -22,7 +23,7 @@ public class PlayerInteract : MonoBehaviour
     {
         DetectInteractable();
 
-        if (Input.GetKeyDown(KeyCode.F) && currentInteractable != null || Gamepad.current.rightShoulder.wasPressedThisFrame)
+        if (Input.GetKeyDown(KeyCode.F) && currentInteractable != null || !chord.GuitarMode && Gamepad.current.buttonSouth.wasPressedThisFrame)
         {
             currentInteractable.Interact();
         }

@@ -1,8 +1,6 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.LowLevel;
 using static EnemyAudioEmitter;
 
 public class Chord : MonoBehaviour
@@ -38,41 +36,73 @@ public class Chord : MonoBehaviour
     [SerializeField] private Animator targetAnimator;
     [SerializeField] private List<string> chordAnimationNames = new();
 
+    [Header("Guitar Mode")]
+    public bool GuitarMode { get; private set; }
+
+    [Header("Gamepad")]
+    public bool IsGamepadConnected { get; private set; }
+
     private int currentIndex = 0;
     private int currentMode = 0;
     private const int MAX_MODES = 2;
-    private string controllerInput;
 
     void Start()
     {
         if (guitarRenderer == null)
             guitarRenderer = GetComponentInChildren<Renderer>();
 
-        if (targetPositions.Count == 0 || objectToMove == null)
-            return;
+        if (targetPositions.Count > 0 && objectToMove != null)
+        {
+            objectToMove.position = targetPositions[currentIndex].position;
+        }
 
-        objectToMove.position = targetPositions[currentIndex].position;
+        UpdateGamepadState();
     }
 
     void Update()
     {
         if (GameState.IsPaused)
-        return;
-        //UpdateGuitarMaterial();
+            return;
+
+        UpdateGamepadState();
+        UpdateGuitarMode();
 
         HandleModeSwitch();
 
-        /*if (!CanUseGuitar())
-            return;*/
+        // Chord inputs only work while Guitar Mode is active.
+        if (!GuitarMode)
+            return;
 
         HandleChordSelection();
-
         HandleNumberShortcuts();
+    }
+
+    void UpdateGamepadState()
+    {
+        IsGamepadConnected = Gamepad.current != null;
+
+        // Guitar mode cannot be active without a gamepad.
+        if (!IsGamepadConnected)
+        {
+            GuitarMode = false;
+        }
+    }
+
+    void UpdateGuitarMode()
+    {
+        if (!IsGamepadConnected)
+        {
+            GuitarMode = false;
+            return;
+        }
+
+        GuitarMode = Gamepad.current.leftTrigger.isPressed || Input.GetMouseButtonDown(1);
     }
 
     void HandleModeSwitch()
     {
-        if (Input.GetKeyDown(KeyCode.R) || Gamepad.current.leftShoulder.wasPressedThisFrame)
+        if (Input.GetKeyDown(KeyCode.R) ||
+            (Gamepad.current != null && Gamepad.current.buttonEast.wasPressedThisFrame && !GuitarMode))
         {
             modeSwitch.PlayReverse();
             modeSwitch.SphereSwitcher();
@@ -83,11 +113,11 @@ public class Chord : MonoBehaviour
                 audioSourceForSwitch.PlayOneShot(switchSound);
             }
 
-
             if (currentMode >= MAX_MODES)
                 currentMode = 0;
 
-            sequenceManager.SetMode(currentMode);
+            if (sequenceManager != null)
+                sequenceManager.SetMode(currentMode);
 
             Debug.Log($"Switched Guitar Mode: {currentMode + 1}");
         }
@@ -106,58 +136,42 @@ public class Chord : MonoBehaviour
 
     void HandleNumberShortcuts()
     {
-        if(Gamepad.current.buttonWest.wasPressedThisFrame|| Input.GetKeyDown(KeyCode.Alpha1))
+        if (Gamepad.current != null &&
+            Gamepad.current.buttonWest.wasPressedThisFrame ||
+            Input.GetKeyDown(KeyCode.Alpha1))
         {
             MoveToIndex(0);
             PlayCurrentSound();
         }
-        else if (Gamepad.current.buttonSouth.wasPressedThisFrame || Input.GetKeyDown(KeyCode.Alpha2))
+        else if (Gamepad.current != null &&
+                 Gamepad.current.buttonSouth.wasPressedThisFrame ||
+                 Input.GetKeyDown(KeyCode.Alpha2))
         {
             MoveToIndex(1);
             PlayCurrentSound();
         }
-        else if (Gamepad.current.buttonEast.wasPressedThisFrame || Input.GetKeyDown(KeyCode.Alpha3))
+        else if (Gamepad.current != null &&
+                 Gamepad.current.buttonEast.wasPressedThisFrame ||
+                 Input.GetKeyDown(KeyCode.Alpha3))
         {
             MoveToIndex(2);
             PlayCurrentSound();
         }
-        else if (Gamepad.current.buttonNorth.wasPressedThisFrame || Input.GetKeyDown(KeyCode.Alpha4))
+        else if (Gamepad.current != null &&
+                 Gamepad.current.buttonNorth.wasPressedThisFrame ||
+                 Input.GetKeyDown(KeyCode.Alpha4))
         {
             MoveToIndex(3);
             PlayCurrentSound();
         }
-        
-
-        /*for (int i = 0; i < targetPositions.Count && i < 9; i++)
-        {
-            if (Input.GetKeyDown(KeyCode.Alpha1 + i))
-            {
-
-                MoveToIndex(i);
-                PlayCurrentSound();
-            }
-        }*/
     }
-
-    /*bool CanUseGuitar()
-    {
-        return !FindObjectOfType<SoundBait>();
-    }
-
-    void UpdateGuitarMaterial()
-    {
-        if (guitarRenderer == null)
-            return;
-
-        guitarRenderer.material =
-            FindObjectOfType<SoundBait>()
-            ? disabledMaterial
-            : usableMaterial;
-    }*/
 
     void MoveToIndex(int newIndex)
     {
         int count = targetPositions.Count;
+
+        if (count == 0 || objectToMove == null)
+            return;
 
         if (newIndex < 0)
             newIndex = count - 1;
@@ -168,6 +182,7 @@ public class Chord : MonoBehaviour
         if (newIndex != currentIndex)
         {
             currentIndex = newIndex;
+
             objectToMove.position =
                 targetPositions[currentIndex].position;
         }
@@ -191,7 +206,10 @@ public class Chord : MonoBehaviour
 
     void PlayCurrentSound()
     {
-        enemyAudioEmitter.EmitSound(SoundLevel.High, 1);
+        if (enemyAudioEmitter != null)
+        {
+            enemyAudioEmitter.EmitSound(SoundLevel.High, 1);
+        }
 
         if (currentMode >= modeSounds.Count)
             return;
@@ -205,10 +223,12 @@ public class Chord : MonoBehaviour
             sequenceManager.RegisterChord(currentIndex + 1);
 
         AudioSource sourceInstance =
-            Instantiate(audioSourcePrefab,
-            transform.position,
-            Quaternion.identity,
-            transform);
+            Instantiate(
+                audioSourcePrefab,
+                transform.position,
+                Quaternion.identity,
+                transform
+            );
 
         sourceInstance.clip =
             activeModeSounds[currentIndex];
@@ -217,13 +237,16 @@ public class Chord : MonoBehaviour
 
         PlayCurrentAnimation();
 
-        emitter.PlaySound(5);
+        if (emitter != null)
+            emitter.PlaySound(5);
 
         if (vfxController != null)
             vfxController.Pulse();
 
-        Destroy(sourceInstance.gameObject,
-            sourceInstance.clip.length);
+        Destroy(
+            sourceInstance.gameObject,
+            sourceInstance.clip.length
+        );
     }
 }
 
