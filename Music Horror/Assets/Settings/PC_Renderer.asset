@@ -96,6 +96,7 @@ MonoBehaviour:
     blurStrength: 3
     iterations: 2
     injectionPoint: 500
+  blurShader: {fileID: 4800000, guid: 8b0963d5448d2c84fb3b536c47b6125d, type: 3}
 --- !u!114 &6662500613957034531
 MonoBehaviour:
   m_ObjectHideFlags: 0

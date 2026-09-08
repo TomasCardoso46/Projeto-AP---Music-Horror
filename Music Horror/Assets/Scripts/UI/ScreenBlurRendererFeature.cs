@@ -24,26 +24,41 @@ public class ScreenBlurRendererFeature : ScriptableRendererFeature
     [SerializeField]
     private Settings settings = new Settings();
 
-    private Material blurMaterial;
+    [Header("Shader")]
+    [SerializeField]
+    private Shader blurShader;
+
+    private Material horizontalMaterial;
+    private Material verticalMaterial;
     private BlurPass blurPass;
 
     public override void Create()
     {
-        Shader shader = Shader.Find("Custom/ScreenBlur");
-
-        if (shader == null)
+        if (blurShader == null)
         {
             Debug.LogError(
-                "ScreenBlurRendererFeature: Could not find " +
-                "shader 'Custom/ScreenBlur'."
+                "ScreenBlurRendererFeature: Blur Shader has not been assigned."
             );
 
             return;
         }
 
-        blurMaterial = CoreUtils.CreateEngineMaterial(shader);
+        horizontalMaterial = CoreUtils.CreateEngineMaterial(blurShader);
+        verticalMaterial = CoreUtils.CreateEngineMaterial(blurShader);
 
-        blurPass = new BlurPass(blurMaterial);
+        if (horizontalMaterial == null || verticalMaterial == null)
+        {
+            Debug.LogError(
+                "ScreenBlurRendererFeature: Failed to create blur materials."
+            );
+
+            return;
+        }
+
+        blurPass = new BlurPass(
+            horizontalMaterial,
+            verticalMaterial
+        );
 
         blurPass.renderPassEvent = settings.injectionPoint;
     }
@@ -67,17 +82,25 @@ public class ScreenBlurRendererFeature : ScriptableRendererFeature
     protected override void Dispose(bool disposing)
     {
         blurPass?.Dispose();
+        blurPass = null;
 
-        if (blurMaterial != null)
+        if (horizontalMaterial != null)
         {
-            CoreUtils.Destroy(blurMaterial);
-            blurMaterial = null;
+            CoreUtils.Destroy(horizontalMaterial);
+            horizontalMaterial = null;
+        }
+
+        if (verticalMaterial != null)
+        {
+            CoreUtils.Destroy(verticalMaterial);
+            verticalMaterial = null;
         }
     }
 
     private class BlurPass : ScriptableRenderPass
     {
-        private readonly Material material;
+        private readonly Material horizontalMaterial;
+        private readonly Material verticalMaterial;
 
         private static readonly int BlurStrengthID =
             Shader.PropertyToID("_BlurStrength");
@@ -91,9 +114,12 @@ public class ScreenBlurRendererFeature : ScriptableRendererFeature
         private const string VerticalPassName =
             "Screen Blur - Vertical";
 
-        public BlurPass(Material material)
+        public BlurPass(
+            Material horizontalMaterial,
+            Material verticalMaterial)
         {
-            this.material = material;
+            this.horizontalMaterial = horizontalMaterial;
+            this.verticalMaterial = verticalMaterial;
 
             requiresIntermediateTexture = true;
         }
@@ -102,8 +128,11 @@ public class ScreenBlurRendererFeature : ScriptableRendererFeature
             RenderGraph renderGraph,
             ContextContainer frameData)
         {
-            if (material == null)
+            if (horizontalMaterial == null ||
+                verticalMaterial == null)
+            {
                 return;
+            }
 
             if (!ScreenBlurSettings.Enabled)
                 return;
@@ -143,21 +172,31 @@ public class ScreenBlurRendererFeature : ScriptableRendererFeature
                     ScreenBlurSettings.Iterations
                 );
 
-            material.SetFloat(
+            horizontalMaterial.SetFloat(
                 BlurStrengthID,
                 strength
             );
 
-            material.SetVector(
+            horizontalMaterial.SetVector(
                 BlurDirectionID,
                 new Vector2(1f, 0f)
+            );
+
+            verticalMaterial.SetFloat(
+                BlurStrengthID,
+                strength
+            );
+
+            verticalMaterial.SetVector(
+                BlurDirectionID,
+                new Vector2(0f, 1f)
             );
 
             var horizontalParameters =
                 new RenderGraphUtils.BlitMaterialParameters(
                     source,
                     temporary,
-                    material,
+                    horizontalMaterial,
                     0
                 );
 
@@ -166,16 +205,11 @@ public class ScreenBlurRendererFeature : ScriptableRendererFeature
                 HorizontalPassName
             );
 
-            material.SetVector(
-                BlurDirectionID,
-                new Vector2(0f, 1f)
-            );
-
             var verticalParameters =
                 new RenderGraphUtils.BlitMaterialParameters(
                     temporary,
                     source,
-                    material,
+                    verticalMaterial,
                     0
                 );
 
@@ -186,16 +220,11 @@ public class ScreenBlurRendererFeature : ScriptableRendererFeature
 
             for (int i = 1; i < iterations; i++)
             {
-                material.SetVector(
-                    BlurDirectionID,
-                    new Vector2(1f, 0f)
-                );
-
                 var extraHorizontal =
                     new RenderGraphUtils.BlitMaterialParameters(
                         source,
                         temporary,
-                        material,
+                        horizontalMaterial,
                         0
                     );
 
@@ -204,16 +233,11 @@ public class ScreenBlurRendererFeature : ScriptableRendererFeature
                     $"Screen Blur - Horizontal {i + 1}"
                 );
 
-                material.SetVector(
-                    BlurDirectionID,
-                    new Vector2(0f, 1f)
-                );
-
                 var extraVertical =
                     new RenderGraphUtils.BlitMaterialParameters(
                         temporary,
                         source,
-                        material,
+                        verticalMaterial,
                         0
                     );
 

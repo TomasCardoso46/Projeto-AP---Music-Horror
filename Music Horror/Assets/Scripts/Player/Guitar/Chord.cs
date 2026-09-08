@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 using static EnemyAudioEmitter;
 
 public class Chord : MonoBehaviour
@@ -32,6 +34,11 @@ public class Chord : MonoBehaviour
     [SerializeField] private ModeSwitch modeSwitch;
     [SerializeField] private VFXIntensityController vfxController;
 
+    [Header("Guitar Status UI")]
+    [SerializeField] private Image guitarStatus;
+    [SerializeField] private Sprite guitarModeImage;
+    [SerializeField] private Sprite normalModeImage;
+
     [Header("Chord Animations")]
     [SerializeField] private Animator targetAnimator;
     [SerializeField] private List<string> chordAnimationNames = new();
@@ -42,24 +49,26 @@ public class Chord : MonoBehaviour
     [Header("Gamepad")]
     public bool IsGamepadConnected { get; private set; }
 
+    public event Action OnChordPlayed;
+    public event Action OnGuitarModeChanged;
+
     private int currentIndex = 0;
     private int currentMode = 0;
     private const int MAX_MODES = 2;
 
-    void Start()
+    private void Start()
     {
         if (guitarRenderer == null)
             guitarRenderer = GetComponentInChildren<Renderer>();
 
         if (targetPositions.Count > 0 && objectToMove != null)
-        {
             objectToMove.position = targetPositions[currentIndex].position;
-        }
 
         UpdateGamepadState();
+        UpdateGuitarStatusUI();
     }
 
-    void Update()
+    private void Update()
     {
         if (GameState.IsPaused)
             return;
@@ -69,7 +78,6 @@ public class Chord : MonoBehaviour
 
         HandleModeSwitch();
 
-        // Chord inputs only work while Guitar Mode is active.
         if (!GuitarMode)
             return;
 
@@ -77,41 +85,66 @@ public class Chord : MonoBehaviour
         HandleNumberShortcuts();
     }
 
-    void UpdateGamepadState()
+    private void UpdateGamepadState()
     {
         IsGamepadConnected = Gamepad.current != null;
 
-        // Guitar mode cannot be active without a gamepad.
         if (!IsGamepadConnected)
         {
-            GuitarMode = false;
+            SetGuitarMode(false);
         }
     }
 
-    void UpdateGuitarMode()
+    private void UpdateGuitarMode()
     {
         if (!IsGamepadConnected)
         {
-            GuitarMode = false;
+            SetGuitarMode(false);
             return;
         }
 
-        GuitarMode = Gamepad.current.leftTrigger.isPressed || Input.GetMouseButtonDown(1);
+        bool newGuitarMode =
+            Gamepad.current.leftTrigger.isPressed ||
+            Input.GetMouseButton(1);
+
+        SetGuitarMode(newGuitarMode);
     }
 
-    void HandleModeSwitch()
+    private void SetGuitarMode(bool newValue)
+    {
+        if (GuitarMode == newValue)
+            return;
+
+        GuitarMode = newValue;
+
+        UpdateGuitarStatusUI();
+        OnGuitarModeChanged?.Invoke();
+    }
+
+    private void UpdateGuitarStatusUI()
+    {
+        if (guitarStatus == null)
+            return;
+
+        guitarStatus.sprite = GuitarMode
+            ? guitarModeImage
+            : normalModeImage;
+    }
+
+    private void HandleModeSwitch()
     {
         if (Input.GetKeyDown(KeyCode.R) ||
-            (Gamepad.current != null && Gamepad.current.buttonEast.wasPressedThisFrame && !GuitarMode))
+            (Gamepad.current != null &&
+             Gamepad.current.buttonEast.wasPressedThisFrame &&
+             !GuitarMode))
         {
             modeSwitch.PlayReverse();
             modeSwitch.SphereSwitcher();
+
             currentMode++;
 
             if (audioSourceForSwitch != null && switchSound != null)
-            {
                 audioSourceForSwitch.PlayOneShot(switchSound);
-            }
 
             if (currentMode >= MAX_MODES)
                 currentMode = 0;
@@ -119,46 +152,47 @@ public class Chord : MonoBehaviour
             if (sequenceManager != null)
                 sequenceManager.SetMode(currentMode);
 
+            OnGuitarModeChanged?.Invoke();
+
             Debug.Log($"Switched Guitar Mode: {currentMode + 1}");
         }
     }
 
-    void HandleChordSelection()
+    private void HandleChordSelection()
     {
         float scroll = Input.GetAxis("Mouse ScrollWheel");
 
         if (scroll > 0f)
             MoveToIndex(currentIndex - 1);
-
         else if (scroll < 0f)
             MoveToIndex(currentIndex + 1);
     }
 
-    void HandleNumberShortcuts()
+    private void HandleNumberShortcuts()
     {
-        if (Gamepad.current != null &&
-            Gamepad.current.buttonWest.wasPressedThisFrame ||
+        if ((Gamepad.current != null &&
+             Gamepad.current.buttonWest.wasPressedThisFrame) ||
             Input.GetKeyDown(KeyCode.Alpha1))
         {
             MoveToIndex(0);
             PlayCurrentSound();
         }
-        else if (Gamepad.current != null &&
-                 Gamepad.current.buttonSouth.wasPressedThisFrame ||
+        else if ((Gamepad.current != null &&
+                  Gamepad.current.buttonSouth.wasPressedThisFrame) ||
                  Input.GetKeyDown(KeyCode.Alpha2))
         {
             MoveToIndex(1);
             PlayCurrentSound();
         }
-        else if (Gamepad.current != null &&
-                 Gamepad.current.buttonEast.wasPressedThisFrame ||
+        else if ((Gamepad.current != null &&
+                  Gamepad.current.buttonEast.wasPressedThisFrame) ||
                  Input.GetKeyDown(KeyCode.Alpha3))
         {
             MoveToIndex(2);
             PlayCurrentSound();
         }
-        else if (Gamepad.current != null &&
-                 Gamepad.current.buttonNorth.wasPressedThisFrame ||
+        else if ((Gamepad.current != null &&
+                  Gamepad.current.buttonNorth.wasPressedThisFrame) ||
                  Input.GetKeyDown(KeyCode.Alpha4))
         {
             MoveToIndex(3);
@@ -166,7 +200,7 @@ public class Chord : MonoBehaviour
         }
     }
 
-    void MoveToIndex(int newIndex)
+    private void MoveToIndex(int newIndex)
     {
         int count = targetPositions.Count;
 
@@ -175,20 +209,17 @@ public class Chord : MonoBehaviour
 
         if (newIndex < 0)
             newIndex = count - 1;
-
         else if (newIndex >= count)
             newIndex = 0;
 
         if (newIndex != currentIndex)
         {
             currentIndex = newIndex;
-
-            objectToMove.position =
-                targetPositions[currentIndex].position;
+            objectToMove.position = targetPositions[currentIndex].position;
         }
     }
 
-    void PlayCurrentAnimation()
+    private void PlayCurrentAnimation()
     {
         if (targetAnimator == null)
             return;
@@ -199,17 +230,13 @@ public class Chord : MonoBehaviour
         string animationName = chordAnimationNames[currentIndex];
 
         if (!string.IsNullOrEmpty(animationName))
-        {
             targetAnimator.Play(animationName, 0, 0f);
-        }
     }
 
-    void PlayCurrentSound()
+    private void PlayCurrentSound()
     {
         if (enemyAudioEmitter != null)
-        {
             enemyAudioEmitter.EmitSound(SoundLevel.High, 1);
-        }
 
         if (currentMode >= modeSounds.Count)
             return;
@@ -222,18 +249,17 @@ public class Chord : MonoBehaviour
         if (sequenceManager != null)
             sequenceManager.RegisterChord(currentIndex + 1);
 
-        AudioSource sourceInstance =
-            Instantiate(
-                audioSourcePrefab,
-                transform.position,
-                Quaternion.identity,
-                transform
-            );
+        AudioSource sourceInstance = Instantiate(
+            audioSourcePrefab,
+            transform.position,
+            Quaternion.identity,
+            transform
+        );
 
-        sourceInstance.clip =
-            activeModeSounds[currentIndex];
-
+        sourceInstance.clip = activeModeSounds[currentIndex];
         sourceInstance.Play();
+
+        OnChordPlayed?.Invoke();
 
         PlayCurrentAnimation();
 

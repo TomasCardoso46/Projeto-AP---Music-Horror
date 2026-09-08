@@ -46,7 +46,6 @@ public class ScriptedChase : MonoBehaviour
     private bool chaseStarted = false;
     private float currentSpeed;
     private int currentCheckpointIndex = 0;
-
     private float musicOriginalVolume = 1f;
 
     private void Reset()
@@ -56,6 +55,9 @@ public class ScriptedChase : MonoBehaviour
 
     private void Awake()
     {
+        if (animator != null)
+            animator.speed = 0f;
+
         if (loopingAudioSource != null)
         {
             loopingAudioSource.playOnAwake = false;
@@ -106,7 +108,7 @@ public class ScriptedChase : MonoBehaviour
 
         if (animator != null && !string.IsNullOrEmpty(animationStateName))
         {
-            animator.Play(animationStateName);
+            animator.Play(animationStateName, 0, 0f);
             animator.speed = currentSpeed * animationSpeedMultiplier;
         }
 
@@ -159,6 +161,7 @@ public class ScriptedChase : MonoBehaviour
         if (direction != Vector3.zero)
         {
             Quaternion targetRotation = Quaternion.LookRotation(direction);
+
             movingObject.transform.rotation = Quaternion.Slerp(
                 movingObject.transform.rotation,
                 targetRotation,
@@ -182,10 +185,16 @@ public class ScriptedChase : MonoBehaviour
         musicAudioSource.Play();
 
         float time = 0f;
+
         while (time < musicFadeInDuration)
         {
             time += Time.deltaTime;
-            musicAudioSource.volume = Mathf.Lerp(0f, musicOriginalVolume, time / musicFadeInDuration);
+            musicAudioSource.volume = Mathf.Lerp(
+                0f,
+                musicOriginalVolume,
+                time / musicFadeInDuration
+            );
+
             yield return null;
         }
 
@@ -208,7 +217,13 @@ public class ScriptedChase : MonoBehaviour
             while (time < musicFadeOutDuration)
             {
                 time += Time.deltaTime;
-                musicAudioSource.volume = Mathf.Lerp(startVolume, 0f, time / musicFadeOutDuration);
+
+                musicAudioSource.volume = Mathf.Lerp(
+                    startVolume,
+                    0f,
+                    time / musicFadeOutDuration
+                );
+
                 yield return null;
             }
 
