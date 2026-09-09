@@ -136,7 +136,7 @@ public class Chord : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.R) ||
             (Gamepad.current != null &&
-             Gamepad.current.buttonEast.wasPressedThisFrame &&
+             Gamepad.current.buttonNorth.wasPressedThisFrame &&
              !GuitarMode))
         {
             modeSwitch.PlayReverse();

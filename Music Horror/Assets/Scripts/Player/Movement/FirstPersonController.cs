@@ -36,6 +36,7 @@ public class FirstPersonRigidbodyController : MonoBehaviour
 
     [Header("References")]
     [SerializeField] Rigidbody rb;
+    [SerializeField] Chord chord;
 
     [Header("Smooth Camera Rotation")]
     [SerializeField] float smoothRotationDuration = 0.5f;
@@ -130,7 +131,9 @@ public class FirstPersonRigidbodyController : MonoBehaviour
         ).normalized;
 
         if (Gamepad.current != null &&
-            Gamepad.current.rightStickButton.wasPressedThisFrame)
+            Gamepad.current.buttonEast.wasPressedThisFrame &&
+            chord != null &&
+            !chord.GuitarMode)
         {
             gamepadCrouchState = !gamepadCrouchState;
 
