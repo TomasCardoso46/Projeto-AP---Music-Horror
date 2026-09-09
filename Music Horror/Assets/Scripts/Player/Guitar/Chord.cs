@@ -105,7 +105,8 @@ public class Chord : MonoBehaviour
 
         bool newGuitarMode =
             Gamepad.current.leftTrigger.isPressed ||
-            Input.GetMouseButton(1);
+            Input.GetMouseButton(1) ||
+            Gamepad.current.rightTrigger.isPressed;
 
         SetGuitarMode(newGuitarMode);
     }
