@@ -88,25 +88,16 @@ public class Chord : MonoBehaviour
     private void UpdateGamepadState()
     {
         IsGamepadConnected = Gamepad.current != null;
-
-        if (!IsGamepadConnected)
-        {
-            SetGuitarMode(false);
-        }
     }
 
     private void UpdateGuitarMode()
     {
-        if (!IsGamepadConnected)
-        {
-            SetGuitarMode(false);
-            return;
-        }
-
         bool newGuitarMode =
-            Gamepad.current.leftTrigger.isPressed ||
             Input.GetMouseButton(1) ||
-            Gamepad.current.rightTrigger.isPressed;
+            Input.GetMouseButton(0) ||
+            (Gamepad.current != null &&
+            (Gamepad.current.leftTrigger.isPressed ||
+            Gamepad.current.rightTrigger.isPressed));
 
         SetGuitarMode(newGuitarMode);
     }

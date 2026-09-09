@@ -23,6 +23,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Tutorial.unity
     guid: 72a403950f5100040b007e01e85a01b7
+  - enabled: 1
+    path: Assets/Scenes/Temp/Text1.unity
+    guid: 461ca91c190687244add155cb5ad65fb
+  - enabled: 1
+    path: Assets/Scenes/Temp/Text2.unity
+    guid: 5ee570d762286b64a950c54bfa5a3a5f
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
   m_UseUCBPForAssetBundles: 0

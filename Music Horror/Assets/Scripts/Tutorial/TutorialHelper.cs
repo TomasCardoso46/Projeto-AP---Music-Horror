@@ -186,7 +186,7 @@ public class TutorialHelper : MonoBehaviour
 
         finished = true;
 
-        SceneManager.LoadScene("Prototype");
+        SceneManager.LoadScene("Text2");
     }
 
     private IEnumerator ShakeScreen()

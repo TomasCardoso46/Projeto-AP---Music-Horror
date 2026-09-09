@@ -14,13 +14,14 @@ public class GamepadMenuCursor : MonoBehaviour
 
     private Vector2 cursorPosition;
 
+    private void OnEnable()
+    {
+        SyncCursorPosition();
+    }
+
     private void Start()
     {
-        cursorPosition = Mouse.current != null
-            ? Mouse.current.position.ReadValue()
-            : new Vector2(Screen.width / 2f, Screen.height / 2f);
-
-        SetCursorPosition(cursorPosition);
+        SyncCursorPosition();
     }
 
     private void Update()
@@ -30,6 +31,26 @@ public class GamepadMenuCursor : MonoBehaviour
 
         MoveCursor();
         HandleClick();
+    }
+
+    private void SyncCursorPosition()
+    {
+        if (Mouse.current != null)
+        {
+            cursorPosition = Mouse.current.position.ReadValue();
+        }
+        else
+        {
+            cursorPosition = new Vector2(
+                Screen.width / 2f,
+                Screen.height / 2f
+            );
+        }
+
+        cursorPosition.x = Mathf.Clamp(cursorPosition.x, 0f, Screen.width);
+        cursorPosition.y = Mathf.Clamp(cursorPosition.y, 0f, Screen.height);
+
+        SetCursorPosition(cursorPosition);
     }
 
     private void MoveCursor()
@@ -90,13 +111,22 @@ public class GamepadMenuCursor : MonoBehaviour
         if (EventSystem.current == null)
             return;
 
+        Vector2 actualMousePosition = cursorPosition;
+
+        if (Mouse.current != null)
+        {
+            actualMousePosition = Mouse.current.position.ReadValue();
+            cursorPosition = actualMousePosition;
+        }
+
         PointerEventData pointerData =
             new PointerEventData(EventSystem.current);
 
-        pointerData.position = cursorPosition;
+        pointerData.position = actualMousePosition;
         pointerData.button = PointerEventData.InputButton.Left;
 
-        var results = new System.Collections.Generic.List<RaycastResult>();
+        var results =
+            new System.Collections.Generic.List<RaycastResult>();
 
         EventSystem.current.RaycastAll(pointerData, results);
 

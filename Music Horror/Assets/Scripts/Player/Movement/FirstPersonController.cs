@@ -229,9 +229,9 @@ public class FirstPersonRigidbodyController : MonoBehaviour
 
     void HandleLean()
     {
-        if (Input.GetKey(KeyCode.Q) || Gamepad.current.leftShoulder.isPressed)
+        if (Input.GetKey(KeyCode.Q) ||Gamepad.current != null && Gamepad.current.leftShoulder.isPressed)
             targetLean = leanAngle;
-        else if (Input.GetKey(KeyCode.E) || Gamepad.current.rightShoulder.isPressed)
+        else if (Input.GetKey(KeyCode.E) || Gamepad.current != null && Gamepad.current.rightShoulder.isPressed)
             targetLean = -leanAngle;
         else
             targetLean = 0f;
