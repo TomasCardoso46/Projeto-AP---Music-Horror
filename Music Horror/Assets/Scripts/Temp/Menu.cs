@@ -19,7 +19,7 @@ public class MainMenu : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        SceneManager.LoadScene("Text1");
+        SceneManager.LoadScene("Tutorial");
     }
 
     // Opens settings UI
