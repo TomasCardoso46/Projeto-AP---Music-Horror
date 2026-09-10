@@ -25,6 +25,9 @@ public class ScriptedChase : MonoBehaviour
     [SerializeField] private float rotationSpeed = 8f;
     [SerializeField] private float reachDistance = 0.2f;
 
+    [Header("Starting Rotation")]
+    [SerializeField] private bool rotate180WhenChaseStarts = true;
+
     [Header("Looping Movement Audio & Animation")]
     [SerializeField] private Animator animator;
     [SerializeField] private string idleAnimationStateName = "Idle";
@@ -59,6 +62,7 @@ public class ScriptedChase : MonoBehaviour
     {
         if (animator != null)
         {
+            animator.applyRootMotion = false;
             animator.speed = 1f;
 
             if (!string.IsNullOrEmpty(idleAnimationStateName))
@@ -116,11 +120,16 @@ public class ScriptedChase : MonoBehaviour
         if (eventAudioSource != null && chaseStartClip != null)
             eventAudioSource.PlayOneShot(chaseStartClip);
 
+        if (rotate180WhenChaseStarts)
             movingObject.transform.Rotate(0f, 180f, 0f);
 
-        if (animator != null && !string.IsNullOrEmpty(animationStateName))
+        if (animator != null)
         {
-            animator.Play(animationStateName, 0, 0f);
+            animator.applyRootMotion = false;
+
+            if (!string.IsNullOrEmpty(animationStateName))
+                animator.Play(animationStateName, 0, 0f);
+
             animator.speed = currentSpeed * animationSpeedMultiplier;
         }
 
@@ -152,6 +161,7 @@ public class ScriptedChase : MonoBehaviour
             {
                 MoveTowards(target);
                 UpdateAnimationAndAudioSpeed();
+
                 yield return null;
             }
 
@@ -167,18 +177,21 @@ public class ScriptedChase : MonoBehaviour
 
     private void MoveTowards(Transform target)
     {
-        Vector3 direction = (target.position - movingObject.transform.position).normalized;
+        Vector3 direction = target.position - movingObject.transform.position;
+        direction.y = 0f;
 
-        if (direction.sqrMagnitude > 0.001f)
-        {
-            Quaternion targetRotation = Quaternion.LookRotation(direction);
+        if (direction.sqrMagnitude <= 0.001f)
+            return;
 
-            movingObject.transform.rotation = Quaternion.Slerp(
-                movingObject.transform.rotation,
-                targetRotation,
-                rotationSpeed * Time.deltaTime
-            );
-        }
+        direction.Normalize();
+
+        Quaternion targetRotation = Quaternion.LookRotation(direction, Vector3.up);
+
+        movingObject.transform.rotation = Quaternion.Slerp(
+            movingObject.transform.rotation,
+            targetRotation,
+            rotationSpeed * Time.deltaTime
+        );
 
         movingObject.transform.position += direction * currentSpeed * Time.deltaTime;
     }
