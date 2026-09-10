@@ -9,6 +9,7 @@ public class ScriptedChase : MonoBehaviour
     public class ChaseCheckpoint
     {
         public Transform checkpoint;
+
         [Tooltip("Speed the moving object will use AFTER reaching this checkpoint.")]
         public float speedAfterCheckpoint = 3f;
     }
@@ -26,6 +27,7 @@ public class ScriptedChase : MonoBehaviour
 
     [Header("Looping Movement Audio & Animation")]
     [SerializeField] private Animator animator;
+    [SerializeField] private string idleAnimationStateName = "Idle";
     [SerializeField] private string animationStateName = "Chase";
     [SerializeField] private AudioSource loopingAudioSource;
 
@@ -56,7 +58,12 @@ public class ScriptedChase : MonoBehaviour
     private void Awake()
     {
         if (animator != null)
-            animator.speed = 0f;
+        {
+            animator.speed = 1f;
+
+            if (!string.IsNullOrEmpty(idleAnimationStateName))
+                animator.Play(idleAnimationStateName, 0, 0f);
+        }
 
         if (loopingAudioSource != null)
         {
@@ -86,7 +93,10 @@ public class ScriptedChase : MonoBehaviour
         if (other.GetComponent<FirstPersonRigidbodyController>() != null)
         {
             Debug.Log("[ScriptedChase] Player detected. Starting chase.");
-            sequenceLockController.LockSequence(lockedSequence);
+
+            if (sequenceLockController != null)
+                sequenceLockController.LockSequence(lockedSequence);
+
             StartChase();
         }
     }
@@ -105,6 +115,8 @@ public class ScriptedChase : MonoBehaviour
 
         if (eventAudioSource != null && chaseStartClip != null)
             eventAudioSource.PlayOneShot(chaseStartClip);
+
+            movingObject.transform.Rotate(0f, 180f, 0f);
 
         if (animator != null && !string.IsNullOrEmpty(animationStateName))
         {
@@ -144,6 +156,7 @@ public class ScriptedChase : MonoBehaviour
             }
 
             movingObject.transform.position = target.position;
+
             currentSpeed = checkpoints[currentCheckpointIndex].speedAfterCheckpoint;
 
             currentCheckpointIndex++;
@@ -156,9 +169,7 @@ public class ScriptedChase : MonoBehaviour
     {
         Vector3 direction = (target.position - movingObject.transform.position).normalized;
 
-        movingObject.transform.position += direction * currentSpeed * Time.deltaTime;
-
-        if (direction != Vector3.zero)
+        if (direction.sqrMagnitude > 0.001f)
         {
             Quaternion targetRotation = Quaternion.LookRotation(direction);
 
@@ -168,6 +179,8 @@ public class ScriptedChase : MonoBehaviour
                 rotationSpeed * Time.deltaTime
             );
         }
+
+        movingObject.transform.position += direction * currentSpeed * Time.deltaTime;
     }
 
     private void UpdateAnimationAndAudioSpeed()
@@ -179,28 +192,6 @@ public class ScriptedChase : MonoBehaviour
             loopingAudioSource.pitch = currentSpeed * audioPitchMultiplier;
     }
 
-    private IEnumerator FadeMusicIn()
-    {
-        musicAudioSource.volume = 0f;
-        musicAudioSource.Play();
-
-        float time = 0f;
-
-        while (time < musicFadeInDuration)
-        {
-            time += Time.deltaTime;
-            musicAudioSource.volume = Mathf.Lerp(
-                0f,
-                musicOriginalVolume,
-                time / musicFadeInDuration
-            );
-
-            yield return null;
-        }
-
-        musicAudioSource.volume = musicOriginalVolume;
-    }
-
     private IEnumerator EndChase()
     {
         if (eventAudioSource != null && chaseEndClip != null)
@@ -209,31 +200,70 @@ public class ScriptedChase : MonoBehaviour
         if (loopingAudioSource != null)
             loopingAudioSource.Stop();
 
-        if (musicAudioSource != null && musicAudioSource.isPlaying)
+        if (animator != null)
+            animator.speed = 0f;
+
+        if (musicAudioSource != null)
+            yield return FadeMusicOut();
+
+        Debug.Log("[ScriptedChase] Chase finished.");
+    }
+
+    private IEnumerator FadeMusicIn()
+    {
+        if (musicAudioSource == null)
+            yield break;
+
+        musicAudioSource.Play();
+
+        float elapsed = 0f;
+
+        while (elapsed < musicFadeInDuration)
         {
-            float startVolume = musicAudioSource.volume;
-            float time = 0f;
+            elapsed += Time.deltaTime;
 
-            while (time < musicFadeOutDuration)
-            {
-                time += Time.deltaTime;
+            float t = musicFadeInDuration > 0f
+                ? elapsed / musicFadeInDuration
+                : 1f;
 
-                musicAudioSource.volume = Mathf.Lerp(
-                    startVolume,
-                    0f,
-                    time / musicFadeOutDuration
-                );
+            musicAudioSource.volume = Mathf.Lerp(
+                0f,
+                musicOriginalVolume,
+                t
+            );
 
-                yield return null;
-            }
-
-            musicAudioSource.Stop();
-            musicAudioSource.volume = musicOriginalVolume;
+            yield return null;
         }
 
-        if (movingObject != null)
-            Destroy(movingObject);
+        musicAudioSource.volume = musicOriginalVolume;
+    }
 
-        GetComponent<Collider>().enabled = false;
+    private IEnumerator FadeMusicOut()
+    {
+        if (musicAudioSource == null)
+            yield break;
+
+        float startingVolume = musicAudioSource.volume;
+        float elapsed = 0f;
+
+        while (elapsed < musicFadeOutDuration)
+        {
+            elapsed += Time.deltaTime;
+
+            float t = musicFadeOutDuration > 0f
+                ? elapsed / musicFadeOutDuration
+                : 1f;
+
+            musicAudioSource.volume = Mathf.Lerp(
+                startingVolume,
+                0f,
+                t
+            );
+
+            yield return null;
+        }
+
+        musicAudioSource.volume = 0f;
+        musicAudioSource.Stop();
     }
 }
