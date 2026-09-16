@@ -117,7 +117,7 @@ public class ChordSequenceManager : MonoBehaviour
         ResetSequence();
     }
 
-    private void CastSpell(int index)
+    public void CastSpell(int index)
     {
         SpellModeSet modeSet = spellModes[currentMode];
 

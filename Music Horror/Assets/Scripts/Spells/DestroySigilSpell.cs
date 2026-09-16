@@ -44,7 +44,6 @@ public class DestroySigilSpell : Spell
             if (targetSigil == null)
                 return;
 
-            // IMPORTANT: count remaining ACTIVE sigils BEFORE destroying this one
             int activeSigils = 0;
 
             foreach (Transform child in sigilsRoot)
@@ -55,7 +54,6 @@ public class DestroySigilSpell : Spell
 
             bool isLastSigil = activeSigils == 0;
 
-            // Auto-open ONLY if this is the last sigil
             if (isLastSigil)
             {
                 door.TriggerAutoOpenFromSpell();
