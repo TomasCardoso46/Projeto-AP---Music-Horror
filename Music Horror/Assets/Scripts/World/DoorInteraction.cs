@@ -24,6 +24,9 @@ public class DoorInteraction : MonoBehaviour, IInteractable
     [Header("Debug")]
     [SerializeField] private bool enableDebugLogs = true;
 
+    private const string EnemyTag = "Enemy";
+    private const string TraverseTrigger = "Traverse";
+
     private NavMeshObstacle navMeshObstacle;
 
     private bool isPlayerInRange = false;
@@ -50,8 +53,14 @@ public class DoorInteraction : MonoBehaviour, IInteractable
             navMeshObstacle = door.GetComponent<NavMeshObstacle>();
 
             Vector3 baseEuler = door.localEulerAngles;
-            openRotationA = Quaternion.Euler(baseEuler + new Vector3(0, openAngle, 0));
-            openRotationB = Quaternion.Euler(baseEuler + new Vector3(0, -openAngle, 0));
+
+            openRotationA = Quaternion.Euler(
+                baseEuler + new Vector3(0, openAngle, 0)
+            );
+
+            openRotationB = Quaternion.Euler(
+                baseEuler + new Vector3(0, -openAngle, 0)
+            );
 
             targetRotation = closedRotation;
         }
@@ -73,7 +82,8 @@ public class DoorInteraction : MonoBehaviour, IInteractable
 
     private void FixedUpdate()
     {
-        if (door == null) return;
+        if (door == null)
+            return;
 
         float speed = rotationSpeed;
 
@@ -101,7 +111,8 @@ public class DoorInteraction : MonoBehaviour, IInteractable
 
     private void UnlockDoor()
     {
-        if (hasUnlocked) return;
+        if (hasUnlocked)
+            return;
 
         hasUnlocked = true;
 
@@ -122,7 +133,8 @@ public class DoorInteraction : MonoBehaviour, IInteractable
 
     private void OpenDoor()
     {
-        if (isOpen) return;
+        if (isOpen)
+            return;
 
         targetRotation = DetermineOpenDirection();
         isOpen = true;
@@ -137,12 +149,13 @@ public class DoorInteraction : MonoBehaviour, IInteractable
 
     private void AutoOpenDoor()
     {
-        if (isOpen) return;
+        if (isOpen)
+            return;
 
         Vector3 reference = transform.forward;
         float side = Vector3.Dot(door.forward, reference);
 
-        targetRotation = (side > 0) ? openRotationB : openRotationA;
+        targetRotation = side > 0 ? openRotationB : openRotationA;
         isOpen = true;
 
         Log("Auto-opening door (opposite direction).");
@@ -174,7 +187,8 @@ public class DoorInteraction : MonoBehaviour, IInteractable
 
     private void OpenDoorForEnemy(Transform enemy)
     {
-        if (isOpen) return;
+        if (isOpen)
+            return;
 
         targetRotation = DetermineOpenDirectionForEnemy(enemy);
         isOpen = true;
@@ -184,9 +198,26 @@ public class DoorInteraction : MonoBehaviour, IInteractable
 
         Log($"Door opened for enemy: {enemy.name}");
 
+        TriggerEnemyTraverseAnimation(enemy);
+
         PlayOpenSound();
 
         SetDoorToDefaultLayer();
+    }
+
+    private void TriggerEnemyTraverseAnimation(Transform enemy)
+    {
+        Animator animator = enemy.GetComponentInChildren<Animator>(true);
+
+        if (animator == null)
+        {
+            Log($"No Animator found on enemy or its children: {enemy.name}");
+            return;
+        }
+
+        animator.SetTrigger(TraverseTrigger);
+
+        Log($"Triggered '{TraverseTrigger}' animation on enemy: {enemy.name}");
     }
 
     private Quaternion DetermineOpenDirectionForEnemy(Transform enemy)
@@ -197,9 +228,20 @@ public class DoorInteraction : MonoBehaviour, IInteractable
         return side > 0 ? openRotationB : openRotationA;
     }
 
-    private void PlayOpenSound() => PlayClip(openSoundClip);
-    private void PlayAutoOpenSound() => PlayClip(autoOpenSoundClip);
-    private void PlayLockedSound() => PlayClip(lockedSoundClip);
+    private void PlayOpenSound()
+    {
+        PlayClip(openSoundClip);
+    }
+
+    private void PlayAutoOpenSound()
+    {
+        PlayClip(autoOpenSoundClip);
+    }
+
+    private void PlayLockedSound()
+    {
+        PlayClip(lockedSoundClip);
+    }
 
     private void PlayClip(AudioClip clip)
     {
@@ -215,9 +257,11 @@ public class DoorInteraction : MonoBehaviour, IInteractable
 
     private void SetDoorToDefaultLayer()
     {
-        if (door == null) return;
+        if (door == null)
+            return;
 
         int defaultLayer = LayerMask.NameToLayer("Default");
+
         SetLayerRecursively(door, defaultLayer);
 
         Log("Door and children set to Default layer.");
@@ -239,7 +283,7 @@ public class DoorInteraction : MonoBehaviour, IInteractable
             player = other.transform;
         }
 
-        if (other.CompareTag("Enemy") && hasUnlocked)
+        if (other.CompareTag(EnemyTag) && hasUnlocked)
         {
             OpenDoorForEnemy(other.transform);
         }
@@ -257,8 +301,10 @@ public class DoorInteraction : MonoBehaviour, IInteractable
             return true;
 
         foreach (Transform s in sigilsParent)
+        {
             if (s.gameObject.activeSelf)
                 return false;
+        }
 
         return true;
     }
