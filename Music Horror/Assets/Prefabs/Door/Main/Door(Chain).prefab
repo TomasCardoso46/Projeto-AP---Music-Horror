@@ -562,7 +562,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 1
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &4327885371137910203
 Transform:
@@ -859,8 +859,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7578756642628854062}
-  - component: {fileID: 5113321648880331834}
-  - component: {fileID: 4019059132564346939}
   - component: {fileID: 4656604961441272799}
   - component: {fileID: 7621620072095038032}
   m_Layer: 9
@@ -887,63 +885,6 @@ Transform:
   - {fileID: 9145505840545531492}
   m_Father: {fileID: 5745686888021273138}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &5113321648880331834
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5099878478690794060}
-  m_Mesh: {fileID: -7795986423222554426, guid: a38877d4ef1506548a25a3d5ec4ac796, type: 3}
---- !u!23 &4019059132564346939
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5099878478690794060}
-  m_Enabled: 0
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
-  m_SmallMeshCulling: 1
-  m_ForceMeshLod: -1
-  m_MeshLodSelectionBias: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 501d5d87a0f397e4e809a91d8b9eb3e5, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_MaskInteraction: 0
-  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!65 &4656604961441272799
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1743,6 +1684,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ring (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: d5b52b8d9b67a754a96059b8931d0293, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3396913584297481876, guid: d5b52b8d9b67a754a96059b8931d0293, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1817,6 +1766,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ring (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: d5b52b8d9b67a754a96059b8931d0293, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3396913584297481876, guid: d5b52b8d9b67a754a96059b8931d0293, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1838,6 +1795,10 @@ PrefabInstance:
     - target: {fileID: 2289108612145064616, guid: 2c9b803e31dc427479fc48d3cc23facb, type: 3}
       propertyPath: m_Name
       value: SigilRed (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2289108612145064616, guid: 2c9b803e31dc427479fc48d3cc23facb, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2689170044238788981, guid: 2c9b803e31dc427479fc48d3cc23facb, type: 3}
       propertyPath: m_LocalScale.x
@@ -1916,6 +1877,10 @@ PrefabInstance:
     - target: {fileID: 2289108612145064616, guid: 2c9b803e31dc427479fc48d3cc23facb, type: 3}
       propertyPath: m_Name
       value: SigilRed
+      objectReference: {fileID: 0}
+    - target: {fileID: 2289108612145064616, guid: 2c9b803e31dc427479fc48d3cc23facb, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2689170044238788981, guid: 2c9b803e31dc427479fc48d3cc23facb, type: 3}
       propertyPath: m_LocalScale.x
@@ -2047,6 +2012,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ring (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: d5b52b8d9b67a754a96059b8931d0293, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3396913584297481876, guid: d5b52b8d9b67a754a96059b8931d0293, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2121,6 +2094,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ring
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: d5b52b8d9b67a754a96059b8931d0293, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3396913584297481876, guid: d5b52b8d9b67a754a96059b8931d0293, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2142,6 +2123,10 @@ PrefabInstance:
     - target: {fileID: 2227226255964604965, guid: 66a5f63156af90e45a6422e8d5a91705, type: 3}
       propertyPath: m_Name
       value: SigilGreen
+      objectReference: {fileID: 0}
+    - target: {fileID: 2227226255964604965, guid: 66a5f63156af90e45a6422e8d5a91705, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2258757327680050003, guid: 66a5f63156af90e45a6422e8d5a91705, type: 3}
       propertyPath: m_LocalScale.x
@@ -2216,6 +2201,10 @@ PrefabInstance:
     - target: {fileID: 2227226255964604965, guid: 66a5f63156af90e45a6422e8d5a91705, type: 3}
       propertyPath: m_Name
       value: SigilGreen (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2227226255964604965, guid: 66a5f63156af90e45a6422e8d5a91705, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2258757327680050003, guid: 66a5f63156af90e45a6422e8d5a91705, type: 3}
       propertyPath: m_LocalScale.x
