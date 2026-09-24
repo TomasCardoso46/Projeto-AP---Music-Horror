@@ -18,6 +18,10 @@ public class doorwayAnimationTrigger : MonoBehaviour
     [Header("Start Position")]
     [SerializeField] private float snapDuration = 0.2f;
 
+    [Header("Root Motion")]
+    [SerializeField] private bool transferRootMotionToParent = true;
+    [SerializeField] private bool synchronizeNavMeshAgent = true;
+
     [Header("Cooldown")]
     [SerializeField] private float doorwayCooldown = 3f;
 
@@ -144,24 +148,31 @@ public class doorwayAnimationTrigger : MonoBehaviour
 
         bool hadOriginalPath = agent.hasPath;
 
-        bool movementWasEnabled = movement.enabled;
-        bool agentWasEnabled = agent.enabled;
+        bool originalAgentIsStopped = agent.isStopped;
         bool originalUpdatePosition = agent.updatePosition;
         bool originalUpdateRotation = agent.updateRotation;
         bool originalRootMotion = animator.applyRootMotion;
+        bool originalMovementEnabled = movement.enabled;
 
         Log("Starting doorway animation.");
 
         enemy.SetMovementLocked(true);
 
+        /*
+         * Completely stop the systems that can fight the forced
+         * movement during Traverse.
+         */
         movement.enabled = false;
 
         if (agent.enabled)
         {
             agent.isStopped = true;
             agent.ResetPath();
+
             agent.updatePosition = false;
             agent.updateRotation = false;
+
+            agent.nextPosition = enemyTransform.position;
         }
 
         Transform targetStartPoint = GetClosestStartPoint(enemyTransform);
@@ -183,8 +194,14 @@ public class doorwayAnimationTrigger : MonoBehaviour
                     targetRotation
                 )
             );
+
+            if (agent.enabled)
+                agent.nextPosition = enemyTransform.position;
         }
 
+        /*
+         * Create the forced root-motion driver.
+         */
         DoorwayRootMotionDriver rootMotionDriver =
             animator.gameObject.GetComponent<DoorwayRootMotionDriver>();
 
@@ -194,7 +211,12 @@ public class doorwayAnimationTrigger : MonoBehaviour
                 animator.gameObject.AddComponent<DoorwayRootMotionDriver>();
         }
 
-        rootMotionDriver.Initialize(enemyTransform);
+        rootMotionDriver.Initialize(
+            enemyTransform,
+            agent,
+            transferRootMotionToParent,
+            synchronizeNavMeshAgent
+        );
 
         animator.applyRootMotion = true;
 
@@ -220,68 +242,42 @@ public class doorwayAnimationTrigger : MonoBehaviour
             );
         }
 
-        animator.CrossFadeInFixedTime(
-            doorwayAnimationName,
-            animationCrossFadeTime,
+        int doorwayStateHash =
+            Animator.StringToHash(doorwayAnimationName);
+
+        /*
+         * Force the animation directly.
+         */
+        animator.Play(
+            doorwayStateHash,
             animationLayer,
             0f
         );
 
-        yield return null;
+        /*
+         * Force Animator evaluation immediately.
+         */
+        animator.Update(0f);
 
-        AnimatorStateInfo stateInfo =
-            animator.GetCurrentAnimatorStateInfo(animationLayer);
+        Log("Traverse animation forced.");
 
-        float animationLength = stateInfo.length;
+        /*
+         * Wait until Traverse is actually the active state.
+         */
+        float stateWaitTimer = 0f;
 
-        if (animationLength <= 0f)
-            animationLength = 1f;
-
-        float elapsed = 0f;
-
-        while (elapsed < animationLength)
+        while (stateWaitTimer < 1f)
         {
             if (enemy == null || !enemy.IsAlive)
                 break;
 
-            if (enemy.currentState == EnemyController.State.Attack)
-            {
-                Log("Enemy entered Attack. Doorway animation interrupted.");
+            AnimatorStateInfo currentState =
+                animator.GetCurrentAnimatorStateInfo(animationLayer);
+
+            if (currentState.shortNameHash == doorwayStateHash)
                 break;
-            }
 
-            float normalizedTime =
-                Mathf.Clamp01(elapsed / animationLength);
-
-            animator.Play(
-                doorwayAnimationName,
-                animationLayer,
-                normalizedTime
-            );
-
-            if (HasParameterOfType(
-                animator,
-                "State",
-                AnimatorControllerParameterType.Int))
-            {
-                animator.SetInteger(
-                    "State",
-                    (int)EnemyController.State.Idle
-                );
-            }
-
-            if (HasParameterOfType(
-                animator,
-                "animIsWalking",
-                AnimatorControllerParameterType.Bool))
-            {
-                animator.SetBool(
-                    "animIsWalking",
-                    false
-                );
-            }
-
-            elapsed += Time.deltaTime;
+            stateWaitTimer += Time.deltaTime;
 
             yield return null;
         }
@@ -295,27 +291,147 @@ public class doorwayAnimationTrigger : MonoBehaviour
             yield break;
         }
 
-        Log("Doorway animation finished. Returning control to enemy AI.");
+        /*
+         * Wait for the actual Traverse animation to finish.
+         */
+        while (true)
+        {
+            if (enemy == null || !enemy.IsAlive)
+                break;
 
+            if (enemy.currentState == EnemyController.State.Attack)
+            {
+                Log("Enemy entered Attack. Doorway animation interrupted.");
+                break;
+            }
+
+            AnimatorStateInfo currentState =
+                animator.GetCurrentAnimatorStateInfo(animationLayer);
+
+            if (currentState.shortNameHash != doorwayStateHash)
+            {
+                Log("Traverse stopped being the active state.");
+                break;
+            }
+
+            if (currentState.normalizedTime >= 1f)
+                break;
+
+            yield return null;
+        }
+
+        if (enemy == null)
+        {
+            if (rootMotionDriver != null)
+                Destroy(rootMotionDriver);
+
+            animationPlaying = false;
+            yield break;
+        }
+
+        /*
+         * At this exact point the animation has finished.
+         *
+         * Capture the actual position of the Animator object.
+         */
+        Vector3 finalAnimatorPosition =
+            animator.transform.position;
+
+        Quaternion finalAnimatorRotation =
+            animator.transform.rotation;
+
+        Log(
+            "Traverse finished. Animator position: " +
+            finalAnimatorPosition
+        );
+
+        /*
+         * Because the Animator is a child of the enemy root,
+         * calculate the root position required to keep the
+         * Animator exactly where it currently is.
+         */
+        Transform animatorParent =
+            animator.transform.parent;
+
+        if (animatorParent != null)
+        {
+            Vector3 localPosition =
+                animator.transform.localPosition;
+
+            Vector3 requiredParentPosition =
+                finalAnimatorPosition -
+                animatorParent.rotation * localPosition;
+
+            enemyTransform.position =
+                requiredParentPosition;
+
+            Vector3 forward =
+                animator.transform.forward;
+
+            forward.y = 0f;
+
+            if (forward.sqrMagnitude > 0.001f)
+            {
+                enemyTransform.rotation =
+                    Quaternion.LookRotation(forward);
+            }
+        }
+        else
+        {
+            enemyTransform.position =
+                finalAnimatorPosition;
+
+            enemyTransform.rotation =
+                finalAnimatorRotation;
+        }
+
+        /*
+         * Force NavMeshAgent to accept the new position.
+         */
+        if (agent != null && agent.enabled)
+        {
+            agent.Warp(enemyTransform.position);
+            agent.nextPosition = enemyTransform.position;
+        }
+
+        Log(
+            "Enemy root forcibly synchronized to: " +
+            enemyTransform.position
+        );
+
+        /*
+         * Remove the root-motion driver.
+         */
         if (rootMotionDriver != null)
             Destroy(rootMotionDriver);
 
         animator.applyRootMotion = originalRootMotion;
 
+        /*
+         * Restore NavMesh settings.
+         */
         if (agent != null && agent.enabled)
         {
-            agent.Warp(enemyTransform.position);
+            agent.nextPosition =
+                enemyTransform.position;
 
-            agent.updatePosition = originalUpdatePosition;
-            agent.updateRotation = originalUpdateRotation;
+            agent.updatePosition =
+                originalUpdatePosition;
 
-            agent.isStopped = false;
+            agent.updateRotation =
+                originalUpdateRotation;
+
+            agent.isStopped =
+                originalAgentIsStopped;
 
             if (hadOriginalPath)
                 agent.SetDestination(originalDestination);
         }
 
-        movement.enabled = movementWasEnabled;
+        /*
+         * Restore movement.
+         */
+        movement.enabled = originalMovementEnabled;
 
         enemy.SetMovementLocked(false);
 
@@ -330,6 +446,9 @@ public class doorwayAnimationTrigger : MonoBehaviour
             );
         }
 
+        /*
+         * Immediately switch to walking.
+         */
         animator.Play(
             walkingAnimationName,
             animationLayer,
@@ -338,17 +457,18 @@ public class doorwayAnimationTrigger : MonoBehaviour
 
         animationPlaying = false;
 
-        if (agent != null)
+        if (agent != null && agent.enabled)
         {
-            if (!agent.enabled && agentWasEnabled)
-                agent.enabled = true;
-
-            if (agent.enabled)
-                agent.nextPosition = enemyTransform.position;
+            agent.nextPosition =
+                enemyTransform.position;
         }
 
+        Log("Doorway sequence completely finished.");
+
         if (doorwayCooldown > 0f)
-            yield return StartCoroutine(CooldownRoutine());
+            yield return StartCoroutine(
+                CooldownRoutine()
+            );
     }
 
     private IEnumerator MoveToAnimationStart(
@@ -370,29 +490,41 @@ public class doorwayAnimationTrigger : MonoBehaviour
 
         while (elapsed < snapDuration)
         {
-            float t = elapsed / snapDuration;
+            float t =
+                elapsed / snapDuration;
 
-            t = Mathf.SmoothStep(0f, 1f, t);
+            t =
+                Mathf.SmoothStep(
+                    0f,
+                    1f,
+                    t
+                );
 
-            enemy.position = Vector3.Lerp(
-                startingPosition,
-                targetPosition,
-                t
-            );
+            enemy.position =
+                Vector3.Lerp(
+                    startingPosition,
+                    targetPosition,
+                    t
+                );
 
-            enemy.rotation = Quaternion.Slerp(
-                startingRotation,
-                targetRotation,
-                t
-            );
+            enemy.rotation =
+                Quaternion.Slerp(
+                    startingRotation,
+                    targetRotation,
+                    t
+                );
 
-            elapsed += Time.deltaTime;
+            elapsed +=
+                Time.deltaTime;
 
             yield return null;
         }
 
-        enemy.position = targetPosition;
-        enemy.rotation = targetRotation;
+        enemy.position =
+            targetPosition;
+
+        enemy.rotation =
+            targetRotation;
     }
 
     private IEnumerator CooldownRoutine()
@@ -405,14 +537,17 @@ public class doorwayAnimationTrigger : MonoBehaviour
             " seconds."
         );
 
-        yield return new WaitForSeconds(doorwayCooldown);
+        yield return new WaitForSeconds(
+            doorwayCooldown
+        );
 
         cooldownActive = false;
 
         Log("Doorway cooldown finished.");
     }
 
-    private Transform GetClosestStartPoint(Transform enemy)
+    private Transform GetClosestStartPoint(
+        Transform enemy)
     {
         if (startPointA == null)
             return startPointB;
@@ -420,28 +555,37 @@ public class doorwayAnimationTrigger : MonoBehaviour
         if (startPointB == null)
             return startPointA;
 
-        float distanceA = Vector3.SqrMagnitude(
-            enemy.position - startPointA.position
-        );
+        float distanceA =
+            Vector3.SqrMagnitude(
+                enemy.position -
+                startPointA.position
+            );
 
-        float distanceB = Vector3.SqrMagnitude(
-            enemy.position - startPointB.position
-        );
+        float distanceB =
+            Vector3.SqrMagnitude(
+                enemy.position -
+                startPointB.position
+            );
 
         return distanceA <= distanceB
             ? startPointA
             : startPointB;
     }
 
-    private Animator FindEnemyAnimator(Transform enemy)
+    private Animator FindEnemyAnimator(
+        Transform enemy)
     {
         Transform[] children =
-            enemy.GetComponentsInChildren<Transform>(true);
+            enemy.GetComponentsInChildren<Transform>(
+                true
+            );
 
         foreach (Transform child in children)
         {
             Component target =
-                child.GetComponent("animatorTarget");
+                child.GetComponent(
+                    "animatorTarget"
+                );
 
             if (target == null)
                 continue;
@@ -452,7 +596,9 @@ public class doorwayAnimationTrigger : MonoBehaviour
             if (animator == null)
             {
                 animator =
-                    child.GetComponentInChildren<Animator>(true);
+                    child.GetComponentInChildren<Animator>(
+                        true
+                    );
             }
 
             if (animator == null)
@@ -466,7 +612,9 @@ public class doorwayAnimationTrigger : MonoBehaviour
         }
 
         Animator fallback =
-            enemy.GetComponentInChildren<Animator>(true);
+            enemy.GetComponentInChildren<Animator>(
+                true
+            );
 
         return fallback;
     }
@@ -475,13 +623,18 @@ public class doorwayAnimationTrigger : MonoBehaviour
         Animator animator,
         string stateName)
     {
-        if (animator == null ||
-            animator.runtimeAnimatorController == null)
+        if (
+            animator == null ||
+            animator.runtimeAnimatorController == null
+        )
         {
             return false;
         }
 
-        int hash = Animator.StringToHash(stateName);
+        int hash =
+            Animator.StringToHash(
+                stateName
+            );
 
         return animator.HasState(
             animationLayer,
@@ -501,8 +654,12 @@ public class doorwayAnimationTrigger : MonoBehaviour
             AnimatorControllerParameter parameter
             in animator.parameters)
         {
-            if (parameter.name == parameterName &&
-                parameter.type == type)
+            if (
+                parameter.name ==
+                parameterName &&
+                parameter.type ==
+                type
+            )
             {
                 return true;
             }
@@ -527,24 +684,94 @@ public class doorwayAnimationTrigger : MonoBehaviour
     private class DoorwayRootMotionDriver : MonoBehaviour
     {
         private Transform targetRoot;
+        private NavMeshAgent agent;
         private Animator animator;
 
-        public void Initialize(Transform root)
+        private bool transferRootMotion;
+        private bool synchronizeAgent;
+
+        private Vector3 previousAnimatorRootPosition;
+        private Quaternion previousAnimatorRootRotation;
+
+        public void Initialize(
+            Transform root,
+            NavMeshAgent navMeshAgent,
+            bool shouldTransferRootMotion,
+            bool shouldSynchronizeAgent)
         {
             targetRoot = root;
-            animator = GetComponent<Animator>();
+            agent = navMeshAgent;
+
+            animator =
+                GetComponent<Animator>();
+
+            transferRootMotion =
+                shouldTransferRootMotion;
+
+            synchronizeAgent =
+                shouldSynchronizeAgent;
+
+            previousAnimatorRootPosition =
+                transform.position;
+
+            previousAnimatorRootRotation =
+                transform.rotation;
         }
 
-        private void OnAnimatorMove()
+        private void LateUpdate()
         {
-            if (targetRoot == null || animator == null)
+            if (
+                targetRoot == null ||
+                animator == null
+            )
+            {
+                return;
+            }
+
+            if (!transferRootMotion)
                 return;
 
-            Vector3 deltaPosition = animator.deltaPosition;
-            Quaternion deltaRotation = animator.deltaRotation;
+            /*
+             * We deliberately use LateUpdate instead of relying
+             * on OnAnimatorMove.
+             *
+             * This makes this movement happen AFTER normal Update
+             * logic, making it much harder for EnemyMovement or
+             * other controller code to override it.
+             */
+            Vector3 deltaPosition =
+                animator.deltaPosition;
 
-            targetRoot.position += deltaPosition;
-            targetRoot.rotation *= deltaRotation;
+            Quaternion deltaRotation =
+                animator.deltaRotation;
+
+            /*
+             * Force the actual enemy root to move.
+             */
+            targetRoot.position +=
+                deltaPosition;
+
+            targetRoot.rotation *=
+                deltaRotation;
+
+            /*
+             * Force NavMesh to follow the root.
+             */
+            if (
+                agent != null &&
+                agent.enabled &&
+                synchronizeAgent
+            )
+            {
+                agent.nextPosition =
+                    targetRoot.position;
+            }
+
+            previousAnimatorRootPosition =
+                transform.position;
+
+            previousAnimatorRootRotation =
+                transform.rotation;
         }
     }
 }
